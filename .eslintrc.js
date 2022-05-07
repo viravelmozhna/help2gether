@@ -3,7 +3,7 @@ module.exports = {
   env: { node: true },
   extends: [
     'plugin:vue/essential',
-    '@vue/standard'
+    '@vue/standard',
   ],
   parserOptions: { parser: '@babel/eslint-parser' },
   rules: {
@@ -32,6 +32,13 @@ module.exports = {
     'no-undef': 2,
     'no-multi-assign': [2, { ignoreNonDeclaration: true }],
     'no-plusplus': 2,
-    'operator-linebreak': [2, 'none', { overrides: { '?': 'before', ':': 'before' } }]
-  }
-}
+    'operator-linebreak': [2, 'none', { overrides: { '?': 'before', ':': 'before' } }],
+    'no-nested-ternary': 2,
+    'no-else-return': 1,
+    'space-before-function-paren': [1, { named: 'never' }],
+    'comma-dangle': [1, 'always-multiline'],
+    semi: [2, 'always'],
+    radix: 2,
+    'no-underscore-dangle': 1,
+  },
+};
