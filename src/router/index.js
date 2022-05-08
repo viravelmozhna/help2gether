@@ -1,34 +1,47 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import HomeView from '../views/HomeView.vue';
+import StartView from '../views/StartView';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
+    name: 'start',
+    component: StartView,
+  },
+  // When authentication will be implemented path "/home" and its chidren will be accessible only after sign in/log in
+  {
+    path: '/home',
     name: 'home',
-    component: HomeView,
+    component: () => { return import(/* webpackChunkName: "home" */ '../views/HomeView.vue'); },
+    children: [
+      {
+        path: 'profile',
+        name: 'profile',
+        component: () => { return import(/* webpackChunkName: "profile" */ '../views/ProfileView'); },
+      },
+      {
+        path: 'all-requests',
+        name: 'all-requests',
+        component: () => { return import(/* webpackChunkName: "all-requests" */ '../views/AllRequestsView'); },
+      },
+      {
+        path: 'your-requests',
+        name: 'your-requests',
+        component: () => { return import(/* webpackChunkName: "your-requests" */ '../views/YourRequestsView'); },
+      },
+      {
+        path: 'add-request',
+        name: 'add-request',
+        component: () => { return import(/* webpackChunkName: "add-request" */ '../views/AddRequestView'); },
+      },
+    ],
   },
   {
-    path: '/profile',
-    name: 'profile',
-    component: () => { return import(/* webpackChunkName: "profile" */ '../views/ProfileView.vue'); },
-  },
-  {
-    path: '/all-requests',
-    name: 'all-requests',
-    component: () => { return import(/* webpackChunkName: "all-requests" */ '../views/AllRequestsView.vue'); },
-  },
-  {
-    path: '/your-requests',
-    name: 'your-requests',
-    component: () => { return import(/* webpackChunkName: "your-requests" */ '../views/YourRequestsView.vue'); },
-  },
-  {
-    path: '/add-request',
-    name: 'add-request',
-    component: () => { return import(/* webpackChunkName: "add-request" */ '../views/AddRequestView.vue'); },
+    path: '*',
+    name: 'page-not-found',
+    component: () => { return import(/* webpackChunkName: "page-not-found" */ '../components/PageNotFound.vue'); },
   },
 ];
 

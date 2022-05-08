@@ -1,7 +1,13 @@
 <template>
-  <div class="home">
-    <h1>Welcome to Help2gether application!</h1>
-    <router-link to="/all-requests">Go to requests</router-link>
+  <div>
+    <nav>
+      <router-link to="/home/profile">Profile</router-link> |
+      <router-link to="/home/all-requests">All requests</router-link> |
+      <router-link to="/home/your-requests">Your requests</router-link> |
+      <router-link to="/home/add-request">Add request</router-link> |
+      <router-link to="/">LOG OUT</router-link>
+    </nav>
+    <router-view/>
   </div>
 </template>
 
