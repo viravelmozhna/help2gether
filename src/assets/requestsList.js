@@ -54,7 +54,7 @@ const requestsList = [
       phone: '+38-063-789-12-34',
       address: {
         region: 'Kharkiv region',
-        city: 'Tzyrkuny',
+        city: 'Tsyrkuny',
         street: 'Vyshneva vul. 1',
       },
       request: 'Jeans and two t-shirts for 4 years old girl',
