@@ -14,6 +14,7 @@ const requestsList = [
     categorie: 'food',
     emergency: 'urgent',
     status: 'active',
+    time: '09.05.2022',
   },
   {
     id: 2,
@@ -30,6 +31,7 @@ const requestsList = [
     categorie: 'food',
     emergency: 'urgent',
     status: 'active',
+    time: '06.05.2022',
   },
   {
     id: 3,
@@ -46,6 +48,7 @@ const requestsList = [
     categorie: 'medicines',
     emergency: 'urgent',
     status: 'active',
+    time: '02.05.2022',
   },
   {
     id: 4,
@@ -62,6 +65,7 @@ const requestsList = [
     categorie: 'clothes',
     emergency: 'non-urgent',
     status: 'active',
+    time: '29.04.2022',
   },
   {
     id: 5,
@@ -78,6 +82,7 @@ const requestsList = [
     categorie: 'medicine',
     emergency: 'urgent',
     status: 'in progress',
+    time: '11.05.2022',
   },
   {
     id: 6,
@@ -94,6 +99,7 @@ const requestsList = [
     categorie: 'medicine',
     emergency: 'urgent',
     status: 'in progress',
+    time: '10.05.2022',
   },
   {
     id: 7,
@@ -110,6 +116,7 @@ const requestsList = [
     categorie: 'food',
     emergency: 'urgent',
     status: 'active',
+    time: '05.05.2022',
   },
   {
     id: 8,
@@ -126,6 +133,7 @@ const requestsList = [
     categorie: 'medicine',
     emergency: 'urgent',
     status: 'active',
+    time: '11.05.2022',
   },
   {
     id: 9,
@@ -142,6 +150,7 @@ const requestsList = [
     categorie: 'clothes',
     emergency: 'non-urgent',
     status: 'active',
+    time: '10.05.2022',
   },
   {
     id: 10,
@@ -158,6 +167,7 @@ const requestsList = [
     categorie: 'other',
     emergency: 'non-urgent',
     status: 'active',
+    time: '03.05.2022',
   },
   {
     id: 11,
@@ -174,6 +184,7 @@ const requestsList = [
     categorie: 'other',
     emergency: 'urgent',
     status: 'in progress',
+    time: '02.05.2022',
   },
   {
     id: 12,
@@ -190,6 +201,7 @@ const requestsList = [
     categorie: 'other',
     emergency: 'urgent',
     status: 'completed',
+    time: '13.04.2022',
   },
 ];
 

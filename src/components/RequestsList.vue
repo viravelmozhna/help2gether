@@ -9,19 +9,17 @@
         <b-card-text class="font-weight-bold text-uppercase text m-0">{{ item.data.address.city }}</b-card-text>
         <b-card-text class="text-uppercase">{{ item.categorie }}</b-card-text>
         <b-card-text>{{ item.data.request }}</b-card-text>
+        <b-card-text class="time">{{ item.time }}</b-card-text>
       </b-card>
     </b-row>
   </b-container>
 </template>
 
 <script>
-import requestsList from '../assets/requestsList';
-
 export default {
-  name: 'RequestsList',
   data() {
     return {
-      items: requestsList,
+      items: this.$store.state.requests,
     };
   },
 };
@@ -43,5 +41,11 @@ export default {
 }
 .badge--urgent {
   top: 25px;
+}
+.time {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  font-size: 14px;
 }
 </style>
