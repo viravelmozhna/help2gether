@@ -1,0 +1,40 @@
+{
+  "users": {
+    "id-1": {
+      "name": "Stefania",
+      "phone": "123"
+    },
+    "id-2": {
+      "name": "Taras",
+      "phone": "123"
+    }
+  },
+  "demands": {
+    "id-1": {
+      "name": "Andrii",
+      "phone": "123",
+      "address": {
+        "region": "Kharkiv",
+        "city": "Kutuzivka",
+        "street": "Shkilna 4"
+      },
+      "demand": "potatoes",
+      "category": "food",
+      "emergency": "urgent",
+      "status": "in progress"
+    },
+    "id-2": {
+      "name": "Olena",
+      "phone": "123",
+      "address": {
+        "region": "Kharkiv",
+        "city": "Kharkiv",
+        "street": "Vesela 4"
+      },
+      "demand": "potatoes",
+      "category": "food",
+      "emergency": "urgent",
+      "status": "in progress"
+    }
+  }
+}
