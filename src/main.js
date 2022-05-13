@@ -12,6 +12,7 @@ import store from './store';
 
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
+import router from './router';
 
 Vue.config.productionTip = false;
 
@@ -47,5 +48,6 @@ onValue(starCountRef, (snapshot) => {
 
 new Vue({
   store,
+  router,
   render: (h) => { return h(App); },
 }).$mount('#app');
