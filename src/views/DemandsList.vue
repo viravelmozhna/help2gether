@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  name: 'AllDemands',
+  name: 'DemandsList',
 };
 </script>

@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-// import HomeView from '../views/HomeView';
 
 Vue.use(VueRouter);
 
@@ -8,7 +7,7 @@ const routes = [
   {
     path: '/',
     name: 'start',
-    redirect: '/demands/all',
+    redirect: '/demands/list',
   },
   {
     path: '/demands',
@@ -16,9 +15,9 @@ const routes = [
     component: () => { return import(/* webpackChunkName: "demands" */ '../views/DemandsPage'); },
     children: [
       {
-        path: 'all',
-        name: 'all',
-        component: () => { return import(/* webpackChunkName: "all" */ '../views/AllDemands'); },
+        path: 'list',
+        name: 'list',
+        component: () => { return import(/* webpackChunkName: "list" */ '../views/DemandsList'); },
       },
       {
         path: 'add',
@@ -39,9 +38,15 @@ const routes = [
       },
       {
         path: 'demands',
-        component: () => { return import(/* webpackChunkName: "demands" */ '../views/UserDemands'); },
+        name: 'user-demands',
+        component: () => { return import(/* webpackChunkName: "user-demands" */ '../views/UserDemands'); },
       },
     ],
+  },
+  {
+    path: '*',
+    name: 'page-not-found',
+    component: () => { return import(/* webpackChunkName: "page-not-found" */ '../components/PageNotFound'); },
   },
 ];
 
