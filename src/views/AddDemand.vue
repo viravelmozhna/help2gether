@@ -1,11 +1,11 @@
 <template>
   <div>
-    <h1>Your profile</h1>
+    <h1>Add demands</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ProfileView',
+  name: 'AddDemand',
 };
 </script>

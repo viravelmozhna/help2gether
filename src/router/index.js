@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import StartView from '../views/StartView';
+// import HomeView from '../views/HomeView';
 
 Vue.use(VueRouter);
 
@@ -8,40 +8,40 @@ const routes = [
   {
     path: '/',
     name: 'start',
-    component: StartView,
+    redirect: '/demands/all',
   },
-  // When authentication will be implemented path "/home" and its chidren will be accessible only after sign in/log in
   {
-    path: '/home',
-    name: 'home',
-    component: () => { return import(/* webpackChunkName: "home" */ '../views/HomeView.vue'); },
+    path: '/demands',
+    name: 'demands',
+    component: () => { return import(/* webpackChunkName: "demands" */ '../views/DemandsPage'); },
     children: [
       {
-        path: 'profile',
-        name: 'profile',
-        component: () => { return import(/* webpackChunkName: "profile" */ '../views/ProfileView'); },
+        path: 'all',
+        name: 'all',
+        component: () => { return import(/* webpackChunkName: "all" */ '../views/AllDemands'); },
       },
       {
-        path: 'all-requests',
-        name: 'all-requests',
-        component: () => { return import(/* webpackChunkName: "all-requests" */ '../views/AllRequestsView'); },
-      },
-      {
-        path: 'your-requests',
-        name: 'your-requests',
-        component: () => { return import(/* webpackChunkName: "your-requests" */ '../views/YourRequestsView'); },
-      },
-      {
-        path: 'add-request',
-        name: 'add-request',
-        component: () => { return import(/* webpackChunkName: "add-request" */ '../views/AddRequestView'); },
+        path: 'add',
+        name: 'add',
+        component: () => { return import(/* webpackChunkName: "add" */ '../views/AddDemand'); },
       },
     ],
   },
   {
-    path: '*',
-    name: 'page-not-found',
-    component: () => { return import(/* webpackChunkName: "page-not-found" */ '../components/PageNotFound.vue'); },
+    path: '/user',
+    name: 'user',
+    component: () => { return import(/* webpackChunkName: "add" */ '../views/UserPage'); },
+    children: [
+      {
+        path: 'profile',
+        name: 'profile',
+        component: () => { return import(/* webpackChunkName: "profile" */ '../views/UserProfile'); },
+      },
+      {
+        path: 'demands',
+        component: () => { return import(/* webpackChunkName: "demands" */ '../views/UserDemands'); },
+      },
+    ],
   },
 ];
 

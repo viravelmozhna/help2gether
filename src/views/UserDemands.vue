@@ -1,11 +1,11 @@
 <template>
   <div>
-    <h1>All requests</h1>
+    <h1>Your demands</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'AllRequestsView',
+  name: 'UserDemands',
 };
 </script>
