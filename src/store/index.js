@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import requestsList from '../assets/requestsList';
+import demandsListMockupData from '../assets/demandsListMockupData';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    requests: requestsList,
+    demands: demandsListMockupData,
   },
   getters: {
   },

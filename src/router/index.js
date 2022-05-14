@@ -17,7 +17,7 @@ const routes = [
       {
         path: 'list',
         name: 'list',
-        component: () => { return import(/* webpackChunkName: "list" */ '../views/DemandsList'); },
+        component: () => { return import(/* webpackChunkName: "list" */ '../components/DemandsList'); },
       },
       {
         path: 'add',
