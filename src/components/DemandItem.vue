@@ -1,9 +1,37 @@
 <template>
   <div>
-    <b-badge class="badge" variant="success" v-if="item.status === 'active'">Active</b-badge>
-    <b-badge class="badge" variant="info" v-else-if="item.status === 'in progress'">In progress</b-badge>
-    <b-badge class="badge" variant="light" v-else>Completed</b-badge>
-    <b-badge class="badge badge--urgent" variant="danger" v-if="item.emergency === 'urgent' && item.status === 'active'">Urgent</b-badge>
+    <b-badge
+      v-if="item.status === 'active'"
+      key="demand-status"
+      class="badge"
+      variant="success"
+    >
+      Active
+    </b-badge>
+    <b-badge
+      v-else-if="item.status === 'in progress'"
+      key="demand-status"
+      class="badge"
+      variant="info"
+    >
+      In progress
+    </b-badge>
+    <b-badge
+      v-else
+      key="demand-status"
+      class="badge"
+      variant="light"
+    >
+      Completed
+    </b-badge>
+    <b-badge
+      v-if="item.emergency === 'urgent' && item.status === 'active'"
+      key="demand-emergency"
+      class="badge badge--urgent"
+      variant="danger"
+    >
+      Urgent
+    </b-badge>
     <b-card-text class="font-weight-bold text-uppercase text m-0">{{ item.data.address.city }}</b-card-text>
     <b-card-text class="text-uppercase">{{ item.categorie }}</b-card-text>
     <b-card-text>{{ item.data.demand }}</b-card-text>
@@ -15,12 +43,28 @@
 export default {
   name: 'DemandItem',
   props: {
-    item: Object,
+    item: {
+      status: String,
+      categorie: String,
+      emergency: String,
+      time: String,
+      data: {
+        address: {
+          city: String,
+        },
+        demand: String,
+      },
+    },
   },
 };
 </script>
 
-<style>
+<style scope>
+.item:hover {
+  transform: scale(1.02);
+  border-color: #325892;
+  cursor: pointer;
+}
 .text {
   font-size: 20px;
 }
