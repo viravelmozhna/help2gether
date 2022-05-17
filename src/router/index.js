@@ -24,6 +24,11 @@ const routes = [
         name: 'add',
         component: () => { return import(/* webpackChunkName: "add" */ '../views/AddDemand'); },
       },
+      {
+        path: 'detailed/:id',
+        name: 'demand-detailed-info-page',
+        component: () => { return import(/* webpackChunkName: "demand-detailed-info-page" */ '../components/DemandDetailedInfoPage'); },
+      },
     ],
   },
   {

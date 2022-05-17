@@ -3,7 +3,14 @@
     <b-row cols="1" cols-sm="3" cols-md="5" cols-lg="6" tag="ul" no-gutters class="p-0 mw-100" align-h="center">
 
       <!-- Structure of item ['demand-id', {demand-data}] -->
-      <b-card v-for="item in items" :key="item[0]" align="left" tag="li" class="m-2 item">
+      <b-card
+        v-for="item in items"
+        :key="item[0]"
+        align="left"
+        tag="li"
+        class="m-2 item"
+        @click="() => {demandDetailedInfoPageOpenHandler(item[0])}"
+      >
         <DemandItem :item="item[1]" />
       </b-card>
 
@@ -31,6 +38,11 @@ export default {
         data: dataToArray,
       });
     });
+  },
+  methods: {
+    demandDetailedInfoPageOpenHandler(id) {
+      this.$router.push({ path: `/demands/detailed/${id}` });
+    },
   },
   components: {
     DemandItem,
