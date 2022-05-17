@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <b-card align="left" tag="li" class="m-2 item">
     <b-badge
-      v-if="item.status === 'active'"
-      key="demand-status"
+      v-if="status === 'active'"
+      key="status-active"
       class="badge"
       variant="success"
     >
       Active
     </b-badge>
     <b-badge
-      v-else-if="item.status === 'in progress'"
-      key="demand-status"
+      v-else-if="status === 'in progress'"
+      key="status-in-progress"
       class="badge"
       variant="info"
     >
@@ -18,43 +18,37 @@
     </b-badge>
     <b-badge
       v-else
-      key="demand-status"
+      key="status-completed"
       class="badge"
       variant="light"
     >
       Completed
     </b-badge>
     <b-badge
-      v-if="item.emergency === 'urgent' && item.status === 'active'"
+      v-if="emergency === 'urgent' && status === 'active'"
       key="demand-emergency"
       class="badge badge--urgent"
       variant="danger"
     >
       Urgent
     </b-badge>
-    <b-card-text class="font-weight-bold text-uppercase text m-0">{{ item.data.address.city }}</b-card-text>
-    <b-card-text class="text-uppercase">{{ item.categorie }}</b-card-text>
-    <b-card-text>{{ item.data.demand }}</b-card-text>
-    <b-card-text class="time">{{ item.time }}</b-card-text>
-  </div>
+    <b-card-text class="font-weight-bold text-uppercase text m-0">{{ city }}</b-card-text>
+    <b-card-text class="text-uppercase">{{ categorie }}</b-card-text>
+    <b-card-text>{{ demand }}</b-card-text>
+    <b-card-text class="time">{{ time }}</b-card-text>
+  </b-card>
 </template>
 
 <script>
 export default {
   name: 'DemandItem',
   props: {
-    item: {
-      status: String,
-      categorie: String,
-      emergency: String,
-      time: String,
-      data: {
-        address: {
-          city: String,
-        },
-        demand: String,
-      },
-    },
+    status: String,
+    categorie: String,
+    emergency: String,
+    time: String,
+    city: String,
+    demand: String,
   },
 };
 </script>

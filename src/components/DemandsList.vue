@@ -1,9 +1,17 @@
 <template>
   <b-container fluid>
     <b-row cols="1" cols-sm="3" cols-md="5" cols-lg="6" tag="ul" no-gutters class="p-0 mw-100" align-h="center">
-      <b-card v-for="item in items" :key="item.id" align="left" tag="li" class="m-2 item">
-        <DemandItem :item="item" />
-      </b-card>
+      <template v-for="item in items">
+        <DemandItem
+          :status="item.status"
+          :emergency="item.emergency"
+          :categorie="item.categorie"
+          :city="item.data.address.city"
+          :demand="item.data.demand"
+          :time="item.time"
+          :key="item.id"
+        />
+      </template>
     </b-row>
   </b-container>
 </template>
