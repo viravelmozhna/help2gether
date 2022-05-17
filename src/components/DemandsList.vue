@@ -34,7 +34,7 @@ export default {
     onValue(demands, (snapshot) => {
       // Receive data from DB in objects, transforme it to array for easier maintenance and next interaction
       const dataToArray = Object.entries(snapshot.val());
-      this.$store.dispatch('getData', {
+      this.$store.dispatch('getDemandsList', {
         data: dataToArray,
       });
     });

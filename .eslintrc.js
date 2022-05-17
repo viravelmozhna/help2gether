@@ -14,7 +14,6 @@ module.exports = {
     'quote-props': 1,
     'prefer-object-spread': 2,
     'prefer-destructuring': [1, { array: true, object: true }],
-    'prefer-template': 1,
     'func-style': [2, 'expression'],
     'no-loop-func': 2,
     'prefer-rest-params': 1,

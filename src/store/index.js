@@ -6,17 +6,24 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     demands: [],
+    demandInfo: [],
   },
   getters: {
   },
   mutations: {
-    getData(state, payload) {
+    getDemandsList(state, payload) {
       state.demands = payload.data;
+    },
+    getDemandInfo(state, payload) {
+      state.demandInfo = payload.data;
     },
   },
   actions: {
-    getData(context, payload) {
-      context.commit('getData', payload);
+    getDemandsList(context, payload) {
+      context.commit('getDemandsList', payload);
+    },
+    getDemandInfo(context, payload) {
+      context.commit('getDemandInfo', payload);
     },
   },
   modules: {
