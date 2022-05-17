@@ -22,6 +22,8 @@
 import { getDatabase, ref, onValue } from 'firebase/database';
 import DemandItem from './DemandItem.vue';
 
+const db = getDatabase();
+
 export default {
   computed: {
     items() {
@@ -29,7 +31,6 @@ export default {
     },
   },
   mounted() {
-    const db = getDatabase();
     const demands = ref(db, 'demands');
     onValue(demands, (snapshot) => {
       // Receive data from DB in objects, transforme it to array for easier maintenance and next interaction

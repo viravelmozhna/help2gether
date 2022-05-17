@@ -2,7 +2,8 @@
   <div>
     <b-button @click="goBack" size="sm" variant="link">Go back to the list</b-button>
     <h1>Detailed info about demand -- {{ id }}</h1>
-    <p>NAME: {{demandInfo.contactData.name}}</p>
+     <p>{{from}}</p>
+    <!-- <p>NAME: {{demandInfo.contactData.name}}</p>
     <p>PHONE: {{demandInfo.contactData.phone}}</p>
     <p>ADDRESS: {{demandInfo.contactData.address.region}} region, {{demandInfo.contactData.address.city}}, {{demandInfo.contactData.address.street}}</p>
     <p>DEMAND: {{demandInfo.demand}}</p>
@@ -10,12 +11,12 @@
     <b-badge variant="info" v-else-if="demandInfo.status === 'in progress'">In progress</b-badge>
     <b-badge variant="light" v-else>Completed</b-badge>
     <b-badge variant="danger" v-if="demandInfo.emergency === 'urgent' && demandInfo.status === 'active'">Urgent</b-badge></p>
-    <b-badge variant="secondary">{{demandInfo.category}}</b-badge>
+    <b-badge variant="secondary">{{demandInfo.category}}</b-badge> -->
   </div>
 </template>
 
 <script>
-import { getDatabase, ref, onValue } from 'firebase/database';
+// import { getDatabase, ref, onValue } from 'firebase/database';
 
 export default {
   name: 'DemandDetailedInfoPage',
@@ -32,19 +33,20 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.push({ path: this.from });
+      const path = this.from === null ? '/' : this.from;
+      this.$router.push({ path });
     },
   },
-  mounted() {
-    const db = getDatabase();
-    const demandInfo = ref(db, 'demands/' + this.id);
-    onValue(demandInfo, (snapshot) => {
-      const data = snapshot.val();
-      this.$store.dispatch('getDemandInfo', {
-        data,
-      });
-    });
-  },
+  // mounted() {
+  //   const db = getDatabase();
+  //   const demandInfo = ref(db, 'demands/' + this.id);
+  //   onValue(demandInfo, (snapshot) => {
+  //     const data = snapshot.val();
+  //     this.$store.dispatch('getDemandInfo', {
+  //       data,
+  //     });
+  //   });
+  // },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.from = from.path;
