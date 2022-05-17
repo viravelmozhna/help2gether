@@ -19,17 +19,17 @@
 import { getDatabase, ref, onValue } from 'firebase/database';
 
 export default {
-  data() {
-    return {
-      object: this.$store.state.demands,
-    };
+  computed: {
+    object() {
+      return this.$store.state.demands;
+    },
   },
   mounted() {
     const db = getDatabase();
     const demands = ref(db, 'demands');
     onValue(demands, (snapshot) => {
       const data = snapshot.val();
-      console.log(data);
+      console.log(data['id-1']);
       this.$store.commit('getData', data);
     });
   },
