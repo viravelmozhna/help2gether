@@ -1,13 +1,13 @@
 <template>
   <div>
-    <b-badge class="badge" variant="success" v-if="value.status === 'active'">Active</b-badge>
-        <b-badge class="badge" variant="info" v-else-if="value.status === 'in progress'">In progress</b-badge>
-        <b-badge class="badge" variant="light" v-else>Completed</b-badge>
-        <b-badge class="badge badge--urgent" variant="danger" v-if="value.emergency === 'urgent' && value.status === 'active'">Urgent</b-badge>
-        <b-card-text class="font-weight-bold text-uppercase text m-0">{{ value.contactData.address.city }}</b-card-text>
-        <b-card-text class="text-uppercase">{{ value.category }}</b-card-text>
-        <b-card-text>{{ value.demand }}</b-card-text>
-        <b-card-text class="time">{{ value.createdTime }}</b-card-text>
+    <b-badge class="badge" variant="success" v-if="item.status === 'active'">Active</b-badge>
+    <b-badge class="badge" variant="info" v-else-if="item.status === 'in progress'">In progress</b-badge>
+    <b-badge class="badge" variant="light" v-else>Completed</b-badge>
+    <b-badge class="badge badge--urgent" variant="danger" v-if="item.emergency === 'urgent' && item.status === 'active'">Urgent</b-badge>
+    <b-card-text class="font-weight-bold text-uppercase text m-0">{{ item.contactData.address.city }}</b-card-text>
+    <b-card-text class="text-uppercase">{{ item.category }}</b-card-text>
+    <b-card-text>{{ item.demand }}</b-card-text>
+    <b-card-text class="time">{{ item.createdTime }}</b-card-text>
   </div>
 </template>
 
@@ -15,12 +15,12 @@
 export default {
   name: 'DemandItem',
   props: {
-    value: Object,
+    item: Object,
   },
 };
 </script>
 
-<style>
+<style scoped>
 .text {
   font-size: 20px;
 }

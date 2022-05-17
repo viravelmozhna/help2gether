@@ -1,9 +1,12 @@
 <template>
   <b-container fluid>
     <b-row cols="1" cols-sm="3" cols-md="5" cols-lg="6" tag="ul" no-gutters class="p-0 mw-100" align-h="center">
-      <b-card v-for="value in object" :key="value.name" align="left" tag="li" class="m-2 item">
-        <DemandItem :item="value" />
+
+      <!-- Structure of item ['demand-id', {demand-data}] -->
+      <b-card v-for="item in items" :key="item[0]" align="left" tag="li" class="m-2 item">
+        <DemandItem :item="item[1]" />
       </b-card>
+
     </b-row>
   </b-container>
 </template>
@@ -14,7 +17,7 @@ import DemandItem from './DemandItem.vue';
 
 export default {
   computed: {
-    object() {
+    items() {
       return this.$store.state.demands;
     },
   },
@@ -22,9 +25,11 @@ export default {
     const db = getDatabase();
     const demands = ref(db, 'demands');
     onValue(demands, (snapshot) => {
-      const data = snapshot.val();
-      console.log(data['id-1']);
-      this.$store.commit('getData', data);
+      // Receive data from DB in objects, transforme it to array for easier maintenance and next interaction
+      const dataToArray = Object.entries(snapshot.val());
+      this.$store.dispatch('getData', {
+        data: dataToArray,
+      });
     });
   },
   components: {
@@ -33,7 +38,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .item:hover {
   transform: scale(1.02);
   border-color: #325892;
