@@ -110,7 +110,8 @@ export default {
       this.$router.push({ path });
     },
   },
-  created() {
+  beforeCreate() {
+    console.log('before created');
     const db = getDatabase();
     const demandInfo = ref(db, 'demands/' + this.id);
     onValue(demandInfo, (snapshot) => {

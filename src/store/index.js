@@ -11,7 +11,7 @@ export default new Vuex.Store({
   getters: {
   },
   mutations: {
-    getDemandsList(state, payload) {
+    setDemands(state, payload) {
       state.demands = payload.data;
     },
     getDemandInfo(state, payload) {
@@ -19,8 +19,8 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    getDemandsList(context, payload) {
-      context.commit('getDemandsList', payload);
+    setDemands(context, payload) {
+      context.commit('setDemands', payload);
     },
     getDemandInfo(context, payload) {
       context.commit('getDemandInfo', payload);
