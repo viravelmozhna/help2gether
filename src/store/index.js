@@ -10,13 +10,13 @@ export default new Vuex.Store({
   getters: {
   },
   mutations: {
-    getDemandsList(state, payload) {
+    setDemands(state, payload) {
       state.demands = payload.data;
     },
   },
   actions: {
-    getDemandsList(context, payload) {
-      context.commit('getDemandsList', payload);
+    setDemands(context, payload) {
+      context.commit('setDemands', payload);
     },
   },
   modules: {
