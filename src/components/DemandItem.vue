@@ -33,9 +33,9 @@
       Urgent
     </b-badge>
     <b-card-text class="font-weight-bold text-uppercase text m-0">{{ city }}</b-card-text>
-    <b-card-text class="text-uppercase">{{ categorie }}</b-card-text>
+    <b-card-text class="text-uppercase">{{ category }}</b-card-text>
     <b-card-text>{{ demand }}</b-card-text>
-    <b-card-text class="time">{{ time }}</b-card-text>
+    <b-card-text class="time">{{ createdTime }}</b-card-text>
   </b-card>
 </template>
 
@@ -44,9 +44,9 @@ export default {
   name: 'DemandItem',
   props: {
     status: String,
-    categorie: String,
+    category: String,
     emergency: String,
-    time: String,
+    createdTime: String,
     city: String,
     demand: String,
   },

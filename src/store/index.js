@@ -1,18 +1,23 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import demandsListMockupData from '../assets/demandsListMockupData';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    demands: demandsListMockupData,
+    demands: [],
   },
   getters: {
   },
   mutations: {
+    setDemands(state, payload) {
+      state.demands = payload.data;
+    },
   },
   actions: {
+    setDemands(context, payload) {
+      context.commit('setDemands', payload);
+    },
   },
   modules: {
   },
