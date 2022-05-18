@@ -3,16 +3,18 @@
     <b-row cols="1" cols-sm="3" cols-md="5" cols-lg="6" tag="ul" no-gutters class="p-0 mw-100" align-h="center">
 
       <!-- Structure of item ['demand-id', {demand-data}] -->
-      <b-card
-        v-for="item in items"
-        :key="item[0]"
-        align="left"
-        tag="li"
-        class="m-2 item"
-        @click="() => {demandDetailedInfoPageOpenHandler(item[0])}"
-      >
-        <DemandItem :item="item[1]" />
-      </b-card>
+      <template v-for="item in items">
+        <DemandItem
+          :status="item[1].status"
+          :emergency="item[1].emergency"
+          :category="item[1].category"
+          :city="item[1].contactData.address.city"
+          :demand="item[1].demand"
+          :createdTime="item[1].time"
+          :id="item[0]"
+          :key="item[0]"
+        />
+      </template>
 
     </b-row>
   </b-container>
@@ -22,8 +24,6 @@
 import { getDatabase, ref, onValue } from 'firebase/database';
 import DemandItem from './DemandItem.vue';
 
-const db = getDatabase();
-
 export default {
   computed: {
     items() {
@@ -31,6 +31,7 @@ export default {
     },
   },
   mounted() {
+    const db = getDatabase();
     const demands = ref(db, 'demands');
     onValue(demands, (snapshot) => {
       // Receive data from DB in objects, transforme it to array for easier maintenance and next interaction
@@ -40,21 +41,8 @@ export default {
       });
     });
   },
-  methods: {
-    demandDetailedInfoPageOpenHandler(id) {
-      this.$router.push({ path: `/demands/detailed/${id}` });
-    },
-  },
   components: {
     DemandItem,
   },
 };
 </script>
-
-<style scoped>
-.item:hover {
-  transform: scale(1.02);
-  border-color: #325892;
-  cursor: pointer;
-}
-</style>
