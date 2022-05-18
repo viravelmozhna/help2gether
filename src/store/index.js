@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+// import { getDatabase, ref, onValue } from 'firebase/database';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     demands: [],
-    demandInfo: [],
+    demandDetailedInfo: [],
   },
   getters: {
   },
@@ -14,17 +15,32 @@ export default new Vuex.Store({
     setDemands(state, payload) {
       state.demands = payload.data;
     },
-    getDemandInfo(state, payload) {
-      state.demandInfo = payload.data;
+    setDemandDetailedInfo(state, payload) {
+      state.demandDetailedInfo = payload.data;
     },
   },
   actions: {
     setDemands(context, payload) {
       context.commit('setDemands', payload);
     },
-    getDemandInfo(context, payload) {
-      context.commit('getDemandInfo', payload);
+    setDemandDetailedInfo(context, payload) {
+      context.commit('setDemandDetailedInfo', payload);
     },
+    // setDemandDetailedInfo(context, { id }) {
+    //   console.log('1 - setDemandDetailedInfo action begins');
+    //   const db = getDatabase();
+    //   console.log('2 - get db');
+    //   const demandInfo = ref(db, 'demands/' + id);
+    //   console.log('3 - get demand info ref');
+    //   onValue(demandInfo, (snapshot) => {
+    //     const data = snapshot.val();
+    //     console.log('4 - onvalue snapshot');
+    //     context.commit('setDemandDetailedInfo', {
+    //       data,
+    //     });
+    //     console.log('5 - add info to store');
+    //   });
+    // },
   },
   modules: {
   },

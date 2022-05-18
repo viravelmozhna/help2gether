@@ -101,7 +101,8 @@ export default {
   },
   computed: {
     demandInfo() {
-      return this.$store.state.demandInfo;
+      console.log('5', this.$store.state.demandDetailedInfo);
+      return this.$store.state.demandDetailedInfo;
     },
   },
   methods: {
@@ -111,13 +112,18 @@ export default {
     },
   },
   created() {
+    console.log('0');
     const db = getDatabase();
+    console.log('1');
     const demandInfo = ref(db, 'demands/' + this.id);
+    console.log('2');
     onValue(demandInfo, (snapshot) => {
       const data = snapshot.val();
-      this.$store.dispatch('getDemandInfo', {
+      console.log('3');
+      this.$store.dispatch('setDemandDetailedInfo', {
         data,
       });
+      console.log('4');
     });
   },
   beforeRouteEnter(to, from, next) {
