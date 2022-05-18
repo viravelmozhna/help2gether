@@ -30,7 +30,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped>
 .item:hover {
   transform: scale(1.02);
   border-color: #325892;
