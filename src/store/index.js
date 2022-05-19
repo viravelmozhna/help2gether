@@ -7,7 +7,20 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     demands: [],
-    demandDetailedInfo: [],
+    demandDetailedInfo: {
+      contactData: {
+        name: '',
+        phone: '',
+        address: {
+          region: '',
+        },
+      },
+      demand: '',
+      category: '',
+      createdTime: '',
+      status: '',
+      emergency: '',
+    },
   },
   getters: {
   },

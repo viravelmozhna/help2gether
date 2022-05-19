@@ -112,7 +112,7 @@ export default {
     },
   },
   created() {
-    console.log('0');
+    console.log('created');
     const db = getDatabase();
     console.log('1');
     const demandInfo = ref(db, 'demands/' + this.id);
@@ -127,9 +127,31 @@ export default {
     });
   },
   beforeRouteEnter(to, from, next) {
+    console.log('before route enter');
     next((vm) => {
       vm.from = from.path;
     });
+  },
+  beforeCreate() {
+    console.log('before create');
+  },
+  beforeMount() {
+    console.log('before mount');
+  },
+  mounted() {
+    console.log('mounted');
+  },
+  beforeUpdate() {
+    console.log('before update');
+  },
+  updated() {
+    console.log('updated');
+  },
+  beforeDestroy() {
+    console.log('before destroy');
+  },
+  destroyed() {
+    console.log('destroyed');
   },
 };
 </script>
