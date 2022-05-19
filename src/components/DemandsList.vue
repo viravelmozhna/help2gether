@@ -27,24 +27,18 @@ import DemandItem from './DemandItem.vue';
 export default {
   computed: {
     demands() {
-      console.log('5', this.$store.state.demands);
       return this.$store.state.demands;
     },
   },
   created() {
-    console.log('0');
     const db = getDatabase();
-    console.log('1');
     const demands = ref(db, 'demands');
-    console.log('2');
     onValue(demands, (snapshot) => {
       // Receive data from DB in objects, transforme it to array for easier maintenance and next interaction
       const dataToArray = Object.entries(snapshot.val());
-      console.log('3');
       this.$store.dispatch('setDemands', {
         data: dataToArray,
       });
-      console.log('4');
     });
   },
   components: {
