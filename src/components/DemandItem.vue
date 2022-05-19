@@ -1,5 +1,10 @@
 <template>
-  <b-card align="left" tag="li" class="m-2 item">
+  <b-card
+    @click="demandDetailedInfoPageOpenHandler(id)"
+    align="left"
+    tag="li"
+    class="m-2 item"
+  >
     <b-badge
       v-if="status === 'active'"
       key="status-active"
@@ -49,6 +54,12 @@ export default {
     createdTime: String,
     city: String,
     demand: String,
+    id: String,
+  },
+  methods: {
+    demandDetailedInfoPageOpenHandler(id) {
+      this.$router.push({ path: `/demands/detailed/${id}` });
+    },
   },
 };
 </script>

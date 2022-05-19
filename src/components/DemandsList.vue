@@ -11,9 +11,11 @@
           :city="demand[1].contactData.address.city"
           :demand="demand[1].demand"
           :createdTime="demand[1].time"
+          :id="demand[0]"
           :key="demand[0]"
         />
       </template>
+
     </b-row>
   </b-container>
 </template>
@@ -28,7 +30,7 @@ export default {
       return this.$store.state.demands;
     },
   },
-  mounted() {
+  created() {
     const db = getDatabase();
     const demands = ref(db, 'demands');
     onValue(demands, (snapshot) => {
