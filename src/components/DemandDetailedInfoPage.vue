@@ -1,13 +1,6 @@
 <template>
   <div class="container">
-    <b-button
-      @click="goBack"
-      size="sm"
-      variant="link"
-      class="mb-2"
-    >
-      <u>Go back to the list</u>
-    </b-button>
+    <GoBackButton />
     <b-list-group
       flush
       tag="ul">
@@ -90,68 +83,32 @@
 
 <script>
 import { getDatabase, ref, onValue } from 'firebase/database';
+import GoBackButton from './common/GoBackButton.vue';
 
 export default {
   name: 'DemandDetailedInfoPage',
+  components: {
+    GoBackButton,
+  },
   data() {
     return {
       id: this.$route.params.id,
-      from: null,
     };
   },
   computed: {
     demandInfo() {
-      console.log('5', this.$store.state.demandDetailedInfo);
       return this.$store.state.demandDetailedInfo;
     },
   },
-  methods: {
-    goBack() {
-      const path = this.from === null ? '/' : this.from;
-      this.$router.push({ path });
-    },
-  },
   created() {
-    console.log('created');
     const db = getDatabase();
-    console.log('1');
     const demandInfo = ref(db, 'demands/' + this.id);
-    console.log('2');
     onValue(demandInfo, (snapshot) => {
       const data = snapshot.val();
-      console.log('3');
       this.$store.dispatch('setDemandDetailedInfo', {
         data,
       });
-      console.log('4');
     });
-  },
-  beforeRouteEnter(to, from, next) {
-    console.log('before route enter');
-    next((vm) => {
-      vm.from = from.path;
-    });
-  },
-  beforeCreate() {
-    console.log('before create');
-  },
-  beforeMount() {
-    console.log('before mount');
-  },
-  mounted() {
-    console.log('mounted');
-  },
-  beforeUpdate() {
-    console.log('before update');
-  },
-  updated() {
-    console.log('updated');
-  },
-  beforeDestroy() {
-    console.log('before destroy');
-  },
-  destroyed() {
-    console.log('destroyed');
   },
 };
 </script>

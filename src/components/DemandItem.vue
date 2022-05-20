@@ -1,6 +1,6 @@
 <template>
   <b-card
-    @click="() => {demandDetailedInfoPageOpenHandler(id)}"
+    @click="demandDetailedInfoPageOpenHandler(id)"
     align="left"
     tag="li"
     class="m-2 item"
