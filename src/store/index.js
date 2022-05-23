@@ -23,10 +23,59 @@ export default new Vuex.Store({
       emergency: '',
     },
     activeFiltersList: {
+      region: '',
       status: 'active',
+      emergency: 'urgent',
+      category: '',
     },
   },
   getters: {
+    filteredDemands: (state) => {
+      const { region, status, emergency, category } = state.activeFiltersList;
+
+      const filteredByCategory = function (demands) {
+        if (status) {
+          const filteredListOfDemands = demands.filter((demand) => {
+            return demand[1].status === status;
+          });
+          return filteredListOfDemands;
+        };
+        return demands;
+      };
+
+      const filteredByStatus = function (demands) {
+        if (category) {
+          const filteredListOfDemands = demands.filter((demand) => {
+            return demand[1].category === category;
+          });
+          return filteredListOfDemands;
+        };
+        return demands;
+      };
+
+      const filteredByRegion = function (demands) {
+        if (region) {
+          const filteredListOfDemands = demands.filter((demand) => {
+            return demand[1].contactData.address.region.toLowerCase() === region.toLowerCase();
+          });
+          return filteredListOfDemands;
+        };
+        return demands;
+      };
+
+      const filteredByEmergency = function (demands) {
+        if (emergency) {
+          const filteredListOfDemands = demands.filter((demand) => {
+            return demand[1].emergency === emergency;
+          });
+          return filteredListOfDemands;
+        };
+        return demands;
+      };
+
+      const filteredListOfDemands = filteredByEmergency(filteredByRegion(filteredByCategory(filteredByStatus(state.demands))));
+      return filteredListOfDemands;
+    },
   },
   mutations: {
     setDemands(state, payload) {
@@ -41,7 +90,7 @@ export default new Vuex.Store({
     setActiveFiltersList(state, payload) {
       state.activeFiltersList = {
         ...state.activeFiltersList,
-        region: payload.region,
+        ...payload,
       };
     },
   },

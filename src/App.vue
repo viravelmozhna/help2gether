@@ -11,7 +11,6 @@
   -moz-osx-font-smoothing: grayscale;
   padding-left: 15px;
   padding-right: 15px;
-  text-align: center;
 }
 .active {
   font-weight: 500;
