@@ -22,6 +22,9 @@ export default new Vuex.Store({
       status: '',
       emergency: '',
     },
+    activeFiltersList: {
+      status: 'active',
+    },
   },
   getters: {
   },
@@ -35,6 +38,12 @@ export default new Vuex.Store({
     setGoBackToUrl(state, payload) {
       state.path = payload.path;
     },
+    setActiveFiltersList(state, payload) {
+      state.activeFiltersList = {
+        ...state.activeFiltersList,
+        region: payload.region,
+      };
+    },
   },
   actions: {
     setDemands(context, payload) {
@@ -45,6 +54,9 @@ export default new Vuex.Store({
     },
     setGoBackToUrl(context, payload) {
       context.commit('setGoBackToUrl', payload);
+    },
+    setActiveFiltersList(context, payload) {
+      context.commit('setActiveFiltersList', payload);
     },
   },
   modules: {
