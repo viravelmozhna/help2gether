@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import filterDemands from '../utils/filterDemands';
+import constants from '../env/constants';
 
 Vue.use(Vuex);
 
@@ -34,47 +36,19 @@ export default new Vuex.Store({
       const { region, status, emergency, category } = state.activeFiltersList;
 
       const filteredByCategory = function (demands) {
-        if (status) {
-          const filteredListOfDemands = demands.filter((demand) => {
-            return demand[1].status === status;
-          });
-          return filteredListOfDemands;
-        };
-        return demands;
+        return filterDemands(demands, category, constants.CATEGORY);
       };
-
       const filteredByStatus = function (demands) {
-        if (category) {
-          const filteredListOfDemands = demands.filter((demand) => {
-            return demand[1].category === category;
-          });
-          return filteredListOfDemands;
-        };
-        return demands;
+        return filterDemands(demands, status, constants.STATUS);
       };
-
       const filteredByRegion = function (demands) {
-        if (region) {
-          const filteredListOfDemands = demands.filter((demand) => {
-            return demand[1].contactData.address.region.toLowerCase() === region.toLowerCase();
-          });
-          return filteredListOfDemands;
-        };
-        return demands;
+        return filterDemands(demands, region, constants.REGION);
       };
-
       const filteredByEmergency = function (demands) {
-        if (emergency) {
-          const filteredListOfDemands = demands.filter((demand) => {
-            return demand[1].emergency === emergency && demand[1].status === 'active';
-          });
-          return filteredListOfDemands;
-        };
-        return demands;
+        return filterDemands(demands, emergency, constants.EMERGENCY);
       };
 
-      const filteredListOfDemands = filteredByEmergency(filteredByRegion(filteredByCategory(filteredByStatus(state.demands))));
-      return filteredListOfDemands;
+      return filteredByEmergency(filteredByRegion(filteredByCategory(filteredByStatus(state.demands))));
     },
   },
   mutations: {

@@ -1,11 +1,20 @@
 <template>
-  <div class="wrapper">
+  <div class="d-flex flex-row pl-3" v-if="selectedFilters.length !== 0">
     <span>Selected:</span>
-    <ul class="list">
-      <li v-for="filter in selectedFilters" :key="filter" class="ml-2">
-        <b-badge variant="warning">
-          <button class="my-button" @click="deleteFilter(filter)"><img src="../assests/cross.png" width="10" height="10"></button>
-          <span class="text ml-2">{{filter}}</span>
+    <ul class="list d-flex flex-row pl-0">
+      <li
+        v-for="filter in selectedFilters"
+        :key="filter[1]"
+        class="ml-2 border rounded"
+      >
+        <b-badge variant="light">
+          <button
+            @click="deleteFilter(filter[0])"
+            class="p-0 d-flex border-0 bg-transparent align-items-center"
+          >
+            <img src="../assets/cross.png" width="10" height="10">
+            <span class="text ml-2">{{filter[1].toUpperCase()}}</span>
+          </button>
         </b-badge>
       </li>
     </ul>
@@ -17,47 +26,23 @@ export default {
   name: 'SelectedFilters',
   computed: {
     selectedFilters() {
-      const { region, status, emergency, category } = this.$store.state.activeFiltersList;
-
+      const list = Object.entries(this.$store.state.activeFiltersList);
       const filtersList = [];
 
-      if (region) {
-        filtersList.push(region.toUpperCase());
-      };
-
-      if (status) {
-        filtersList.push(status.toUpperCase());
-      };
-
-      if (emergency) {
-        filtersList.push(emergency.toUpperCase());
-      };
-
-      if (category) {
-        filtersList.push(category.toUpperCase());
-      };
+      list.map((item) => {
+        if (item[1]) {
+          filtersList.push(item);
+        }
+        return item;
+      });
 
       return filtersList;
     },
   },
   methods: {
-    deleteFilter(filter0) {
-      const filter = filter0.toLowerCase();
-      let filter1 = 'region';
-
-      if (filter === 'active' || filter === 'in progress' || filter === 'completed') {
-        filter1 = 'status';
-      }
-
-      if (filter === 'urgent' || filter === 'non-urgent') {
-        filter1 = 'emergency';
-      }
-      if (filter === 'food' || filter === 'medicine' || filter === 'clothes' || filter === 'other') {
-        filter1 = 'category';
-      }
-
+    deleteFilter(filter) {
       this.$store.dispatch('setActiveFiltersList', {
-        [filter1]: '',
+        [filter]: '',
       });
     },
   },
@@ -65,27 +50,10 @@ export default {
 </script>
 
 <style scoped>
-.wrapper {
-  display: flex;
-  flex-direction: row;
-}
 .text {
   font-weight: 500;
 }
 .list {
   list-style: none;
-  padding-left: 0;
-  display: flex;
-  flex-direction: row;
-}
-.my-button {
-  border: none;
-  background-color: transparent;
-  padding: 0;
-  width: 10px;
-  height: 10px;
-}
-img {
-  vertical-align: baseline;
 }
 </style>
