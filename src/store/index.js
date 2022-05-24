@@ -66,7 +66,7 @@ export default new Vuex.Store({
       const filteredByEmergency = function (demands) {
         if (emergency) {
           const filteredListOfDemands = demands.filter((demand) => {
-            return demand[1].emergency === emergency;
+            return demand[1].emergency === emergency && demand[1].status === 'active';
           });
           return filteredListOfDemands;
         };

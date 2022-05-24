@@ -1,9 +1,13 @@
 <template>
-  <div>
-    <p>Selected:</p>
-    <ul v-for="filter in selectedFilters" :key="filter">
-      <li>
-        <button @click="deleteFilter(filter)">delete</button>{{filter}}</li>
+  <div class="wrapper">
+    <span>Selected:</span>
+    <ul class="list">
+      <li v-for="filter in selectedFilters" :key="filter" class="ml-2">
+        <b-badge variant="warning">
+          <button class="my-button" @click="deleteFilter(filter)"><img src="../assests/cross.png" width="10" height="10"></button>
+          <span class="text ml-2">{{filter}}</span>
+        </b-badge>
+      </li>
     </ul>
   </div>
 </template>
@@ -33,7 +37,6 @@ export default {
         filtersList.push(category.toUpperCase());
       };
 
-      // return filtersList.length > 0 ? filtersList.join(',') : '';
       return filtersList;
     },
   },
@@ -60,3 +63,29 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.wrapper {
+  display: flex;
+  flex-direction: row;
+}
+.text {
+  font-weight: 500;
+}
+.list {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: row;
+}
+.my-button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  width: 10px;
+  height: 10px;
+}
+img {
+  vertical-align: baseline;
+}
+</style>

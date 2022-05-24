@@ -1,7 +1,14 @@
 <template>
-    <form @submit.prevent="setFilter">
-      <input v-model.trim="message" placeholder="Search by region">
-    </form>
+    <b-form
+      @submit.prevent="setFilter"
+      class="w-50 mb-2"
+    >
+      <b-form-input
+        v-model.trim="message"
+        placeholder="Search by region (Kyiv, Kharkiv etc.)"
+      >
+      </b-form-input>
+    </b-form>
 </template>
 
 <script>
