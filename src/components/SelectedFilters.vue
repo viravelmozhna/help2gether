@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-row pl-3" v-if="selectedFilters.length !== 0">
     <span>Selected:</span>
-    <ul class="list d-flex flex-row pl-0">
+    <ul class="list d-flex flex-row pl-0 mb-2">
       <li
         v-for="filter in selectedFilters"
         :key="filter[1]"
@@ -9,7 +9,7 @@
       >
         <b-badge variant="light">
           <button
-            @click="deleteFilter(filter[0])"
+            @click="deleteOneFilter(filter[0])"
             class="p-0 d-flex border-0 bg-transparent align-items-center"
           >
             <img src="../assets/cross.png" width="10" height="10">
@@ -18,6 +18,13 @@
         </b-badge>
       </li>
     </ul>
+      <button
+        v-if="selectedFilters.length > 1"
+        @click="deleteAllFilters()"
+        class="mb-2 ml-2 p-0 bg-transparent border-0"
+      >
+        <u>Reset all</u>
+      </button>
   </div>
 </template>
 
@@ -40,9 +47,17 @@ export default {
     },
   },
   methods: {
-    deleteFilter(filter) {
+    deleteOneFilter(filter) {
       this.$store.dispatch('setActiveFiltersList', {
         [filter]: '',
+      });
+    },
+    deleteAllFilters() {
+      this.$store.dispatch('setActiveFiltersList', {
+        region: '',
+        status: '',
+        emergency: '',
+        category: '',
       });
     },
   },
