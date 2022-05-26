@@ -1,5 +1,5 @@
 <template>
-<div>
+<b-container fluid>
   <SearchInput />
   <SelectedFilters />
 
@@ -32,7 +32,7 @@
       </b-row>
     </b-container>
   </div>
-</div>
+</b-container>
 </template>
 
 <script>

@@ -36,16 +36,16 @@ export default new Vuex.Store({
       const { region, status, emergency, category } = state.activeFiltersList;
 
       const filteredByCategory = function (demands) {
-        return filterDemands(demands, category, constants.CATEGORY);
+        return filterDemands(demands, constants.CATEGORY, category);
       };
       const filteredByStatus = function (demands) {
-        return filterDemands(demands, status, constants.STATUS);
+        return filterDemands(demands, constants.STATUS, status);
       };
       const filteredByRegion = function (demands) {
-        return filterDemands(demands, region, constants.REGION);
+        return filterDemands(demands, constants.REGION, region);
       };
       const filteredByEmergency = function (demands) {
-        return filterDemands(demands, emergency, constants.EMERGENCY);
+        return filterDemands(demands, constants.EMERGENCY, emergency);
       };
 
       return filteredByEmergency(filteredByRegion(filteredByCategory(filteredByStatus(state.demands))));
