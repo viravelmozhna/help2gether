@@ -25,10 +25,10 @@ export default new Vuex.Store({
       emergency: '',
     },
     activeFiltersList: {
-      region: '',
-      status: '',
-      emergency: '',
-      category: '',
+      region: [],
+      status: [],
+      emergency: [],
+      category: [],
     },
   },
   getters: {
@@ -62,10 +62,36 @@ export default new Vuex.Store({
       state.path = payload.path;
     },
     setActiveFiltersList(state, payload) {
-      state.activeFiltersList = {
-        ...state.activeFiltersList,
-        ...payload,
-      };
+      const { type, propertyName, propertyValue } = payload;
+
+      if (type === 'delete/all') {
+        state.activeFiltersList = {
+          region: [],
+          status: [],
+          emergency: [],
+          category: [],
+        };
+      }
+
+      if (type === 'delete/one') {
+        state.activeFiltersList = {
+          ...state.activeFiltersList,
+          [propertyName]: state.activeFiltersList[propertyName].filter((property) => {
+            return property !== propertyValue;
+          }),
+        };
+      }
+
+      if (type === 'add' && state.activeFiltersList[propertyName].includes(propertyValue)) {
+        return;
+      }
+
+      if (type === 'add') {
+        state.activeFiltersList = {
+          ...state.activeFiltersList,
+          [propertyName]: [...state.activeFiltersList[propertyName], propertyValue],
+        };
+      }
     },
   },
   actions: {

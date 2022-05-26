@@ -3,7 +3,7 @@
     <p>{{name.toUpperCase()}}:</p>
     <ul class="list pl-0">
       <li v-for="option in options" :key="option">
-        <input type="radio" id="option" :value="option" v-model="checkedOption" @click="setFilter(option)">
+        <input type="checkbox" id="option" :value="option" v-model="checkedOption" @click="setFilter(option)">
         <label for="option">{{option}}</label>
       </li>
     </ul>
@@ -26,7 +26,9 @@ export default {
   methods: {
     setFilter(option) {
       this.$store.dispatch('setActiveFiltersList', {
-        [this.name]: option,
+        type: 'add',
+        propertyName: this.name,
+        propertyValue: option,
       });
     },
   },

@@ -25,7 +25,9 @@ export default {
   methods: {
     setFilter(e) {
       this.$store.dispatch('setActiveFiltersList', {
-        region: `${this.searchQuery} region`,
+        type: 'add',
+        propertyName: 'region',
+        propertyValue: `${this.searchQuery.toLowerCase()} region`,
       });
       e.target.reset();
     },
