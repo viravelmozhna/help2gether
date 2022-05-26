@@ -26,8 +26,8 @@ export default new Vuex.Store({
     },
     activeFiltersList: {
       region: '',
-      status: 'active',
-      emergency: 'urgent',
+      status: '',
+      emergency: '',
       category: '',
     },
   },

@@ -10,7 +10,7 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'prefer-const': 1,
-    'object-shorthand': [1, 'always', { avoidQuotes: true }],
+    // 'object-shorthand': [1, 'always', { avoidQuotes: true }],
     'quote-props': 1,
     'prefer-object-spread': 2,
     'prefer-destructuring': [1, { array: true, object: true }],
