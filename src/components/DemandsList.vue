@@ -1,4 +1,8 @@
 <template>
+<b-container fluid>
+  <SearchInput />
+  <SelectedFilters />
+
   <b-container fluid>
     <b-row cols="1" cols-sm="3" cols-md="5" cols-lg="6" tag="ul" no-gutters class="p-0 mw-100" align-h="center">
 
@@ -18,16 +22,19 @@
 
     </b-row>
   </b-container>
+</b-container>
 </template>
 
 <script>
 import { getDatabase, ref, onValue } from 'firebase/database';
 import DemandItem from './DemandItem.vue';
+import SearchInput from './SearchInput.vue';
+import SelectedFilters from './SelectedFilters.vue';
 
 export default {
   computed: {
     demands() {
-      return this.$store.state.demands;
+      return this.$store.getters.filteredDemands;
     },
   },
   created() {
@@ -43,6 +50,8 @@ export default {
   },
   components: {
     DemandItem,
+    SearchInput,
+    SelectedFilters,
   },
 };
 </script>

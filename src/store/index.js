@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import filterDemands from '../utils/filterDemands';
+import constants from '../env/constants';
 
 Vue.use(Vuex);
 
@@ -22,8 +24,32 @@ export default new Vuex.Store({
       status: '',
       emergency: '',
     },
+    activeFiltersList: {
+      region: '',
+      status: 'active',
+      emergency: 'urgent',
+      category: '',
+    },
   },
   getters: {
+    filteredDemands: (state) => {
+      const { region, status, emergency, category } = state.activeFiltersList;
+
+      const filteredByCategory = function (demands) {
+        return filterDemands(demands, constants.CATEGORY, category);
+      };
+      const filteredByStatus = function (demands) {
+        return filterDemands(demands, constants.STATUS, status);
+      };
+      const filteredByRegion = function (demands) {
+        return filterDemands(demands, constants.REGION, region);
+      };
+      const filteredByEmergency = function (demands) {
+        return filterDemands(demands, constants.EMERGENCY, emergency);
+      };
+
+      return filteredByEmergency(filteredByRegion(filteredByCategory(filteredByStatus(state.demands))));
+    },
   },
   mutations: {
     setDemands(state, payload) {
@@ -35,6 +61,12 @@ export default new Vuex.Store({
     setGoBackToUrl(state, payload) {
       state.path = payload.path;
     },
+    setActiveFiltersList(state, payload) {
+      state.activeFiltersList = {
+        ...state.activeFiltersList,
+        ...payload,
+      };
+    },
   },
   actions: {
     setDemands(context, payload) {
@@ -45,6 +77,9 @@ export default new Vuex.Store({
     },
     setGoBackToUrl(context, payload) {
       context.commit('setGoBackToUrl', payload);
+    },
+    setActiveFiltersList(context, payload) {
+      context.commit('setActiveFiltersList', payload);
     },
   },
   modules: {
