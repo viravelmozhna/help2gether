@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-row pl-3" v-if="selectedFilters.length !== 0">
+  <div class="d-flex flex-row pl-2" v-if="selectedFilters.length !== 0">
     <span>Selected:</span>
     <ul class="list d-flex flex-row pl-0 mb-2">
       <li
@@ -23,7 +23,7 @@
         @click="deleteAllFilters()"
         class="mb-2 ml-2 p-0 bg-transparent border-0"
       >
-        <u>Reset all</u>
+        <span class="border-bottom border-secondary">Reset all</span>
       </button>
   </div>
 </template>
