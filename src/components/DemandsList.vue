@@ -5,13 +5,38 @@
 
   <div class="d-flex flex-column flex-sm-row flex-nowrap">
     <b-list-group class="flex-column filters-list">
-      <b-list-group-item class="p-2 pl-3 pr-3"><FilterComponent filterName="emergency" :options="['urgent', 'non-urgent']" key="emergency"/></b-list-group-item>
-      <b-list-group-item class="p-2 pl-3 pr-3"><FilterComponent filterName="status" :options="['active', 'in progress', 'completed']" key="status"/></b-list-group-item>
-      <b-list-group-item class="p-2 pl-3 pr-3"><FilterComponent filterName="category" :options="['food', 'clothes', 'medicines', 'other']" key="category"/></b-list-group-item>
+      <b-list-group-item class="p-2 pl-3 pr-3">
+        <FilterComponent
+          filterName="emergency"
+          :filterOptions="['urgent', 'non-urgent']"
+        />
+      </b-list-group-item>
+      <b-list-group-item class="p-2 pl-3 pr-3">
+        <FilterComponent
+          filterName="status"
+          :filterOptions="['active', 'in progress', 'completed']"
+        />
+      </b-list-group-item>
+      <b-list-group-item class="p-2 pl-3 pr-3">
+        <FilterComponent
+          filterName="category"
+          :filterOptions="['food', 'clothes', 'medicines', 'other']"
+        />
+      </b-list-group-item>
     </b-list-group>
 
     <b-container fluid>
-      <b-row cols="1" cols-sm="2" cols-md="4" cols-lg="5" tag="ul" no-gutters class="p-0 mw-100" align-h="center">
+      <b-row
+        cols="1"
+        cols-sm="3"
+        cols-md="4"
+        cols-lg="5"
+        cols-xl="6"
+        tag="ul"
+        no-gutters
+        class="p-0 mw-100 demands-list"
+        align-h="center"
+      >
 
         <!-- Structure of demand: ['demand-id', {demand-data}] -->
         <template v-for="demand in demands">
@@ -67,9 +92,16 @@ export default {
 </script>
 
 <style scoped>
+.demands-list {
+  list-style: none;
+}
 @media screen and (min-width: 576px ) {
     .filters-list {
     width: 35vw;
+    }
+    .demands-list {
+      justify-content: left !important;
+      margin-top: -8px;
     }
 }
 @media screen and (min-width: 715px ) {

@@ -1,7 +1,8 @@
 <template>
-  <div class="d-flex flex-row align-items-start pl-2 mb-2" v-if="selectedFilters.length > 0">
-    <span>Selected:</span>
-    <ul class="list d-flex flex-row flex-wrap pl-0">
+  <div class="d-flex flex-row pl-2 mb-2">
+    <span class="font-weight-bold">Selected:</span>
+    <span v-if="selectedFilters.length === 0" class="ml-2"><i>No selected filters yet</i></span>
+    <ul class="list d-flex flex-row flex-wrap pl-0 mb-0">
       <li
         v-for="filter in selectedFilters"
         :key="filter"
@@ -12,19 +13,21 @@
             @click="deleteOneFilter(filter)"
             class="p-0 d-flex border-0 bg-transparent align-items-center"
           >
-            <img src="../assets/cross.png" width="10" height="10">
+            <img src="@/assets/cross.png" width="10" height="10">
             <span class="text ml-2">{{filter.toUpperCase()}}</span>
           </button>
           </b-badge>
       </li>
+      <li>
+        <button
+          v-if="selectedFilters.length > 1"
+          @click="deleteAllFilters()"
+          class="ml-2 p-0 bg-transparent border-0"
+        >
+          <span class="border-bottom border-secondary">Reset all</span>
+        </button>
+      </li>
     </ul>
-      <button
-        v-if="selectedFilters.length > 1"
-        @click="deleteAllFilters()"
-        class="mb-2 ml-2 p-0 bg-transparent border-0"
-      >
-        <span class="border-bottom border-secondary">Reset all</span>
-      </button>
   </div>
 </template>
 
@@ -50,7 +53,6 @@ export default {
   },
   methods: {
     deleteOneFilter(filter) {
-      // console.log('filter', filter);
       let propertyName = 'region';
       if (filter === 'active' || filter === 'in progress' || filter === 'completed') {
         propertyName = 'status';
@@ -61,7 +63,7 @@ export default {
       if (filter === 'food' || filter === 'clothes' || filter === 'medicines' || filter === 'other') {
         propertyName = 'category';
       }
-      // console.log('propertyName', propertyName);
+
       this.$store.dispatch('deleteFilter', {
         propertyName: [propertyName],
         propertyValue: filter,

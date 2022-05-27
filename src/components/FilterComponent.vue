@@ -1,14 +1,26 @@
 <template>
   <div>
     <p class="border-bottom text-uppercase font-weight-bold">{{filterName}}:</p>
-    <ul class="list pl-0">
-      <li v-for="option in options" :key="option">
-        <input type="checkbox" :id="filterName + option" :value="option" v-model="checkedOptions" @change="check($event, option)"/>
-        <label :for="filterName + option" class="ml-2 text-capitalize">{{option}}</label>
+    <ul class="filter-options-list pl-0">
+      <li
+        v-for="filterOption in filterOptions"
+        :key="filterOption"
+      >
+        <input
+          type="checkbox"
+          :id="filterName + filterOption"
+          :value="filterOption"
+          :checked="activeFilters.includes(filterOption)"
+          @change="check($event, filterOption)"
+        />
+        <label
+          :for="filterName + filterOption"
+          class="ml-2 text-capitalize"
+        >
+        {{filterOption}}
+        </label>
       </li>
     </ul>
-    <p>{{checkedOptions}}</p>
-    <p>{{isChecked}}</p>
   </div>
 </template>
 
@@ -18,43 +30,25 @@ export default {
   name: 'FilterComponent',
   props: {
     filterName: String,
-    options: Array,
-  },
-  data: function () {
-    return {
-      checkedOptions: [],
-      selected: [],
-    };
+    filterOptions: Array,
   },
   computed: {
-    isChecked() {
+    activeFilters() {
       const activeFilters = this.$store.state.activeFiltersList[this.filterName];
-      // const obj = {};
-      // this.options.map((opt) => {
-      //   if (activeFilters.includes(opt)) {
-      //     obj[opt] = true;
-      //   } else {
-      //     obj[opt] = false;
-      //   }
-      //   return opt;
-      // });
-      // const aaa = this.checkedOptions.filter((option) => {
-      //   return activeFilters.includes(option);
-      // });
       return activeFilters;
     },
   },
   methods: {
-    check(e, option) {
+    check(e, filterOption) {
       if (e.target.checked) {
         this.$store.dispatch('addFilter', {
           propertyName: this.filterName,
-          propertyValue: option,
+          propertyValue: filterOption,
         });
       } else {
         this.$store.dispatch('deleteFilter', {
           propertyName: this.filterName,
-          propertyValue: option,
+          propertyValue: filterOption,
         });
       }
     },
@@ -63,7 +57,7 @@ export default {
 </script>
 
 <style scoped>
-.list {
+.filter-options-list {
   list-style: none;
 }
 </style>

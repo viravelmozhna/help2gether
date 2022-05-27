@@ -8,7 +8,7 @@
     <b-badge
       v-if="status === 'active'"
       key="status-active"
-      class="badge"
+      class="badge position-absolute"
       variant="success"
     >
       Active
@@ -16,7 +16,7 @@
     <b-badge
       v-else-if="status === 'in progress'"
       key="status-in-progress"
-      class="badge"
+      class="badge position-absolute"
       variant="info"
     >
       In progress
@@ -24,7 +24,7 @@
     <b-badge
       v-else
       key="status-completed"
-      class="badge"
+      class="badge position-absolute"
       variant="light"
     >
       Completed
@@ -32,7 +32,7 @@
     <b-badge
       v-if="emergency === 'urgent' && status === 'active'"
       key="demand-emergency"
-      class="badge badge--urgent"
+      class="badge badge--urgent position-absolute"
       variant="danger"
     >
       Urgent
@@ -40,7 +40,7 @@
     <b-card-text class="font-weight-bold text-uppercase text m-0">{{ city }}</b-card-text>
     <b-card-text class="text-uppercase">{{ category }}</b-card-text>
     <b-card-text>{{ demand }}</b-card-text>
-    <b-card-text class="time">{{ createdTime }}</b-card-text>
+    <b-card-text class="time position-absolute">{{ createdTime }}</b-card-text>
   </b-card>
 </template>
 
@@ -74,7 +74,6 @@ export default {
   font-size: 20px;
 }
 .badge {
-  position: absolute;
   top: 5px;
   right: 5px;
 }
@@ -82,7 +81,6 @@ export default {
   top: 25px;
 }
 .time {
-  position: absolute;
   bottom: 5px;
   right: 5px;
   font-size: 14px;
