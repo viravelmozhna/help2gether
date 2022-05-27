@@ -1,10 +1,10 @@
 <template>
   <div>
-    <p>{{filterName.toUpperCase()}}:</p>
+    <p class="border-bottom text-uppercase font-weight-bold">{{filterName}}:</p>
     <ul class="list pl-0">
       <li v-for="option in options" :key="option">
         <input type="checkbox" :id="filterName + option" :value="option" v-model="checkedOptions" @change="check($event, option)"/>
-        <label :for="filterName + option">{{option}}</label>
+        <label :for="filterName + option" class="ml-2 text-capitalize">{{option}}</label>
       </li>
     </ul>
     <p>{{checkedOptions}}</p>
@@ -23,6 +23,7 @@ export default {
   data: function () {
     return {
       checkedOptions: [],
+      selected: [],
     };
   },
   computed: {

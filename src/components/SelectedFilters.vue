@@ -1,7 +1,7 @@
 <template>
-  <div class="d-flex flex-row pl-2" v-if="selectedFilters.length !== 0">
+  <div class="d-flex flex-row align-items-start pl-2 mb-2" v-if="selectedFilters.length > 0">
     <span>Selected:</span>
-    <ul class="list d-flex flex-row flex-wrap pl-0 mb-2">
+    <ul class="list d-flex flex-row flex-wrap pl-0">
       <li
         v-for="filter in selectedFilters"
         :key="filter"
