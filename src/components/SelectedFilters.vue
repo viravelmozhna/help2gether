@@ -1,8 +1,13 @@
 <template>
   <div class="d-flex flex-row pl-2 mb-2">
     <span class="font-weight-bold">Selected:</span>
-    <span v-if="selectedFilters.length === 0" class="ml-2"><i>No selected filters yet</i></span>
-    <ul class="list d-flex flex-row flex-wrap pl-0 mb-0">
+    <span
+      v-if="selectedFilters.length === 0"
+      class="ml-2"
+    >
+      <i>No selected filters yet</i>
+    </span>
+    <ul class="active-filters-list d-flex flex-row flex-wrap pl-0 mb-0">
       <li
         v-for="filter in selectedFilters"
         :key="filter"
@@ -14,9 +19,9 @@
             class="p-0 d-flex border-0 bg-transparent align-items-center"
           >
             <img src="@/assets/cross.png" width="10" height="10">
-            <span class="text ml-2">{{filter.toUpperCase()}}</span>
+            <span class="text ml-2 text-uppercase">{{filter}}</span>
           </button>
-          </b-badge>
+        </b-badge>
       </li>
       <li>
         <button
@@ -36,19 +41,19 @@ export default {
   name: 'SelectedFilters',
   computed: {
     selectedFilters() {
-      const list = Object.entries(this.$store.state.activeFiltersList);
-      const filtersList = [];
+      const activeFiltersListFromStore = Object.entries(this.$store.state.activeFiltersList);
+      const selectedFilters = [];
 
-      list.map((item) => {
-        if (item[1].length > 0) {
-          item[1].map((property) => {
-            filtersList.push(property);
+      activeFiltersListFromStore.map((filter) => {
+        if (filter[1].length > 0) {
+          filter[1].map((property) => {
+            selectedFilters.push(property);
             return property;
           });
         }
-        return item;
+        return filter;
       });
-      return filtersList;
+      return selectedFilters;
     },
   },
   methods: {
@@ -80,7 +85,7 @@ export default {
 .text {
   font-weight: 500;
 }
-.list {
+.active-filters-list {
   list-style: none;
 }
 </style>
