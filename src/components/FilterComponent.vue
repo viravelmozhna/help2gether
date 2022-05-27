@@ -1,12 +1,14 @@
 <template>
   <div>
-    <p>{{name.toUpperCase()}}:</p>
+    <p>{{filterName.toUpperCase()}}:</p>
     <ul class="list pl-0">
       <li v-for="option in options" :key="option">
-        <input type="checkbox" id="option" :value="option" v-model="checkedOption" @click="setFilter(option)">
-        <label for="option">{{option}}</label>
+        <input type="checkbox" :id="filterName + option" :value="option" v-model="checkedOptions" @change="check($event, option)"/>
+        <label :for="filterName + option">{{option}}</label>
       </li>
     </ul>
+    <p>{{checkedOptions}}</p>
+    <p>{{isChecked}}</p>
   </div>
 </template>
 
@@ -15,21 +17,45 @@
 export default {
   name: 'FilterComponent',
   props: {
-    name: String,
+    filterName: String,
     options: Array,
   },
   data: function () {
     return {
-      checkedOption: '',
+      checkedOptions: [],
     };
   },
+  computed: {
+    isChecked() {
+      const activeFilters = this.$store.state.activeFiltersList[this.filterName];
+      // const obj = {};
+      // this.options.map((opt) => {
+      //   if (activeFilters.includes(opt)) {
+      //     obj[opt] = true;
+      //   } else {
+      //     obj[opt] = false;
+      //   }
+      //   return opt;
+      // });
+      // const aaa = this.checkedOptions.filter((option) => {
+      //   return activeFilters.includes(option);
+      // });
+      return activeFilters;
+    },
+  },
   methods: {
-    setFilter(option) {
-      this.$store.dispatch('setActiveFiltersList', {
-        type: 'add',
-        propertyName: this.name,
-        propertyValue: option,
-      });
+    check(e, option) {
+      if (e.target.checked) {
+        this.$store.dispatch('addFilter', {
+          propertyName: this.filterName,
+          propertyValue: option,
+        });
+      } else {
+        this.$store.dispatch('deleteFilter', {
+          propertyName: this.filterName,
+          propertyValue: option,
+        });
+      }
     },
   },
 };

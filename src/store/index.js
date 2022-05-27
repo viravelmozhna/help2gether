@@ -61,37 +61,32 @@ export default new Vuex.Store({
     setGoBackToUrl(state, payload) {
       state.path = payload.path;
     },
-    setActiveFiltersList(state, payload) {
-      const { type, propertyName, propertyValue } = payload;
-
-      if (type === 'delete/all') {
-        state.activeFiltersList = {
-          region: [],
-          status: [],
-          emergency: [],
-          category: [],
-        };
-      }
-
-      if (type === 'delete/one') {
-        state.activeFiltersList = {
-          ...state.activeFiltersList,
-          [propertyName]: state.activeFiltersList[propertyName].filter((property) => {
-            return property !== propertyValue;
-          }),
-        };
-      }
-
-      if (type === 'add' && state.activeFiltersList[propertyName].includes(propertyValue)) {
+    deleteFilter(state, payload) {
+      const { propertyName, propertyValue } = payload;
+      state.activeFiltersList = {
+        ...state.activeFiltersList,
+        [propertyName]: state.activeFiltersList[propertyName].filter((property) => {
+          return property !== propertyValue;
+        }),
+      };
+    },
+    deleteAllFilters(state) {
+      state.activeFiltersList = {
+        region: [],
+        status: [],
+        emergency: [],
+        category: [],
+      };
+    },
+    addFilter(state, payload) {
+      const { propertyName, propertyValue } = payload;
+      if (state.activeFiltersList[propertyName].includes(propertyValue)) {
         return;
       }
-
-      if (type === 'add') {
-        state.activeFiltersList = {
-          ...state.activeFiltersList,
-          [propertyName]: [...state.activeFiltersList[propertyName], propertyValue],
-        };
-      }
+      state.activeFiltersList = {
+        ...state.activeFiltersList,
+        [propertyName]: [...state.activeFiltersList[propertyName], propertyValue],
+      };
     },
   },
   actions: {
@@ -106,6 +101,15 @@ export default new Vuex.Store({
     },
     setActiveFiltersList(context, payload) {
       context.commit('setActiveFiltersList', payload);
+    },
+    deleteFilter(context, payload) {
+      context.commit('deleteFilter', payload);
+    },
+    deleteAllFilters(context) {
+      context.commit('deleteAllFilters');
+    },
+    addFilter(context, payload) {
+      context.commit('addFilter', payload);
     },
   },
   modules: {

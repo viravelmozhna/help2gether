@@ -5,11 +5,11 @@
 
   <div class="wrapper">
     <div class="filters-list w-25">
-      <FilterComponent name="emergency" :options="['urgent', 'non-urgent']"/>
+      <FilterComponent filterName="emergency" :options="['urgent', 'non-urgent']" key="emergency"/>
       <p>--------------</p>
-      <FilterComponent name="status" :options="['active', 'in progress', 'completed']"/>
+      <FilterComponent filterName="status" :options="['active', 'in progress', 'completed']" key="status"/>
       <p>--------------</p>
-      <FilterComponent name="category" :options="['food', 'clothes', 'medicines', 'other']"/>
+      <FilterComponent filterName="category" :options="['food', 'clothes', 'medicines', 'other']" key="category"/>
     </div>
 
     <b-container fluid>

@@ -24,8 +24,10 @@ export default {
   },
   methods: {
     setFilter(e) {
-      this.$store.dispatch('setActiveFiltersList', {
-        type: 'add',
+      if (this.searchQuery === '') {
+        return;
+      }
+      this.$store.dispatch('addFilter', {
         propertyName: 'region',
         propertyValue: `${this.searchQuery.toLowerCase()} region`,
       });

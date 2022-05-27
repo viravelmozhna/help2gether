@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     deleteOneFilter(filter) {
-      console.log('filter', filter);
+      // console.log('filter', filter);
       let propertyName = 'region';
       if (filter === 'active' || filter === 'in progress' || filter === 'completed') {
         propertyName = 'status';
@@ -61,18 +61,14 @@ export default {
       if (filter === 'food' || filter === 'clothes' || filter === 'medicines' || filter === 'other') {
         propertyName = 'category';
       }
-      console.log('propertyName', propertyName);
-      this.$store.dispatch('setActiveFiltersList', {
-        type: 'delete/one',
+      // console.log('propertyName', propertyName);
+      this.$store.dispatch('deleteFilter', {
         propertyName: [propertyName],
         propertyValue: filter,
       });
     },
     deleteAllFilters() {
-      this.$store.dispatch('setActiveFiltersList', {
-        type: 'delete/all',
-        propertyName: 'resetAllFilters',
-      });
+      this.$store.dispatch('deleteAllFilters');
     },
   },
 };
