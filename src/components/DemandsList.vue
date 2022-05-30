@@ -64,10 +64,12 @@ import DemandItem from './DemandItem.vue';
 import SearchInput from './SearchInput.vue';
 import SelectedFilters from './SelectedFilters.vue';
 import FilterComponent from './FilterComponent.vue';
-import { getAuth } from 'firebase/auth';
 
 export default {
   computed: {
+    user() {
+      return this.$store.getters.user;
+    },
     demands() {
       return this.$store.getters.filteredDemands;
     },
@@ -83,13 +85,8 @@ export default {
       });
     });
 
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (user) {
-      console.log(user.email);
-    } else {
-      console.log('Sorry, you are not logged');
+    if (this.user.loggedIn) {
+      console.log('this.user.data.displayName', this.user.data.displayName);
     }
   },
   components: {

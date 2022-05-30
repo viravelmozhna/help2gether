@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import store from './store';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyA7jP2FD-YA9RClr7yxoJngzVAO_WlA1Zk',
@@ -14,3 +15,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+  const { currentUser } = auth;
+  console.log('currentUser name', currentUser.displayName);
+  console.log('currentUser email', currentUser.email);
+  store.dispatch('setUser', currentUser);
+});

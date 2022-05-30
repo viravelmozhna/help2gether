@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 export default {
   name: 'SignupPage',
   data() {
@@ -76,6 +76,11 @@ export default {
         .then((userCredential) => {
           const { user } = userCredential;
           user.displayName = this.user.name;
+        })
+        .then(() => {
+          updateProfile(auth.currentUser, {
+            displayName: this.user.name,
+          });
         })
         .then(() => {
           this.$router.push('/demands/list');

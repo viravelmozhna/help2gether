@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from 'firebase/auth';
 export default {
   name: 'LoginPage',
   data() {
@@ -60,6 +60,10 @@ export default {
   methods: {
     userLogin() {
       const auth = getAuth();
+      setPersistence(auth, browserLocalPersistence)
+        .then(() => {
+          return signInWithEmailAndPassword(auth, this.user.email, this.user.password);
+        });
       signInWithEmailAndPassword(auth, this.user.email, this.user.password)
         .then(() => {
           this.$router.push('/demands/list');
