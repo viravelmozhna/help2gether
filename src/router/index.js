@@ -10,6 +10,16 @@ const routes = [
     redirect: '/demands/list',
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => { return import(/* webpackChunkName: "login" */ '../views/LoginPage'); },
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => { return import(/* webpackChunkName: "register" */ '../views/RegisterPage'); },
+  },
+  {
     path: '/demands',
     name: 'demands',
     component: () => { return import(/* webpackChunkName: "demands" */ '../views/DemandsPage'); },
