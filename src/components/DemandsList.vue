@@ -64,6 +64,7 @@ import DemandItem from './DemandItem.vue';
 import SearchInput from './SearchInput.vue';
 import SelectedFilters from './SelectedFilters.vue';
 import FilterComponent from './FilterComponent.vue';
+import { getAuth } from 'firebase/auth';
 
 export default {
   computed: {
@@ -81,6 +82,15 @@ export default {
         data: dataToArray,
       });
     });
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      console.log(user.email);
+    } else {
+      console.log('Sorry, you are not logged');
+    }
   },
   components: {
     DemandItem,

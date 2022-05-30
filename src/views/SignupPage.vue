@@ -4,8 +4,19 @@
       bg-variant="light"
       class="w-50 mt-5 mr-auto ml-auto"
     >
-      <h1 class="text-center title">Log In</h1>
-      <b-form @submit.prevent="userLogin">
+      <h1 class="text-center title">Sign Up</h1>
+      <b-form @submit.prevent="userRegistration">
+        <b-form-group
+          label="Name"
+          label-for="name"
+        >
+          <b-form-input
+            id="name"
+            type="text"
+            v-model="user.name"
+          >
+          </b-form-input>
+        </b-form-group>
         <b-form-group
           label="Email"
           label-for="email"
@@ -34,11 +45,11 @@
           size="lg"
           variant="dark"
         >
-          Log In
+          Sign Up
         </b-button>
         <p class="mb-0">
-          Not registered yet?
-          <router-link to="/signup">Sign up!</router-link>
+          Already registered?
+          <router-link to="/login">Log in!</router-link>
         </p>
         </b-form>
       </b-card>
@@ -46,21 +57,26 @@
 </template>
 
 <script>
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 export default {
-  name: 'LoginPage',
+  name: 'SignupPage',
   data() {
     return {
       user: {
+        name: '',
         email: '',
         password: '',
       },
     };
   },
   methods: {
-    userLogin() {
+    userRegistration() {
       const auth = getAuth();
-      signInWithEmailAndPassword(auth, this.user.email, this.user.password)
+      createUserWithEmailAndPassword(auth, this.user.email, this.user.password)
+        .then((userCredential) => {
+          const { user } = userCredential;
+          user.displayName = this.user.name;
+        })
         .then(() => {
           this.$router.push('/demands/list');
         })
@@ -71,3 +87,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.title {
+  font-size: 30px;
+}
+</style>
