@@ -67,9 +67,6 @@ import FilterComponent from './FilterComponent.vue';
 
 export default {
   computed: {
-    user() {
-      return this.$store.getters.user;
-    },
     demands() {
       return this.$store.getters.filteredDemands;
     },
@@ -84,10 +81,6 @@ export default {
         data: dataToArray,
       });
     });
-
-    if (this.user.loggedIn) {
-      console.log('this.user.data.displayName', this.user.data.displayName);
-    }
   },
   components: {
     DemandItem,

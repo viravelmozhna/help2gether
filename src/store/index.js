@@ -1,18 +1,16 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import filterDemands from '../utils/filterDemands';
-import constants from '../env/constants';
+import filterDemands from '@/utils/filterDemands';
+import constants from '@/env/constants';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     user: {
-      loggedIn: false,
+      isLoggedIn: false,
       data: null,
     },
-    // by default we return to the full list of demands; in the future 'user-demands' component we will change this 'goBackToUrl' path with action
-    goBackToUrl: '/demands/list',
     demands: [],
     demandDetailedInfo: {
       contactData: {
@@ -34,10 +32,15 @@ export default new Vuex.Store({
       emergency: [],
       category: [],
     },
+    // TODO: by default we return to the full list of demands; in the future 'user-demands' component we will change this 'goBackToUrl' path with action
+    goBackToUrl: '/demands/list',
   },
   getters: {
-    user(state) {
-      return state.user;
+    isUserLoggedIn(state) {
+      return state.user.isLoggedIn;
+    },
+    userData(state) {
+      return state.user.data;
     },
     filteredDemands: (state) => {
       const { region, status, emergency, category } = state.activeFiltersList;
@@ -59,8 +62,8 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    setUserLoggedIn(state, payload) {
-      state.user.loggedIn = payload;
+    setUserLoggedIn(state) {
+      state.user.isLoggedIn = !state.user.isLoggedIn;
     },
     setUserData(state, payload) {
       state.user.data = payload;
@@ -103,16 +106,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    setUser(context, user) {
-      context.commit('setUserLoggedIn', user !== null);
-      if (user) {
-        context.commit('setUserData', {
-          displayName: user.displayName,
-          email: user.email,
-        });
-      } else {
-        context.commit('setUserData', null);
-      }
+    setUser(context, payload) {
+      context.commit('setUserLoggedIn');
+      context.commit('setUserData', payload);
     },
     setDemands(context, payload) {
       context.commit('setDemands', payload);

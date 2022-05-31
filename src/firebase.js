@@ -18,7 +18,15 @@ export const auth = getAuth(app);
 
 onAuthStateChanged(auth, (user) => {
   const { currentUser } = auth;
-  console.log('currentUser name', currentUser.displayName);
-  console.log('currentUser email', currentUser.email);
-  store.dispatch('setUser', currentUser);
+  if (currentUser) {
+    console.log('currentUser name', currentUser.displayName);
+    console.log('currentUser email', currentUser.email);
+    store.dispatch('setUser', {
+      displayName: currentUser.displayName,
+      email: currentUser.email,
+      id: currentUser.uid,
+    });
+  } else {
+    console.log('You are logged out');
+  }
 });
