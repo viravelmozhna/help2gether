@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/',
     name: 'start',
-    redirect: '/login',
+    redirect: '/demands/list',
   },
   {
     path: '/login',
@@ -75,9 +75,12 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const auth = getAuth();
   if (to.matched.some((record) => { return record.meta.requiresAuth; })) {
-    if (!auth.currentUser) {
+    const auth = getAuth();
+    const { currentUser } = auth;
+    console.log('auth in router', auth);
+    console.log('currentuser in router', currentUser);
+    if (!currentUser) {
       next({
         path: '/login',
       });

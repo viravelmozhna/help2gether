@@ -14,14 +14,17 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
+const auth = getAuth(app);
+console.log('auth in firebase file ---', auth);
+console.log('current user in firebase file ---', auth.currentUser);
 
 onAuthStateChanged(auth, (user) => {
   const { currentUser } = auth;
   if (currentUser) {
-    console.log(currentUser);
-    console.log('currentUser name', currentUser.displayName);
-    console.log('currentUser email', currentUser.email);
+    console.log('current user in onAuthStateChanged ---', currentUser);
+    console.log('currentUser name in onAuthStateChanged ---', currentUser.displayName);
+    console.log('currentUser email in onAuthStateChanged ---', currentUser.email);
+
     store.dispatch('setUser', {
       displayName: currentUser.displayName,
       email: currentUser.email,
