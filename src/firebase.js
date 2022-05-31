@@ -19,6 +19,7 @@ export const auth = getAuth(app);
 onAuthStateChanged(auth, (user) => {
   const { currentUser } = auth;
   if (currentUser) {
+    console.log(currentUser);
     console.log('currentUser name', currentUser.displayName);
     console.log('currentUser email', currentUser.email);
     store.dispatch('setUser', {

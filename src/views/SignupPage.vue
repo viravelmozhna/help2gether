@@ -81,8 +81,7 @@ export default {
           updateProfile(auth.currentUser, {
             displayName: this.user.name,
           });
-        })
-        .then(() => {
+
           this.$router.push('/demands/list');
         })
         .catch((error) => {
