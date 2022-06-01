@@ -12,7 +12,7 @@
         >
           <b-form-input
             id="email"
-            type="text"
+            type="email"
             v-model="user.email"
           >
           </b-form-input>
@@ -23,7 +23,7 @@
         >
           <b-form-input
             id="password"
-            type="text"
+            type="password"
             v-model="user.password"
           >
           </b-form-input>
@@ -46,7 +46,9 @@
 </template>
 
 <script>
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/firebase';
+
 export default {
   name: 'LoginPage',
   data() {
@@ -59,7 +61,6 @@ export default {
   },
   methods: {
     userLogin() {
-      const auth = getAuth();
       signInWithEmailAndPassword(auth, this.user.email, this.user.password)
         .then(() => {
           this.$router.push('/demands/list');

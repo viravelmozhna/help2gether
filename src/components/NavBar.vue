@@ -7,18 +7,22 @@
         <b-nav-item to="/demands/list" exact-active-class="active" class="text-uppercase">All demands</b-nav-item>
         <b-nav-item to="/user/demands" exact-active-class="active" class="text-uppercase">Your demands</b-nav-item>
         <b-nav-item to="/user/profile" exact-active-class="active" class="text-uppercase">Profile</b-nav-item>
-        <b-nav-item>
-          <span v-if="isLoggedIn">
-            <a @click="logout">Logout</a>
-          </span>
-        </b-nav-item>
       </b-navbar-nav>
     </b-collapse>
+    <div v-if="isLoggedIn" class="ml-auto">
+        <span class="mr-2">
+          Hello, {{ userData.displayName }}
+        </span>
+        <span class="text-uppercase logout-button">
+          <a @click="logout">Logout</a>
+        </span>
+      </div>
   </b-navbar>
 </template>
 
 <script>
-import { getAuth, signOut } from 'firebase/auth';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/firebase';
 
 export default {
   name: 'NavBar',
@@ -26,18 +30,24 @@ export default {
     isLoggedIn() {
       return this.$store.getters.isUserLoggedIn;
     },
+    userData() {
+      return this.$store.getters.userData;
+    },
   },
   methods: {
     logout() {
-      const auth = getAuth();
       signOut(auth)
         .then(() => {
           this.$store.dispatch('setUser', null);
-        })
-        .then(() => {
           this.$router.push('/login');
         });
     },
   },
 };
 </script>
+
+<style scoped>
+.logout-button {
+  cursor: pointer;
+}
+</style>

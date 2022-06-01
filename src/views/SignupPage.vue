@@ -23,7 +23,7 @@
         >
           <b-form-input
             id="email"
-            type="text"
+            type="email"
             v-model="user.email"
           >
           </b-form-input>
@@ -34,7 +34,7 @@
         >
           <b-form-input
             id="password"
-            type="text"
+            type="password"
             v-model="user.password"
           >
           </b-form-input>
@@ -57,7 +57,9 @@
 </template>
 
 <script>
-import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
+import { auth } from '@/firebase';
+
 export default {
   name: 'SignupPage',
   data() {
@@ -71,7 +73,6 @@ export default {
   },
   methods: {
     userRegistration() {
-      const auth = getAuth();
       createUserWithEmailAndPassword(auth, this.user.email, this.user.password)
         .then(() => {
           updateProfile(auth.currentUser, {
@@ -80,6 +81,7 @@ export default {
         })
         .then(() => {
           sendEmailVerification(auth.currentUser);
+
           this.$router.push('/demands/list');
         })
         .catch((error) => {
