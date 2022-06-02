@@ -39,7 +39,7 @@ const routes = [
       {
         path: 'add',
         name: 'add',
-        component: () => { return import(/* webpackChunkName: "add" */ '@/views/AddDemand'); },
+        component: () => { return import(/* webpackChunkName: "add" */ '@/components/AddDemand'); },
       },
       {
         path: 'detailed/:id',
