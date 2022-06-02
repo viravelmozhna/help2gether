@@ -19,7 +19,7 @@
       <b-list-group-item tag="li">
         <div class="mb-2">
           <span class="text mr-2">ADDRESS:</span>
-          <span>{{demandInfo.contactData.address.region}} region, {{demandInfo.contactData.address.city}}, {{demandInfo.contactData.address.street}}</span>
+          <span>{{demandInfo.contactData.address.region}}, {{demandInfo.contactData.address.city}}, {{demandInfo.contactData.address.street}}</span>
         </div>
       </b-list-group-item>
       <b-list-group-item tag="li">
