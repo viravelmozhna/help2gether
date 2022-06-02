@@ -2,7 +2,6 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import store from './store';
 
-// Database connection
 const firebaseConfig = {
   apiKey: 'AIzaSyA7jP2FD-YA9RClr7yxoJngzVAO_WlA1Zk',
   authDomain: 'help2gether-a15a6.firebaseapp.com',
@@ -14,7 +13,6 @@ const firebaseConfig = {
 };
 export const app = initializeApp(firebaseConfig);
 
-// Authentication
 export const auth = getAuth(app);
 
 // The function to check is user logged in or not before enter to routes

@@ -9,7 +9,7 @@
         <b-nav-item to="/user/profile" exact-active-class="active" class="text-uppercase">Profile</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
-    <div v-if="isLoggedIn" class="ml-auto">
+    <div v-if="isUserLoggedIn" class="ml-auto">
         <span class="mr-2">
           Hello, {{ userData.displayName }}
         </span>
@@ -27,7 +27,7 @@ import { auth } from '@/firebase';
 export default {
   name: 'NavBar',
   computed: {
-    isLoggedIn() {
+    isUserLoggedIn() {
       return this.$store.getters.isUserLoggedIn;
     },
     userData() {
