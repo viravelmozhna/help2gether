@@ -27,6 +27,10 @@
             v-model="user.password"
           >
           </b-form-input>
+          <p class="mb-0 text-right">
+            Forgot the password?
+            <router-link to="/reset-password">Reset it!</router-link>
+          </p>
         </b-form-group>
         <b-button
           type="submit"
@@ -36,7 +40,7 @@
         >
           Log In
         </b-button>
-        <p class="mb-0">
+        <p class="mb-0 text-right">
           Not registered yet?
           <router-link to="/signup">Sign up!</router-link>
         </p>

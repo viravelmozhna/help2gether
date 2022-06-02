@@ -47,7 +47,7 @@
         >
           Sign Up
         </b-button>
-        <p class="mb-0">
+        <p class="mb-0 text-right">
           Already registered?
           <router-link to="/login">Log in!</router-link>
         </p>

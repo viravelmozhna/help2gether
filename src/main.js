@@ -6,9 +6,13 @@ import '@/firebase';
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import Toast from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
 
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
+
+Vue.use(Toast);
 
 Vue.config.productionTip = false;
 
