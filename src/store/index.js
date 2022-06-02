@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import filterDemands from '../utils/filterDemands';
-import constants from '../env/constants';
+import { filterProperties } from '@/env/constants';
 
 Vue.use(Vuex);
 
@@ -25,10 +25,10 @@ export default new Vuex.Store({
       emergency: '',
     },
     activeFiltersList: {
-      region: '',
-      status: 'active',
-      emergency: 'urgent',
-      category: '',
+      region: [],
+      status: [],
+      emergency: [],
+      category: [],
     },
   },
   getters: {
@@ -36,16 +36,16 @@ export default new Vuex.Store({
       const { region, status, emergency, category } = state.activeFiltersList;
 
       const filteredByCategory = function (demands) {
-        return filterDemands(demands, constants.CATEGORY, category);
+        return filterDemands(demands, filterProperties.CATEGORY, category);
       };
       const filteredByStatus = function (demands) {
-        return filterDemands(demands, constants.STATUS, status);
+        return filterDemands(demands, filterProperties.STATUS, status);
       };
       const filteredByRegion = function (demands) {
-        return filterDemands(demands, constants.REGION, region);
+        return filterDemands(demands, filterProperties.REGION, region);
       };
       const filteredByEmergency = function (demands) {
-        return filterDemands(demands, constants.EMERGENCY, emergency);
+        return filterDemands(demands, filterProperties.EMERGENCY, emergency);
       };
 
       return filteredByEmergency(filteredByRegion(filteredByCategory(filteredByStatus(state.demands))));
@@ -61,10 +61,31 @@ export default new Vuex.Store({
     setGoBackToUrl(state, payload) {
       state.path = payload.path;
     },
-    setActiveFiltersList(state, payload) {
+    deleteFilter(state, payload) {
+      const { propertyName, propertyValue } = payload;
       state.activeFiltersList = {
         ...state.activeFiltersList,
-        ...payload,
+        [propertyName]: state.activeFiltersList[propertyName].filter((property) => {
+          return property !== propertyValue;
+        }),
+      };
+    },
+    deleteAllFilters(state) {
+      state.activeFiltersList = {
+        region: [],
+        status: [],
+        emergency: [],
+        category: [],
+      };
+    },
+    addFilter(state, payload) {
+      const { propertyName, propertyValue } = payload;
+      if (state.activeFiltersList[propertyName].includes(propertyValue)) {
+        return;
+      }
+      state.activeFiltersList = {
+        ...state.activeFiltersList,
+        [propertyName]: [...state.activeFiltersList[propertyName], propertyValue],
       };
     },
   },
@@ -80,6 +101,15 @@ export default new Vuex.Store({
     },
     setActiveFiltersList(context, payload) {
       context.commit('setActiveFiltersList', payload);
+    },
+    deleteFilter(context, payload) {
+      context.commit('deleteFilter', payload);
+    },
+    deleteAllFilters(context) {
+      context.commit('deleteAllFilters');
+    },
+    addFilter(context, payload) {
+      context.commit('addFilter', payload);
     },
   },
   modules: {

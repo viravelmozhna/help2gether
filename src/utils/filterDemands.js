@@ -1,23 +1,23 @@
-import constants from '@/env/constants';
+import { filterProperties } from '@/env/constants';
 
 const filterDemands = function (demands, propertyName, propertyValue) {
-  if (propertyValue) {
-    if (propertyName === constants.REGION) {
+  if (propertyValue.length > 0) {
+    if (propertyName === filterProperties.REGION) {
       const filteredListOfDemands = demands.filter((demand) => {
-        return demand[1].contactData.address.region.toLowerCase() === propertyValue.toLowerCase();
+        return propertyValue.includes(demand[1].contactData.address.region.toLowerCase());
       });
       return filteredListOfDemands;
     };
 
-    if (propertyName === constants.EMERGENCY) {
+    if (propertyName === filterProperties.EMERGENCY) {
       const filteredListOfDemands = demands.filter((demand) => {
-        return demand[1].emergency === propertyValue && demand[1].status === 'active';
+        return propertyValue.includes(demand[1].emergency);
       });
       return filteredListOfDemands;
     }
 
     const filteredListOfDemands = demands.filter((demand) => {
-      return demand[1][propertyName] === propertyValue;
+      return propertyValue.includes(demand[1][propertyName]);
     });
 
     return filteredListOfDemands;

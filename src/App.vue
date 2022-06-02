@@ -15,4 +15,7 @@
 .active {
   font-weight: 500;
 }
+.card-body {
+  padding: 15px !important;
+}
 </style>
