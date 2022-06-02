@@ -5,24 +5,16 @@
 
   <div class="d-flex flex-column flex-sm-row flex-nowrap">
     <b-list-group class="flex-column filters-list">
-      <b-list-group-item class="p-2 pl-3 pr-3">
-        <FilterComponent
-          filterName="emergency"
-          :filterOptions="['urgent', 'non-urgent']"
-        />
-      </b-list-group-item>
-      <b-list-group-item class="p-2 pl-3 pr-3">
-        <FilterComponent
-          filterName="status"
-          :filterOptions="['active', 'in progress', 'completed']"
-        />
-      </b-list-group-item>
-      <b-list-group-item class="p-2 pl-3 pr-3">
-        <FilterComponent
-          filterName="category"
-          :filterOptions="['food', 'clothes', 'medicines', 'other']"
-        />
-      </b-list-group-item>
+
+      <template v-for="(propertyOptions, propertyName) in filterProperties">
+        <b-list-group-item class="p-2 pl-3 pr-3" :key="propertyName">
+          <FilterComponent
+            :filterName="propertyName"
+            :filterOptions="propertyOptions"
+          />
+        </b-list-group-item>
+      </template>
+
     </b-list-group>
 
     <b-container fluid>
@@ -64,8 +56,14 @@ import DemandItem from './DemandItem.vue';
 import SearchInput from './SearchInput.vue';
 import SelectedFilters from './SelectedFilters.vue';
 import FilterComponent from './FilterComponent.vue';
+import { filterPropertiesValues } from '@/env/constants';
 
 export default {
+  data() {
+    return {
+      filterProperties: filterPropertiesValues,
+    };
+  },
   computed: {
     demands() {
       return this.$store.getters.filteredDemands;
