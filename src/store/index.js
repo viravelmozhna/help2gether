@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import filterDemands from '../utils/filterDemands';
-import constants from '../env/constants';
+import { filterProperties } from '@/env/constants';
 
 Vue.use(Vuex);
 
@@ -36,16 +36,16 @@ export default new Vuex.Store({
       const { region, status, emergency, category } = state.activeFiltersList;
 
       const filteredByCategory = function (demands) {
-        return filterDemands(demands, constants.CATEGORY, category);
+        return filterDemands(demands, filterProperties.CATEGORY, category);
       };
       const filteredByStatus = function (demands) {
-        return filterDemands(demands, constants.STATUS, status);
+        return filterDemands(demands, filterProperties.STATUS, status);
       };
       const filteredByRegion = function (demands) {
-        return filterDemands(demands, constants.REGION, region);
+        return filterDemands(demands, filterProperties.REGION, region);
       };
       const filteredByEmergency = function (demands) {
-        return filterDemands(demands, constants.EMERGENCY, emergency);
+        return filterDemands(demands, filterProperties.EMERGENCY, emergency);
       };
 
       return filteredByEmergency(filteredByRegion(filteredByCategory(filteredByStatus(state.demands))));

@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { filterProperties, filterPropertiesValues } from '@/env/constants';
 export default {
   name: 'SelectedFilters',
   computed: {
@@ -58,15 +59,15 @@ export default {
   },
   methods: {
     deleteOneFilter(filter) {
-      let propertyName = 'region';
-      if (filter === 'active' || filter === 'in progress' || filter === 'completed') {
-        propertyName = 'status';
+      let propertyName = filterProperties.REGION;
+      if (filterPropertiesValues[filterProperties.STATUS].includes(filter)) {
+        propertyName = filterProperties.STATUS;
       }
-      if (filter === 'urgent' || filter === 'non-urgent') {
-        propertyName = 'emergency';
+      if (filterPropertiesValues[filterProperties.EMERGENCY].includes(filter)) {
+        propertyName = filterProperties.EMERGENCY;
       }
-      if (filter === 'food' || filter === 'clothes' || filter === 'medicines' || filter === 'other') {
-        propertyName = 'category';
+      if (filterPropertiesValues[filterProperties.CATEGORY].includes(filter)) {
+        propertyName = filterProperties.CATEGORY;
       }
 
       this.$store.dispatch('deleteFilter', {
