@@ -10,6 +10,7 @@
           id="name"
           type="text"
           v-model="name"
+          autocomplete="off"
           required
         ></b-form-input>
       </b-form-group>
@@ -21,6 +22,7 @@
           id="phone"
           type="tel"
           v-model="phone"
+          autocomplete="off"
           required
         ></b-form-input>
       </b-form-group>
@@ -41,6 +43,7 @@
           id="city"
           type="text"
           v-model="city"
+          autocomplete="off"
           required
         ></b-form-input>
       </b-form-group>
@@ -52,6 +55,7 @@
           id="street"
           type="text"
           v-model="street"
+          autocomplete="off"
           required
         ></b-form-input>
       </b-form-group>

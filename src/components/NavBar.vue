@@ -39,6 +39,9 @@ export default {
       signOut(auth)
         .then(() => {
           this.$store.dispatch('setUser', null);
+          this.$toast.warning('You was logged out!', {
+            timeout: 2000,
+          });
           this.$router.push('/login');
         });
     },
