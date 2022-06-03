@@ -8,7 +8,11 @@
         placeholder="Search by region (Kyiv, Kharkiv etc.)"
       >
       </b-form-input>
-      <b-button type="submit" class="position-absolute find-button">
+      <b-button
+        type="submit"
+        class="position-absolute find-button"
+        variant="dark"
+      >
         Find
       </b-button>
     </b-form>
