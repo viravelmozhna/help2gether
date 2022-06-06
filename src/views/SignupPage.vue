@@ -1,0 +1,99 @@
+<template>
+  <div class="container">
+    <b-card
+      bg-variant="light"
+      class="w-50 mt-5 mr-auto ml-auto"
+    >
+      <h1 class="text-center title">Sign Up</h1>
+      <b-form @submit.prevent="userRegistration">
+        <b-form-group
+          label="Name"
+          label-for="name"
+        >
+          <b-form-input
+            id="name"
+            type="text"
+            v-model="user.name"
+          >
+          </b-form-input>
+        </b-form-group>
+        <b-form-group
+          label="Email"
+          label-for="email"
+        >
+          <b-form-input
+            id="email"
+            type="email"
+            v-model="user.email"
+          >
+          </b-form-input>
+        </b-form-group>
+        <b-form-group
+          label="Password"
+          label-for="password"
+        >
+          <b-form-input
+            id="password"
+            type="password"
+            v-model="user.password"
+          >
+          </b-form-input>
+        </b-form-group>
+        <b-button
+          type="submit"
+          class="w-100 mb-2"
+          size="lg"
+          variant="dark"
+        >
+          Sign Up
+        </b-button>
+        <p class="mb-0 text-right">
+          Already registered?
+          <router-link to="/login">Log in!</router-link>
+        </p>
+        </b-form>
+      </b-card>
+  </div>
+</template>
+
+<script>
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
+import { auth } from '@/firebase';
+
+export default {
+  name: 'SignupPage',
+  data() {
+    return {
+      user: {
+        name: '',
+        email: '',
+        password: '',
+      },
+    };
+  },
+  methods: {
+    userRegistration() {
+      createUserWithEmailAndPassword(auth, this.user.email, this.user.password)
+        .then(() => {
+          updateProfile(auth.currentUser, {
+            displayName: this.user.name,
+          });
+        })
+        .then(() => {
+          sendEmailVerification(auth.currentUser);
+
+          this.$router.push('/demands/list');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+};
+</script>
+
+<style scoped>
+.title {
+  font-size: 30px;
+}
+</style>

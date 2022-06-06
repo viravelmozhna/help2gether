@@ -7,7 +7,10 @@
     <b-list-group class="flex-column filters-list">
 
       <template v-for="(propertyOptions, propertyName) in filterProperties">
-        <b-list-group-item class="p-2 pl-3 pr-3" :key="propertyName">
+        <b-list-group-item
+          :key="propertyName"
+          class="p-2 pl-3 pr-3"
+        >
           <FilterComponent
             :filterName="propertyName"
             :filterOptions="propertyOptions"
@@ -52,11 +55,11 @@
 
 <script>
 import { getDatabase, ref, onValue } from 'firebase/database';
+import { filterPropertiesValues } from '@/env/constants';
 import DemandItem from './DemandItem.vue';
 import SearchInput from './SearchInput.vue';
 import SelectedFilters from './SelectedFilters.vue';
 import FilterComponent from './FilterComponent.vue';
-import { filterPropertiesValues } from '@/env/constants';
 
 export default {
   data() {

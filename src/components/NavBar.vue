@@ -9,11 +9,45 @@
         <b-nav-item to="/user/profile" exact-active-class="active" class="text-uppercase">Profile</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
+    <div v-if="isUserLoggedIn" class="ml-auto">
+        <span class="mr-2">
+          Hello, {{ userData.displayName }}
+        </span>
+        <span class="text-uppercase logout-button">
+          <a @click="logout">Logout</a>
+        </span>
+      </div>
   </b-navbar>
 </template>
 
 <script>
+import { signOut } from 'firebase/auth';
+import { auth } from '@/firebase';
+
 export default {
   name: 'NavBar',
+  computed: {
+    isUserLoggedIn() {
+      return this.$store.getters.isUserLoggedIn;
+    },
+    userData() {
+      return this.$store.getters.userData;
+    },
+  },
+  methods: {
+    logout() {
+      signOut(auth)
+        .then(() => {
+          this.$store.dispatch('setUser', null);
+          this.$router.push('/login');
+        });
+    },
+  },
 };
 </script>
+
+<style scoped>
+.logout-button {
+  cursor: pointer;
+}
+</style>

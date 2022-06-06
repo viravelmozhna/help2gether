@@ -7,8 +7,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    // by default we return to the full list of demands; in the future 'user-demands' component we will change this 'goBackToUrl' path with action
-    goBackToUrl: '/demands/list',
+    user: {
+      isLoggedIn: false,
+      data: null,
+    },
     demands: [],
     demandDetailedInfo: {
       contactData: {
@@ -30,8 +32,16 @@ export default new Vuex.Store({
       emergency: [],
       category: [],
     },
+    // TODO: by default we return to the full list of demands; in the future 'user-demands' component we will change this 'goBackToUrl' path with action
+    goBackToUrl: '/demands/list',
   },
   getters: {
+    isUserLoggedIn(state) {
+      return state.user.isLoggedIn;
+    },
+    userData(state) {
+      return state.user.data;
+    },
     filteredDemands: (state) => {
       const { region, status, emergency, category } = state.activeFiltersList;
 
@@ -52,6 +62,12 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setUserLoggedIn(state) {
+      state.user.isLoggedIn = !state.user.isLoggedIn;
+    },
+    setUserData(state, payload) {
+      state.user.data = payload;
+    },
     setDemands(state, payload) {
       state.demands = payload.data;
     },
@@ -90,6 +106,10 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    setUser(context, payload) {
+      context.commit('setUserLoggedIn');
+      context.commit('setUserData', payload);
+    },
     setDemands(context, payload) {
       context.commit('setDemands', payload);
     },
