@@ -1,16 +1,15 @@
 <template>
     <b-form
       @submit.prevent="setFilter"
-      class="w-75 mb-2 d-flex position-relative"
+      class="mb-2 d-flex search-input"
     >
-      <b-form-input
-        v-model.trim="searchQuery"
-        placeholder="Search by region (Kyiv, Kharkiv etc.)"
-      >
-      </b-form-input>
+      <b-form-select
+          :options="regions"
+          v-model="region"
+          required
+        ></b-form-select>
       <b-button
         type="submit"
-        class="position-absolute find-button"
         variant="dark"
       >
         Find
@@ -19,31 +18,37 @@
 </template>
 
 <script>
+import { regions } from '@/env/constants';
+
 export default {
   name: 'SearchInput',
   data() {
     return {
-      searchQuery: '',
+      regions: regions,
+      region: 'Kharkiv',
+
     };
   },
   methods: {
-    setFilter(e) {
-      if (this.searchQuery === '') {
-        return;
-      }
+    setFilter() {
       this.$store.dispatch('addFilter', {
         propertyName: 'region',
-        propertyValue: `${this.searchQuery.toLowerCase()} region`,
+        propertyValue: `${this.region.toLowerCase()} region`,
       });
-      e.target.reset();
     },
   },
 };
 </script>
 
 <style scoped>
-.find-button {
-  top: 0;
-  right: 0;
+@media screen and (max-width: 991px) {
+  .search-input {
+    width: 90vw;
+  }
+}
+@media screen and (min-width: 992px) {
+  .search-input {
+    width: 40vw;
+  }
 }
 </style>
