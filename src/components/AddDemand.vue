@@ -144,11 +144,19 @@ export default {
         createdTime: currentTime,
         status: 'active',
         emergency: this.emergency,
-      });
-      this.$toast.success('The demand was added!', {
-        timeout: 3500,
-      });
-      this.$router.push({ path: `/demands/detailed/${demandId}` });
+      })
+        .then(() => {
+          this.$toast.success('The demand was added!', {
+            timeout: 3500,
+          });
+          this.$router.push({ path: `/demands/detailed/${demandId}` });
+        })
+        .catch(() => {
+          this.$toast.error('Sorry, something went wrong! Try again later!', {
+            timeout: 3500,
+          });
+          this.$router.push({ path: '/demands/list' });
+        });
     },
   },
 };
