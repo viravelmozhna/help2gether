@@ -126,7 +126,9 @@ export default {
     addDemand() {
       const db = getDatabase();
       const demandId = shortid.generate();
-      const currentTime = Date.now();
+      const date = new Date();
+      const [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
+      const currentTime = `${day.toString().padStart(2, '0')}.${(month + 1).toString().padStart(2, '0')}.${year}`;
       set(ref(db, 'demands/' + demandId), {
         contactData: {
           name: this.name,
