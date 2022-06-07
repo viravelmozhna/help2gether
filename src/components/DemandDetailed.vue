@@ -86,7 +86,7 @@ import { getDatabase, ref, onValue } from 'firebase/database';
 import GoBackButton from './common/GoBackButton.vue';
 
 export default {
-  name: 'DemandDetailedInfoPage',
+  name: 'DemandDetailed',
   components: {
     GoBackButton,
   },

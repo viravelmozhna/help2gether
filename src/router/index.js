@@ -38,13 +38,13 @@ const routes = [
       },
       {
         path: 'add',
-        name: 'add',
-        component: () => { return import(/* webpackChunkName: "add" */ '@/components/AddDemand'); },
+        name: 'demand-new',
+        component: () => { return import(/* webpackChunkName: "demand-new" */ '@/components/DemandNew'); },
       },
       {
         path: 'detailed/:id',
-        name: 'demand-detailed-info-page',
-        component: () => { return import(/* webpackChunkName: "demand-detailed-info-page" */ '@/components/DemandDetailedInfoPage'); },
+        name: 'demand-detailed',
+        component: () => { return import(/* webpackChunkName: "demand-detailed" */ '@/components/DemandDetailed'); },
       },
     ],
   },
