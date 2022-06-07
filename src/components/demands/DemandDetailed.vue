@@ -83,7 +83,7 @@
 
 <script>
 import { getDatabase, ref, onValue } from 'firebase/database';
-import GoBackButton from './common/GoBackButton.vue';
+import GoBackButton from '../common/GoBackButton.vue';
 
 export default {
   name: 'DemandDetailed',

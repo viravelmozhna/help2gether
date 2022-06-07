@@ -57,9 +57,9 @@
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { filterPropertiesValues } from '@/env/constants';
 import DemandItem from './DemandItem.vue';
-import SearchInput from './SearchInput.vue';
-import SelectedFilters from './SelectedFilters.vue';
-import FilterComponent from './FilterComponent.vue';
+import SearchInput from '../filters/SearchInput.vue';
+import SelectedFilters from '../filters/SelectedFilters.vue';
+import FilterComponent from '../filters/FilterComponent.vue';
 
 export default {
   data() {
