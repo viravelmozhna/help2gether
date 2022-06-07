@@ -41,7 +41,7 @@
             :category="demand[1].category"
             :city="demand[1].contactData.address.city"
             :demand="demand[1].demand"
-            :createdTime="demand[1].time"
+            :createdTime="demand[1].createdTime"
             :id="demand[0]"
             :key="demand[0]"
           />
@@ -57,9 +57,9 @@
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { filterPropertiesValues } from '@/env/constants';
 import DemandItem from './DemandItem.vue';
-import SearchInput from './SearchInput.vue';
-import SelectedFilters from './SelectedFilters.vue';
-import FilterComponent from './FilterComponent.vue';
+import SearchInput from '../filters/SearchInput.vue';
+import SelectedFilters from '../filters/SelectedFilters.vue';
+import FilterComponent from '../filters/FilterComponent.vue';
 
 export default {
   data() {

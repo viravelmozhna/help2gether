@@ -34,17 +34,17 @@ const routes = [
       {
         path: 'list',
         name: 'list',
-        component: () => { return import(/* webpackChunkName: "list" */ '@/components/DemandsList'); },
+        component: () => { return import(/* webpackChunkName: "list" */ '@/components/demands/DemandsList'); },
       },
       {
         path: 'add',
-        name: 'add',
-        component: () => { return import(/* webpackChunkName: "add" */ '@/views/AddDemand'); },
+        name: 'demand-new',
+        component: () => { return import(/* webpackChunkName: "demand-new" */ '@/components/demands/DemandNew'); },
       },
       {
         path: 'detailed/:id',
-        name: 'demand-detailed-info-page',
-        component: () => { return import(/* webpackChunkName: "demand-detailed-info-page" */ '@/components/DemandDetailedInfoPage'); },
+        name: 'demand-detailed',
+        component: () => { return import(/* webpackChunkName: "demand-detailed" */ '@/components/demands/DemandDetailed'); },
       },
     ],
   },
@@ -69,7 +69,7 @@ const routes = [
   {
     path: '*',
     name: 'page-not-found',
-    component: () => { return import(/* webpackChunkName: "page-not-found" */ '@/components/PageNotFound'); },
+    component: () => { return import(/* webpackChunkName: "page-not-found" */ '@/views/PageNotFound'); },
   },
 ];
 

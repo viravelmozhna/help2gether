@@ -19,7 +19,7 @@
       <b-list-group-item tag="li">
         <div class="mb-2">
           <span class="text mr-2">ADDRESS:</span>
-          <span>{{demandInfo.contactData.address.region}} region, {{demandInfo.contactData.address.city}}, {{demandInfo.contactData.address.street}}</span>
+          <span>{{demandInfo.contactData.address.region}}, {{demandInfo.contactData.address.city}}, {{demandInfo.contactData.address.street}}</span>
         </div>
       </b-list-group-item>
       <b-list-group-item tag="li">
@@ -83,10 +83,10 @@
 
 <script>
 import { getDatabase, ref, onValue } from 'firebase/database';
-import GoBackButton from './common/GoBackButton.vue';
+import GoBackButton from '../common/GoBackButton.vue';
 
 export default {
-  name: 'DemandDetailedInfoPage',
+  name: 'DemandDetailed',
   components: {
     GoBackButton,
   },
