@@ -78,7 +78,7 @@
         </div>
       </b-list-group-item>
       <b-list-group-item tag="li" v-if="demandInfo.assignedTo">
-        <span>The demand assigned to: {{`${userInfo.firstName} ${userInfo.lastName}`}}</span>
+        <span>The demand assigned to: {{`${assigneeInfo.firstName} ${assigneeInfo.lastName}`}}</span>
       </b-list-group-item>
       <b-list-group-item tag="li" v-if="!demandInfo.assignedTo">
         <b-button
@@ -122,8 +122,8 @@ export default {
     demandInfo() {
       return this.$store.state.demandDetailedInfo;
     },
-    userInfo() {
-      return this.$store.state.userInfo;
+    assigneeInfo() {
+      return this.$store.state.assigneeInfo;
     },
   },
   created() {
@@ -138,8 +138,10 @@ export default {
         const assigneeInfo = ref(db, 'users/' + this.demandInfo.assignedTo);
         onValue(assigneeInfo, (snapshot) => {
           const data = snapshot.val();
-          this.$store.dispatch('setUserInfo', {
-            data,
+          console.log('data', data);
+          this.$store.dispatch('setAssigneeInfo', {
+            firstName: data.firstName,
+            lastName: data.lastName,
           });
         });
       };
@@ -165,6 +167,10 @@ export default {
       update(ref(db, 'demands/' + this.id), {
         assignedTo: null,
         status: 'active',
+      });
+      this.$store.dispatch('setAssigneeInfo', {
+        firstName: '',
+        lastName: '',
       });
     },
   },
