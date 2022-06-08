@@ -10,13 +10,13 @@
       </b-navbar-nav>
     </b-collapse>
     <div v-if="isUserLoggedIn" class="ml-auto">
-        <span class="mr-2">
+        <!-- <span class="mr-2">
           Hello, {{ userData.displayName }}
-        </span>
+        </span> -->
         <span class="text-uppercase logout-button">
           <a @click="logout">Logout</a>
         </span>
-      </div>
+    </div>
   </b-navbar>
 </template>
 

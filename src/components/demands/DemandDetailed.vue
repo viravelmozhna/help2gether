@@ -6,25 +6,25 @@
       tag="ul">
       <b-list-group-item tag="li">
         <div class="mb-2">
-          <span class="text mr-2">NAME:</span>
+          <span class="text mr-2 font-weight-bold">NAME:</span>
           <span>{{demandInfo.contactData.name}}</span>
         </div>
       </b-list-group-item>
       <b-list-group-item tag="li">
         <div class="mb-2">
-          <span class="text mr-2">PHONE:</span>
+          <span class="text mr-2 font-weight-bold">PHONE:</span>
           <span>{{demandInfo.contactData.phone}}</span>
         </div>
       </b-list-group-item>
       <b-list-group-item tag="li">
         <div class="mb-2">
-          <span class="text mr-2">ADDRESS:</span>
+          <span class="text mr-2 font-weight-bold">ADDRESS:</span>
           <span>{{demandInfo.contactData.address.region}}, {{demandInfo.contactData.address.city}}, {{demandInfo.contactData.address.street}}</span>
         </div>
       </b-list-group-item>
       <b-list-group-item tag="li">
         <div class="mb-2">
-          <span class="text mr-2">DEMAND:</span>
+          <span class="text mr-2 font-weight-bold">DEMAND:</span>
           <span>{{demandInfo.demand}}</span>
           <div>
             <b-badge
@@ -77,12 +77,35 @@
           </div>
         </div>
       </b-list-group-item>
+      <b-list-group-item tag="li" v-if="demandInfo.assignedTo">
+        <span>The demand assigned to: {{`${userInfo.firstName} ${userInfo.lastName}`}}</span>
+      </b-list-group-item>
+      <b-list-group-item tag="li" v-if="!demandInfo.assignedTo">
+        <b-button
+          class="mt-3"
+          variant="info"
+          @click="assignDemand"
+          >Take demand</b-button>
+      </b-list-group-item>
+      <b-list-group-item tag="li" v-else-if="demandInfo.status !== 'completed'">
+        <b-button
+          class="mt-3 mr-3"
+          variant="success"
+          @click="markAsComplete"
+          >Mark as completed</b-button>
+          <b-button
+          class="mt-3"
+          variant="danger"
+          @click="unassignDemand"
+          >Unassign demand</b-button>
+      </b-list-group-item>
     </b-list-group>
   </div>
 </template>
 
 <script>
-import { getDatabase, ref, onValue } from 'firebase/database';
+import { getDatabase, ref, onValue, update } from 'firebase/database';
+import { auth } from '@/firebase';
 import GoBackButton from '../common/GoBackButton.vue';
 
 export default {
@@ -99,6 +122,9 @@ export default {
     demandInfo() {
       return this.$store.state.demandDetailedInfo;
     },
+    userInfo() {
+      return this.$store.state.userInfo;
+    },
   },
   created() {
     const db = getDatabase();
@@ -108,7 +134,39 @@ export default {
       this.$store.dispatch('setDemandDetailedInfo', {
         data,
       });
+      if (data.assignedTo) {
+        const assigneeInfo = ref(db, 'users/' + this.demandInfo.assignedTo);
+        onValue(assigneeInfo, (snapshot) => {
+          const data = snapshot.val();
+          this.$store.dispatch('setUserInfo', {
+            data,
+          });
+        });
+      };
     });
+  },
+  methods: {
+    assignDemand() {
+      const user = auth.currentUser;
+      const db = getDatabase();
+      update(ref(db, 'demands/' + this.id), {
+        assignedTo: user.uid,
+        status: 'in progress',
+      });
+    },
+    markAsComplete() {
+      const db = getDatabase();
+      update(ref(db, 'demands/' + this.id), {
+        status: 'completed',
+      });
+    },
+    unassignDemand() {
+      const db = getDatabase();
+      update(ref(db, 'demands/' + this.id), {
+        assignedTo: null,
+        status: 'active',
+      });
+    },
   },
 };
 </script>

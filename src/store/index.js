@@ -26,6 +26,12 @@ export default new Vuex.Store({
       status: '',
       emergency: '',
     },
+    userInfo: {
+      firstName: '',
+      lastName: '',
+      phone: '',
+      email: '',
+    },
     activeFiltersList: {
       region: [],
       status: [],
@@ -74,6 +80,9 @@ export default new Vuex.Store({
     setDemandDetailedInfo(state, payload) {
       state.demandDetailedInfo = payload.data;
     },
+    setUserInfo(state, payload) {
+      state.userInfo = payload.data;
+    },
     setGoBackToUrl(state, payload) {
       state.path = payload.path;
     },
@@ -115,6 +124,9 @@ export default new Vuex.Store({
     },
     setDemandDetailedInfo(context, payload) {
       context.commit('setDemandDetailedInfo', payload);
+    },
+    setUserInfo(context, payload) {
+      context.commit('setUserInfo', payload);
     },
     setGoBackToUrl(context, payload) {
       context.commit('setGoBackToUrl', payload);
