@@ -1,6 +1,9 @@
 <template>
   <div class="container">
+
     <GoBackButton />
+    <ModalWindow title="Mark this demand as completed?" v-on:actionInModalWindow="actionInModalWindowHandler"/>
+
     <b-list-group
       flush
       tag="ul">
@@ -114,10 +117,9 @@
         key="demand-is-assigned-to-current-logged-user-and-is-not-completed-yet"
         tag="li"
         >
-        <b-button
+        <b-button v-b-modal.modalWindow
           class="mt-3 mr-3"
           variant="success"
-          @click="markAsComplete"
           >Mark as completed</b-button>
           <b-button
           class="mt-3"
@@ -126,6 +128,7 @@
           >Unassign demand</b-button>
       </b-list-group-item>
     </b-list-group>
+
   </div>
 </template>
 
@@ -134,11 +137,13 @@ import { getDatabase, ref, onValue, update, get, child } from 'firebase/database
 import { auth } from '@/firebase';
 import getCurrentDate from '@/utils/getCurrentDate';
 import GoBackButton from '../common/GoBackButton.vue';
+import ModalWindow from '../common/ModalWindow.vue';
 
 export default {
   name: 'DemandDetailed',
   components: {
     GoBackButton,
+    ModalWindow,
   },
   data() {
     return {
@@ -188,19 +193,21 @@ export default {
         status: 'in progress',
       });
     },
-    markAsComplete() {
-      const db = getDatabase();
-      update(ref(db, 'demands/' + this.id), {
-        status: 'completed',
-        completedTime: getCurrentDate(),
-      });
-    },
     unassignDemand() {
       const db = getDatabase();
       update(ref(db, 'demands/' + this.id), {
         assignedTo: null,
         status: 'active',
       });
+    },
+    actionInModalWindowHandler(e) {
+      if (e === 'approve') {
+        const db = getDatabase();
+        update(ref(db, 'demands/' + this.id), {
+          status: 'completed',
+          completedTime: getCurrentDate(),
+        });
+      }
     },
   },
 };
