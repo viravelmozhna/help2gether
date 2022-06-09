@@ -87,7 +87,7 @@
           @click="assignDemand"
           >Take demand</b-button>
       </b-list-group-item>
-      <b-list-group-item tag="li" v-else-if="demandInfo.status !== 'completed'">
+      <b-list-group-item tag="li" v-else-if="demandInfo.status !== 'completed' && isCurrentUserAnAssignee">
         <b-button
           class="mt-3 mr-3"
           variant="success"
@@ -117,14 +117,12 @@ export default {
     return {
       id: this.$route.params.id,
       assigneeName: '',
+      isCurrentUserAnAssignee: false,
     };
   },
   computed: {
     demandInfo() {
       return this.$store.state.demandDetailedInfo;
-    },
-    assigneeInfo() {
-      return this.$store.state.assigneeInfo;
     },
   },
   created() {
@@ -139,6 +137,11 @@ export default {
         get(child(ref(db), `users/${this.demandInfo.assignedTo}`))
           .then((snapshot) => {
             if (snapshot.exists()) {
+              const { currentUser } = auth;
+              if (this.demandInfo.assignedTo === currentUser.uid) {
+                this.isCurrentUserAnAssignee = true;
+              }
+
               const assignee = snapshot.val();
               this.assigneeName = `${assignee.firstName} ${assignee.lastName}`;
             };
@@ -151,10 +154,10 @@ export default {
   },
   methods: {
     assignDemand() {
-      const user = auth.currentUser;
+      const { currentUser } = auth;
       const db = getDatabase();
       update(ref(db, 'demands/' + this.id), {
-        assignedTo: user.uid,
+        assignedTo: currentUser.uid,
         status: 'in progress',
       });
     },
@@ -170,7 +173,6 @@ export default {
         assignedTo: null,
         status: 'active',
       });
-      this.assigneeName = '';
     },
   },
 };
