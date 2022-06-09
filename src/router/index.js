@@ -55,7 +55,7 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       {
-        path: 'profile',
+        path: 'profile/:id',
         name: 'profile',
         component: () => { return import(/* webpackChunkName: "profile" */ '@/views/UserProfile'); },
       },

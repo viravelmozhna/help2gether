@@ -90,15 +90,23 @@
         key="demand-was-assigned"
         tag="li"
       >
-        <span
-          v-if="demandInfo.completedTime"
-          key="demand-is-completed-by-user"
-          ><i>The demand was completed by {{assigneeName}}</i>
-        </span>
-        <span
-          v-else
-          key="demand-is-assigned-to-user"
-          ><i>The demand assigned to {{assigneeName}}</i>
+        <span>
+          <i>
+            The demand
+            <span
+              v-if="demandInfo.completedTime"
+              key="demand-is-completed-by-user"
+            >
+            was completed by
+            </span>
+            <span
+              v-else
+              key="demand-is-assigned-to-user"
+            >
+            assigned to
+            </span>
+            <a @click="goToUserProfile"><u class="link">{{assigneeName}}</u></a>
+          </i>
         </span>
       </b-list-group-item>
       <b-list-group-item
@@ -209,6 +217,9 @@ export default {
         });
       }
     },
+    goToUserProfile() {
+      this.$router.push({ path: `/user/profile/${this.demandInfo.assignedTo}` });
+    },
   },
 };
 </script>
@@ -216,5 +227,9 @@ export default {
 <style scoped>
 .text {
   font-size: 20px;
+}
+.link {
+  cursor: pointer;
+  color: #325892;
 }
 </style>

@@ -3,9 +3,9 @@
       @click="goBack"
       size="sm"
       variant="link"
-      class="mb-2"
+      class="mb-2 link"
     >
-      <u>Go back to the list</u>
+      <u>Go back</u>
     </b-button>
 </template>
 
@@ -19,3 +19,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.link {
+  color: #325892;
+}
+</style>

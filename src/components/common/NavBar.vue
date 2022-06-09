@@ -6,7 +6,7 @@
         <b-nav-item to="/demands/add" exact-active-class="active" class="text-uppercase">Add demand</b-nav-item>
         <b-nav-item to="/demands/list" exact-active-class="active" class="text-uppercase">All demands</b-nav-item>
         <b-nav-item to="/user/demands" exact-active-class="active" class="text-uppercase">Your demands</b-nav-item>
-        <b-nav-item to="/user/profile" exact-active-class="active" class="text-uppercase">Profile</b-nav-item>
+        <!-- <b-nav-item to="/user/profile" exact-active-class="active" class="text-uppercase">Profile</b-nav-item> -->
       </b-navbar-nav>
     </b-collapse>
     <div v-if="isUserLoggedIn" class="ml-auto">
