@@ -38,7 +38,12 @@
       </b-list-group-item>
       <b-list-group-item tag="li" >
         <div>
-          <span><i>The demand was created on {{demandInfo.createdTime}}</i></span>
+          <span><i>The demand was created on {{demandInfo.createdTime}}</i></span><br>
+          <span
+            v-if="demandInfo.completedTime"
+            key="completed-time"
+            ><i>The demand was completed on {{demandInfo.completedTime}}</i>
+          </span>
           <div>
             <span class="mr-2">
               <b-badge
@@ -77,17 +82,38 @@
           </div>
         </div>
       </b-list-group-item>
-      <b-list-group-item tag="li" v-if="demandInfo.assignedTo">
-        <span>The demand assigned to: {{assigneeName}}</span>
+      <b-list-group-item
+        v-if="demandInfo.assignedTo"
+        key="demand-was-assigned"
+        tag="li"
+      >
+        <span
+          v-if="demandInfo.completedTime"
+          key="demand-is-completed-by-user"
+          ><i>The demand was completed by {{assigneeName}}</i>
+        </span>
+        <span
+          v-else
+          key="demand-is-assigned-to-user"
+          ><i>The demand assigned to {{assigneeName}}</i>
+        </span>
       </b-list-group-item>
-      <b-list-group-item tag="li" v-if="!demandInfo.assignedTo">
+      <b-list-group-item
+        v-if="!demandInfo.assignedTo"
+        key="demand-is-not-assigned-yet"
+        tag="li"
+        >
         <b-button
           class="mt-3"
           variant="info"
           @click="assignDemand"
           >Take demand</b-button>
       </b-list-group-item>
-      <b-list-group-item tag="li" v-else-if="demandInfo.status !== 'completed' && isCurrentUserAnAssignee">
+      <b-list-group-item
+        v-else-if="isCurrentLoggedUserAnAssignee && demandInfo.status !== 'completed'"
+        key="demand-is-assigned-to-current-logged-user-and-is-not-completed-yet"
+        tag="li"
+        >
         <b-button
           class="mt-3 mr-3"
           variant="success"
@@ -106,6 +132,7 @@
 <script>
 import { getDatabase, ref, onValue, update, get, child } from 'firebase/database';
 import { auth } from '@/firebase';
+import getCurrentDate from '@/utils/getCurrentDate';
 import GoBackButton from '../common/GoBackButton.vue';
 
 export default {
@@ -117,7 +144,7 @@ export default {
     return {
       id: this.$route.params.id,
       assigneeName: '',
-      isCurrentUserAnAssignee: false,
+      isCurrentLoggedUserAnAssignee: false,
     };
   },
   computed: {
@@ -139,7 +166,7 @@ export default {
             if (snapshot.exists()) {
               const { currentUser } = auth;
               if (this.demandInfo.assignedTo === currentUser.uid) {
-                this.isCurrentUserAnAssignee = true;
+                this.isCurrentLoggedUserAnAssignee = true;
               }
 
               const assignee = snapshot.val();
@@ -165,6 +192,7 @@ export default {
       const db = getDatabase();
       update(ref(db, 'demands/' + this.id), {
         status: 'completed',
+        completedTime: getCurrentDate(),
       });
     },
     unassignDemand() {
