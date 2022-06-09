@@ -78,7 +78,7 @@
         </div>
       </b-list-group-item>
       <b-list-group-item tag="li" v-if="demandInfo.assignedTo">
-        <span>The demand assigned to: {{`${assigneeInfo.firstName} ${assigneeInfo.lastName}`}}</span>
+        <span>The demand assigned to: {{assigneeName}}</span>
       </b-list-group-item>
       <b-list-group-item tag="li" v-if="!demandInfo.assignedTo">
         <b-button
@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import { getDatabase, ref, onValue, update } from 'firebase/database';
+import { getDatabase, ref, onValue, update, get, child } from 'firebase/database';
 import { auth } from '@/firebase';
 import GoBackButton from '../common/GoBackButton.vue';
 
@@ -116,6 +116,7 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
+      assigneeName: '',
     };
   },
   computed: {
@@ -135,15 +136,16 @@ export default {
         data,
       });
       if (data.assignedTo) {
-        const assigneeInfo = ref(db, 'users/' + this.demandInfo.assignedTo);
-        onValue(assigneeInfo, (snapshot) => {
-          const data = snapshot.val();
-          console.log('data', data);
-          this.$store.dispatch('setAssigneeInfo', {
-            firstName: data.firstName,
-            lastName: data.lastName,
+        get(child(ref(db), `users/${this.demandInfo.assignedTo}`))
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              const assignee = snapshot.val();
+              this.assigneeName = `${assignee.firstName} ${assignee.lastName}`;
+            };
+          })
+          .catch((error) => {
+            console.error(error);
           });
-        });
       };
     });
   },
@@ -168,10 +170,7 @@ export default {
         assignedTo: null,
         status: 'active',
       });
-      this.$store.dispatch('setAssigneeInfo', {
-        firstName: '',
-        lastName: '',
-      });
+      this.assigneeName = '';
     },
   },
 };
