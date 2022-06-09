@@ -62,7 +62,7 @@ const routes = [
       {
         path: 'demands',
         name: 'user-demands',
-        component: () => { return import(/* webpackChunkName: "user-demands" */ '@/views/UserDemands'); },
+        component: () => { return import(/* webpackChunkName: "user-demands" */ '@/components/demands/DemandsList'); },
       },
     ],
   },

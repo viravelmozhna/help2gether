@@ -12,14 +12,9 @@
 <script>
 export default {
   name: 'GoBackButton',
-  computed: {
-    goBackToUrl() {
-      return this.$store.state.goBackToUrl;
-    },
-  },
   methods: {
     goBack() {
-      this.$router.push({ path: this.goBackToUrl });
+      this.$router.go(-1);
     },
   },
 };
