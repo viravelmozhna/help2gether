@@ -67,6 +67,9 @@ export default {
     userLogin() {
       signInWithEmailAndPassword(auth, this.user.email, this.user.password)
         .then(() => {
+          this.$toast.success('You was logged in!', {
+            timeout: 2500,
+          });
           this.$router.push('/demands/list');
         })
         .catch((error) => {

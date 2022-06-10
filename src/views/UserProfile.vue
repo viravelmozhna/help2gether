@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import GoBackButton from '../components/common/GoBackButton.vue';
+import GoBackButton from '@/components/common/GoBackButton.vue';
 
 export default {
   name: 'UserProfile',

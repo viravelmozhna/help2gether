@@ -112,7 +112,9 @@ export default {
         })
         .then(() => {
           sendEmailVerification(auth.currentUser);
-
+          this.$toast.success('You was successfully registered!', {
+            timeout: 2500,
+          });
           this.$router.push('/demands/list');
         })
         .catch((error) => {

@@ -18,7 +18,6 @@ export default {
     const db = getDatabase();
     const demands = ref(db, 'demands');
     onValue(demands, (snapshot) => {
-      // Receive data from DB in objects, transforme it to array for easier maintenance and next interaction
       const dataToArray = Object.entries(snapshot.val());
       this.$store.dispatch('setDemands', {
         data: dataToArray,
