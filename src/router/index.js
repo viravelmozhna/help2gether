@@ -56,8 +56,8 @@ const routes = [
     children: [
       {
         path: 'profile/:id',
-        name: 'profile',
-        component: () => { return import(/* webpackChunkName: "profile" */ '@/views/UserProfile'); },
+        name: 'user-profile',
+        component: () => { return import(/* webpackChunkName: "user-profile" */ '@/components/UserProfile'); },
       },
       {
         path: 'demands',
