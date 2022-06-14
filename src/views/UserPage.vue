@@ -20,9 +20,9 @@ export default {
     const { currentUser } = auth;
     const demands = query(ref(db, 'demands'), orderByChild('assignedTo'), equalTo(currentUser.uid));
     onValue(demands, (snapshot) => {
-      const dataToArray = Object.entries(snapshot.val());
+      const data = Object.entries(snapshot.val());
       this.$store.dispatch('setDemands', {
-        data: dataToArray,
+        data,
       });
     });
   },

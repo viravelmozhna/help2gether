@@ -73,6 +73,15 @@ export default {
           this.$router.push('/demands/list');
         })
         .catch((error) => {
+          let errorMessage;
+          if (error.code === 'auth/wrong-password') {
+            errorMessage = 'Incorrect password!';
+          } else if (error.code === 'auth/user-not-found') {
+            errorMessage = 'Incorrect email or password!';
+          }
+          this.$toast.error(`${errorMessage}`, {
+            timeout: 2500,
+          });
           console.log(error);
         });
     },
