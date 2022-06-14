@@ -3,7 +3,7 @@
       @click="goBack"
       size="sm"
       variant="link"
-      class="mb-2 ml-3 link"
+      class="mb-2 link d-flex ml-auto mr-auto"
     >
       <u>Go back</u>
     </b-button>

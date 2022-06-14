@@ -60,6 +60,11 @@ const routes = [
         component: () => { return import(/* webpackChunkName: "user-profile" */ '@/components/UserProfile'); },
       },
       {
+        path: 'edit',
+        name: 'edit-user-profile',
+        component: () => { return import(/* webpackChunkName: "edit-user-profile" */ '@/components/UserDataForm'); },
+      },
+      {
         path: 'demands',
         name: 'user-demands',
         component: () => { return import(/* webpackChunkName: "user-demands" */ '@/components/demands/DemandsList'); },

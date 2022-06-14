@@ -1,57 +1,42 @@
 <template>
-  <div class="container">
+  <b-container class="d-flex flex-column justify-content-center">
 
     <GoBackButton />
 
-    <b-list-group
-      flush
-      tag="ul">
-      <b-list-group-item tag="li" class="border-0">
-        <div class="mb-2">
-          <span class="text mr-2 font-weight-bold">NAME:</span>
-          <!-- <span>{{userData.firstName}} {{userData.lastName}}</span> -->
-          <b-form-input
-            :value="`${userData.firstName} ${userData.lastName}`"
-            :disabled="!editPhase"
-            class="bg-transparent w-50 text-dark"
-          ></b-form-input>
-        </div>
-      </b-list-group-item>
-      <b-list-group-item tag="li" class="border-0">
-        <div class="mb-2">
-          <span class="text mr-2 font-weight-bold">PHONE:</span>
-          <!-- <span>{{userData.phone}}</span> -->
-          <b-form-input
-            :value="userData.phone"
-            :disabled="!editPhase"
-            class="bg-transparent w-50 text-dark"
-          ></b-form-input>
-        </div>
-      </b-list-group-item>
-      <b-list-group-item
-        v-if="isItProfileOfCurrentLoggedUser && !editPhase"
-        key="profile-of-current-logged-user"
-        tag="li"
-        >
+    <b-card
+      header-bg-variant="info"
+      header-text-variant="white"
+      header="USER INFO"
+      class="ml-auto mr-auto user-profile-card">
+
+      <b-card-text class="mb-3">
+        <span class="text mr-2 label font-weight-bold">First name:</span>
+        <span>{{userData.firstName}}</span>
+      </b-card-text>
+      <b-card-text class="mb-3">
+        <span class="text mr-2 label font-weight-bold">Last name:</span>
+        <span>{{userData.lastName}}</span>
+      </b-card-text>
+      <b-card-text>
+        <span class="text mr-2 label font-weight-bold">Phone:</span>
+        <span>{{userData.phone}}</span>
+      </b-card-text>
+      <b-card-text>
+        <span class="text mr-2 label font-weight-bold">Email:</span>
+        <span>{{userData.email}}</span>
+      </b-card-text>
+
         <b-button
+          v-if="isItProfileOfCurrentLoggedUser"
+          key="profile-of-current-logged-user"
           class="mt-2"
-          variant="info"
+          variant="dark"
           @click="editUserData"
           >Edit your profile</b-button>
-      </b-list-group-item>
-      <b-list-group-item
-        v-if="isItProfileOfCurrentLoggedUser && editPhase"
-        key="profile-of-current-logged-user"
-        tag="li"
-        >
-        <b-button
-          class="mt-2"
-          variant="info"
-          @click="saveNewUserData"
-          >Save</b-button>
-      </b-list-group-item>
-    </b-list-group>
-  </div>
+
+    </b-card>
+
+  </b-container>
 </template>
 
 <script>
@@ -67,9 +52,13 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      userData: {},
+      userData: {
+        firstName: 'gggg',
+        lastName: '',
+        phone: '',
+        email: '',
+      },
       isItProfileOfCurrentLoggedUser: false,
-      editPhase: false,
     };
   },
   created() {
@@ -92,15 +81,31 @@ export default {
   },
   methods: {
     editUserData() {
-      console.log('edit profile');
-      this.editPhase = true;
-    },
-    saveNewUserData() {
-      this.editPhase = false;
-      this.$toast.success('Your profile was updated!', {
-        timeout: 2500,
+      this.$router.push({
+        name: 'edit-user-profile',
+        params: {
+          userId: this.id,
+          mode: 'edit',
+          userData: this.userData,
+        },
       });
     },
   },
 };
 </script>
+
+<style scoped>
+.label {
+  width: 200px;
+}
+@media screen and (min-width: 550px) {
+  .user-profile-card {
+    width: 300px;
+  }
+}
+@media screen and (min-width: 900px) {
+  .user-profile-card {
+    width: 400px;
+  }
+}
+</style>
