@@ -53,7 +53,7 @@ export default {
     return {
       id: this.$route.params.id,
       userData: {
-        firstName: 'gggg',
+        firstName: '',
         lastName: '',
         phone: '',
         email: '',
@@ -83,11 +83,7 @@ export default {
     editUserData() {
       this.$router.push({
         name: 'edit-user-profile',
-        params: {
-          userId: this.id,
-          mode: 'edit',
-          userData: this.userData,
-        },
+        params: { mode: 'edit', userData: this.userData },
       });
     },
   },

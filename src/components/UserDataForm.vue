@@ -57,7 +57,7 @@
           label="Password"
           label-for="password"
         >
-          <b-form-input
+          <input
             id="password"
             type="password"
             class="form-control"
@@ -111,13 +111,13 @@ export default {
       },
     };
   },
-  created() {
-    console.log('user data form');
-  },
   methods: {
     userProfileEdit() {
       if (this.mode === 'edit') {
         console.log('edit mode');
+        console.log(this.userUpdatedData.firstName);
+        console.log(this.userUpdatedData.lastName);
+        console.log(this.userUpdatedData.phone);
       } else {
         createUserWithEmailAndPassword(auth, this.userUpdatedData.email, this.userUpdatedData.password)
           .then(() => {

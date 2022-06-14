@@ -18,7 +18,7 @@ const routes = [
   {
     path: '/signup',
     name: 'signup',
-    component: () => { return import(/* webpackChunkName: "signup" */ '@/views/SignupPage'); },
+    component: () => { return import(/* webpackChunkName: "signup" */ '@/components/UserDataForm'); },
   },
   {
     path: '/reset-password',
