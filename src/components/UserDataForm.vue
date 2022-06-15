@@ -121,10 +121,14 @@ export default {
       },
     };
   },
+  computed: {
+    currentUserData() {
+      return this.$store.getters.userData;
+    },
+  },
   created() {
-    const { currentUser } = auth;
-    if (currentUser) {
-      this.id = currentUser.uid;
+    if (this.currentUserData) {
+      this.id = this.currentUserData.id;
       this.mode = 'edit';
 
       get(child(ref(db), `users/${this.id}`))

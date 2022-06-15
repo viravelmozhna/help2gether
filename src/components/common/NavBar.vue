@@ -6,13 +6,12 @@
         <b-nav-item to="/demands/add" exact-active-class="active" class="text-uppercase">Add demand</b-nav-item>
         <b-nav-item to="/demands/list" exact-active-class="active" class="text-uppercase">All demands</b-nav-item>
         <b-nav-item to="/user/demands" exact-active-class="active" class="text-uppercase">Your demands</b-nav-item>
-        <!-- TODO: <b-nav-item to="/user/profile" exact-active-class="active" class="text-uppercase">Profile</b-nav-item> -->
       </b-navbar-nav>
     </b-collapse>
     <div v-if="isUserLoggedIn" class="ml-auto">
-        <!--TODO:  <span class="mr-2">
-          Hello, {{ userData.displayName }}
-        </span> -->
+        <span class="mr-3">
+          Hello, <a @click="goToUserProfile"><u class="link"><i>{{ userName }}</i></u></a>
+        </span>
         <span class="text-uppercase logout-button">
           <a @click="logout">Logout</a>
         </span>
@@ -22,10 +21,18 @@
 
 <script>
 import { signOut } from 'firebase/auth';
+import { getDatabase, ref, get, child } from 'firebase/database';
 import { auth } from '@/firebase';
+
+const db = getDatabase();
 
 export default {
   name: 'NavBar',
+  data() {
+    return {
+      userName: '',
+    };
+  },
   computed: {
     isUserLoggedIn() {
       return this.$store.getters.isUserLoggedIn;
@@ -33,6 +40,21 @@ export default {
     userData() {
       return this.$store.getters.userData;
     },
+  },
+  created() {
+    if (this.isUserLoggedIn) {
+      get(child(ref(db), `users/${this.userData.id}`))
+        .then((snapshot) => {
+          const userData = snapshot.val();
+          this.userName = `${userData.firstName} ${userData.lastName}`;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$toast.error('Something went wrong! Try again later!', {
+            timeout: 2500,
+          });
+        });
+    };
   },
   methods: {
     logout() {
@@ -45,6 +67,9 @@ export default {
           this.$router.push('/login');
         });
     },
+    goToUserProfile() {
+      this.$router.push({ path: `/user/profile/${this.userData.id}` });
+    },
   },
 };
 </script>
@@ -52,5 +77,9 @@ export default {
 <style scoped>
 .logout-button {
   cursor: pointer;
+}
+.link {
+  cursor: pointer;
+  color: #325892;
 }
 </style>
