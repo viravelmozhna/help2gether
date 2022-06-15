@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container mt-5">
 
-    <GoBackButton />
+    <GoBackButton v-if="mode === 'edit'"/>
 
     <b-card
       bg-variant="light"
@@ -19,6 +19,7 @@
             id="firstName"
             type="text"
             class="form-control"
+            required
             :value="userData.firstName"
             @change="e => userData.firstName = e.target.value"/>
         </b-form-group>
@@ -30,6 +31,7 @@
             id="lastName"
             type="text"
             class="form-control"
+            required
             :value="userData.lastName"
             @change="e => userData.lastName = e.target.value"/>
         </b-form-group>
@@ -41,6 +43,7 @@
             id="phone"
             type="text"
             class="form-control"
+            required
             :value="userData.phone"
             @change="e => userData.phone = e.target.value"/>
         </b-form-group>
@@ -53,17 +56,20 @@
             id="email"
             type="email"
             class="form-control"
+            required
             :value="userData.email"
             @change="e => userData.email = e.target.value"/>
         </b-form-group>
         <b-form-group
           v-if="mode !== 'edit'"
-          label="Password"
+          label="Password (8 characters minimum)"
           label-for="password"
         >
           <input
             id="password"
             type="password"
+            minlength="8"
+            required
             class="form-control"
             @change="e => userData.password = e.target.value"/>
         </b-form-group>
@@ -143,7 +149,19 @@ export default {
           firstName: this.userData.firstName,
           lastName: this.userData.lastName,
           phone: this.userData.phone,
-        });
+        })
+          .then(() => {
+            this.$toast.success('Your profile was updated!', {
+              timeout: 2500,
+            });
+          })
+          .catch((error) => {
+            console.log(error.code);
+            this.$toast.error('Something went wrong! Try again later!', {
+              timeout: 2500,
+            });
+          });
+        this.$router.go(-1);
       } else {
         createUserWithEmailAndPassword(auth, this.userData.email, this.userData.password)
           .then(() => {
@@ -164,7 +182,13 @@ export default {
             this.$router.push('/demands/list');
           })
           .catch((error) => {
-            this.$toast.error('Something went wrong! Try again later!', {
+            let errorMessage = 'Sorry, something went wrong! Try again later!';
+            if (error.code === 'auth/email-already-in-use') {
+              errorMessage = 'This email is already in use!';
+            } else if (error.code === 'auth/invalid-email') {
+              errorMessage = 'Invalid email!';
+            }
+            this.$toast.error(errorMessage, {
               timeout: 2500,
             });
             console.log(error.code);
