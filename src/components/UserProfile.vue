@@ -31,7 +31,7 @@
           key="profile-of-current-logged-user"
           class="mt-2"
           variant="dark"
-          @click="editUserData"
+          @click="editUserProfile"
           >Edit your profile</b-button>
 
     </b-card>
@@ -76,15 +76,16 @@ export default {
         };
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error.code);
+        this.$toast.error('Something went wrong! Try again later!', {
+          timeout: 2500,
+        });
+        this.$router.go(-1);
       });
   },
   methods: {
-    editUserData() {
-      this.$router.push({
-        name: 'edit-user-profile',
-        params: { mode: 'edit', userData: this.userData },
-      });
+    editUserProfile() {
+      this.$router.push('/user/edit');
     },
   },
 };
@@ -94,14 +95,19 @@ export default {
 .label {
   width: 200px;
 }
+@media screen and (max-width: 549px) {
+  .user-profile-card {
+    width: 90vw;
+  }
+}
 @media screen and (min-width: 550px) {
   .user-profile-card {
-    width: 300px;
+    width: 400px;
   }
 }
 @media screen and (min-width: 900px) {
   .user-profile-card {
-    width: 400px;
+    width: 450px;
   }
 }
 </style>

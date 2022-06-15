@@ -1,13 +1,16 @@
 <template>
   <div class="container">
+
+    <GoBackButton />
+
     <b-card
       bg-variant="light"
-      class="w-50 mt-5 mr-auto ml-auto"
+      class="mt-2 mr-auto ml-auto user-data-form"
     >
       <h1 class="text-center title">
         <span>{{mode === 'edit' ? 'Edit profile' : 'Sign Up'}}</span>
       </h1>
-      <b-form @submit.prevent="userProfileEdit">
+      <b-form @submit.prevent="userDataFormHandler">
         <b-form-group
           label="First name"
           label-for="firstName"
@@ -17,7 +20,7 @@
             type="text"
             class="form-control"
             :value="userData.firstName"
-            @change="e => userUpdatedData.firstName = e.target.value"/>
+            @change="e => userData.firstName = e.target.value"/>
         </b-form-group>
         <b-form-group
           label="Last name"
@@ -28,7 +31,7 @@
             type="text"
             class="form-control"
             :value="userData.lastName"
-            @change="e => userUpdatedData.lastName = e.target.value"/>
+            @change="e => userData.lastName = e.target.value"/>
         </b-form-group>
         <b-form-group
           label="Phone"
@@ -39,9 +42,10 @@
             type="text"
             class="form-control"
             :value="userData.phone"
-            @change="e => userUpdatedData.phone = e.target.value"/>
+            @change="e => userData.phone = e.target.value"/>
         </b-form-group>
         <b-form-group
+          v-if="mode !== 'edit'"
           label="Email"
           label-for="email"
         >
@@ -50,7 +54,7 @@
             type="email"
             class="form-control"
             :value="userData.email"
-            @change="e => userUpdatedData.email = e.target.value"/>
+            @change="e => userData.email = e.target.value"/>
         </b-form-group>
         <b-form-group
           v-if="mode !== 'edit'"
@@ -61,7 +65,7 @@
             id="password"
             type="password"
             class="form-control"
-            @change="e => userUpdatedData.password = e.target.value"/>
+            @change="e => userData.password = e.target.value"/>
         </b-form-group>
 
         <b-button
@@ -80,29 +84,29 @@
           Already registered?
           <router-link to="/login">Log in!</router-link>
         </p>
-        </b-form>
-      </b-card>
+      </b-form>
+    </b-card>
   </div>
 </template>
 
 <script>
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-import { getDatabase, ref, set } from 'firebase/database';
+import { getDatabase, ref, set, update, get, child } from 'firebase/database';
 import { auth } from '@/firebase';
+import GoBackButton from '@/components/common/GoBackButton.vue';
+
+const db = getDatabase();
 
 export default {
   name: 'UserDataForm',
+  components: {
+    GoBackButton,
+  },
   data() {
     return {
-      id: this.$route.params.userId,
-      mode: this.$route.params.mode,
-      userData: this.$route.params.userData || {
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
-      },
-      userUpdatedData: {
+      id: '',
+      mode: '',
+      userData: {
         firstName: '',
         lastName: '',
         phone: '',
@@ -111,24 +115,45 @@ export default {
       },
     };
   },
+  created() {
+    const { currentUser } = auth;
+    if (currentUser) {
+      this.id = currentUser.uid;
+      this.mode = 'edit';
+
+      get(child(ref(db), `users/${this.id}`))
+        .then((snapshot) => {
+          this.userData = snapshot.val();
+        })
+        .catch((error) => {
+          console.log(error.code);
+          this.$toast.error('Something went wrong! Try again later!', {
+            timeout: 2500,
+          });
+          this.$router.go(-1);
+        });
+    } else {
+      this.mode = 'signup';
+    };
+  },
   methods: {
-    userProfileEdit() {
+    userDataFormHandler() {
       if (this.mode === 'edit') {
-        console.log('edit mode');
-        console.log(this.userUpdatedData.firstName);
-        console.log(this.userUpdatedData.lastName);
-        console.log(this.userUpdatedData.phone);
+        update(ref(db, 'users/' + this.id), {
+          firstName: this.userData.firstName,
+          lastName: this.userData.lastName,
+          phone: this.userData.phone,
+        });
       } else {
-        createUserWithEmailAndPassword(auth, this.userUpdatedData.email, this.userUpdatedData.password)
+        createUserWithEmailAndPassword(auth, this.userData.email, this.userData.password)
           .then(() => {
-            const db = getDatabase();
             const userId = auth.currentUser.uid;
-            const usersListRef = ref(db, 'users/' + userId);
-            set(usersListRef, {
-              firstName: this.userUpdatedData.firstName,
-              lastName: this.userUpdatedData.lastName,
-              phone: this.userUpdatedData.phone,
-              email: this.userUpdatedData.email,
+            const userRef = ref(db, 'users/' + userId);
+            set(userRef, {
+              firstName: this.userData.firstName,
+              lastName: this.userData.lastName,
+              phone: this.userData.phone,
+              email: this.userData.email,
             });
           })
           .then(() => {
@@ -139,10 +164,12 @@ export default {
             this.$router.push('/demands/list');
           })
           .catch((error) => {
-            console.log(error);
+            this.$toast.error('Something went wrong! Try again later!', {
+              timeout: 2500,
+            });
+            console.log(error.code);
           });
       }
-      // this.$router.go(-1);
     },
   },
 };
@@ -151,5 +178,20 @@ export default {
 <style scoped>
 .title {
   font-size: 30px;
+}
+@media screen and (max-width: 549px) {
+  .user-data-form {
+    width: 90vw;
+  }
+}
+@media screen and (min-width: 550px) {
+  .user-data-form {
+    width: 400px;
+  }
+}
+@media screen and (min-width: 900px) {
+  .user-data-form {
+    width: 450px;
+  }
 }
 </style>
