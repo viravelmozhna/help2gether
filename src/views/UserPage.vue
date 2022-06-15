@@ -25,6 +25,10 @@ export default {
         this.$store.dispatch('setDemands', {
           data: Object.entries(data),
         });
+      } else {
+        this.$store.dispatch('setDemands', {
+          data: [],
+        });
       };
     });
   },

@@ -20,7 +20,7 @@
 
     </b-list-group>
 
-    <b-container fluid>
+    <b-container fluid v-if="demands">
       <b-row
         cols="1"
         cols-sm="3"
