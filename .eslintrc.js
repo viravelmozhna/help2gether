@@ -13,7 +13,7 @@ module.exports = {
     // 'object-shorthand': [1, 'always', { avoidQuotes: true }],
     'quote-props': 1,
     'prefer-object-spread': 2,
-    'prefer-destructuring': [1, { array: true, object: true }],
+    // 'prefer-destructuring': [1, { array: true, object: true }],
     'func-style': [2, 'expression'],
     'no-loop-func': 2,
     'prefer-rest-params': 1,

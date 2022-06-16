@@ -4,6 +4,12 @@
     <GoBackButton />
     <ModalWindow title="Mark this demand as completed?" v-on:actionInModalWindow="actionInModalWindowHandler"/>
 
+    <b-button
+      class="mt-3"
+      variant="secondary"
+      @click="editDemand"
+      >Edit demand</b-button>
+
     <b-list-group
       flush
       tag="ul">
@@ -219,6 +225,9 @@ export default {
     },
     goToUserProfile() {
       this.$router.push({ path: `/user/profile/${this.demandInfo.assignedTo}` });
+    },
+    editDemand() {
+      this.$router.push({ path: `/demands/edit/${this.id}` });
     },
   },
 };
