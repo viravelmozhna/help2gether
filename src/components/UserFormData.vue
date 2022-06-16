@@ -57,7 +57,6 @@
             type="email"
             class="form-control"
             required
-            :value="userData.email"
             @change="e => userData.email = e.target.value"/>
         </b-form-group>
         <b-form-group
@@ -96,108 +95,40 @@
 </template>
 
 <script>
-import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-import { getDatabase, ref, set, update, get, child } from 'firebase/database';
-import { auth } from '@/firebase';
 import GoBackButton from '@/components/common/GoBackButton.vue';
 
-const db = getDatabase();
-
 export default {
-  name: 'UserDataForm',
+  name: 'UserFormData',
   components: {
     GoBackButton,
   },
-  data() {
-    return {
-      id: '',
-      mode: '',
-      userData: {
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
-        password: '',
-      },
-    };
+  props: {
+    mode: String,
+    userFirstName: String,
+    userLastName: String,
+    userPhone: String,
   },
   computed: {
-    currentUserData() {
-      return this.$store.getters.userData;
+    userData() {
+      return {
+        firstName: this.userFirstName,
+        lastName: this.userLastName,
+        phone: this.userPhone,
+        email: '',
+        password: '',
+      };
     },
-  },
-  created() {
-    if (this.currentUserData) {
-      this.id = this.currentUserData.id;
-      this.mode = 'edit';
-
-      get(child(ref(db), `users/${this.id}`))
-        .then((snapshot) => {
-          this.userData = snapshot.val();
-        })
-        .catch((error) => {
-          console.log(error.code);
-          this.$toast.error('Something went wrong! Try again later!', {
-            timeout: 2500,
-          });
-          this.$router.go(-1);
-        });
-    } else {
-      this.mode = 'signup';
-    };
   },
   methods: {
     userDataFormHandler() {
-      if (this.mode === 'edit') {
-        update(ref(db, 'users/' + this.id), {
-          firstName: this.userData.firstName,
-          lastName: this.userData.lastName,
-          phone: this.userData.phone,
-        })
-          .then(() => {
-            this.$toast.success('Your profile was updated!', {
-              timeout: 2500,
-            });
-          })
-          .catch((error) => {
-            console.log(error.code);
-            this.$toast.error('Something went wrong! Try again later!', {
-              timeout: 2500,
-            });
-          });
-        this.$router.go(-1);
-      } else {
-        createUserWithEmailAndPassword(auth, this.userData.email, this.userData.password)
-          .then(() => {
-            const userId = auth.currentUser.uid;
-            const userRef = ref(db, 'users/' + userId);
-            set(userRef, {
-              firstName: this.userData.firstName,
-              lastName: this.userData.lastName,
-              phone: this.userData.phone,
-              email: this.userData.email,
-            });
-          })
-          .then(() => {
-            sendEmailVerification(auth.currentUser);
-            this.$toast.success('You was successfully registered!', {
-              timeout: 2500,
-            });
-            this.$router.push('/demands/list');
-          })
-          .catch((error) => {
-            let errorMessage = 'Sorry, something went wrong! Try again later!';
-            if (error.code === 'auth/email-already-in-use') {
-              errorMessage = 'This email is already in use!';
-            } else if (error.code === 'auth/invalid-email') {
-              errorMessage = 'Invalid email!';
-            }
-            this.$toast.error(errorMessage, {
-              timeout: 2500,
-            });
-            console.log(error.code);
-          });
-      }
+      const userData = {
+        firstName: this.userData.firstName,
+        lastName: this.userData.lastName,
+        phone: this.userData.phone,
+        email: this.userData.email,
+        password: this.userData.password,
+      };
+      this.$emit('formSubmit', userData);
     },
   },
 };
