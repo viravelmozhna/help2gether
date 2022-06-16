@@ -12,6 +12,7 @@ import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/
 import { getDatabase, ref, update, set, get, child } from 'firebase/database';
 import { auth } from '@/firebase';
 import UserFormData from './UserFormData.vue';
+import { modes, errors } from '@/env/constants';
 
 const db = getDatabase();
 
@@ -37,11 +38,11 @@ export default {
       return this.$store.getters.userData;
     },
     mode() {
-      return this.isUserLoggedIn ? 'edit' : 'add';
+      return this.isUserLoggedIn ? modes.EDIT : modes.ADD;
     },
   },
   created() {
-    if (this.mode === 'edit') {
+    if (this.mode === modes.EDIT) {
       get(child(ref(db), `users/${this.currentUserData.id}`))
         .then((snapshot) => {
           this.userData = snapshot.val();
@@ -57,7 +58,7 @@ export default {
   },
   methods: {
     formSubmit(e) {
-      if (this.mode === 'edit') {
+      if (this.mode === modes.EDIT) {
         update(ref(db, 'users/' + this.currentUserData.id), {
           firstName: e.firstName,
           lastName: e.lastName,
@@ -96,9 +97,9 @@ export default {
           })
           .catch((error) => {
             let errorMessage = 'Sorry, something went wrong! Try again later!';
-            if (error.code === 'auth/email-already-in-use') {
+            if (error.code === errors.EMAIL_ALREADY_IN_USE) {
               errorMessage = 'This email is already in use!';
-            } else if (error.code === 'auth/invalid-email') {
+            } else if (error.code === errors.INVALID_EMAIL) {
               errorMessage = 'Invalid email!';
             }
             this.$toast.error(errorMessage, {

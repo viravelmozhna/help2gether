@@ -1,14 +1,14 @@
 <template>
   <div class="container mt-5">
 
-    <GoBackButton v-if="mode === 'edit'"/>
+    <GoBackButton v-if="mode === modes.EDIT"/>
 
     <b-card
       bg-variant="light"
       class="mt-2 mr-auto ml-auto user-data-form"
     >
       <h1 class="text-center title">
-        <span>{{mode === 'edit' ? 'Edit profile' : 'Sign Up'}}</span>
+        <span>{{mode === modes.EDIT ? 'Edit profile' : 'Sign Up'}}</span>
       </h1>
       <b-form @submit.prevent="userDataFormHandler">
         <b-form-group
@@ -48,7 +48,7 @@
             @change="e => userData.phone = e.target.value"/>
         </b-form-group>
         <b-form-group
-          v-if="mode !== 'edit'"
+          v-if="mode !== modes.EDIT"
           label="Email"
           label-for="email"
         >
@@ -60,7 +60,7 @@
             @change="e => userData.email = e.target.value"/>
         </b-form-group>
         <b-form-group
-          v-if="mode !== 'edit'"
+          v-if="mode !== modes.EDIT"
           label="Password (8 characters minimum)"
           label-for="password"
         >
@@ -79,11 +79,11 @@
           size="lg"
           variant="dark"
         >
-          <span>{{mode === 'edit' ? 'Save changes' : 'Sign Up'}}</span>
+          <span>{{mode === modes.EDIT ? 'Save changes' : 'Sign Up'}}</span>
         </b-button>
 
         <p
-          v-if="mode !== 'edit'"
+          v-if="mode !== modes.EDIT"
           class="mb-0 text-right"
         >
           Already registered?
@@ -96,11 +96,17 @@
 
 <script>
 import GoBackButton from '@/components/common/GoBackButton.vue';
+import { modes } from '@/env/constants';
 
 export default {
   name: 'UserFormData',
   components: {
     GoBackButton,
+  },
+  data() {
+    return {
+      modes: modes,
+    };
   },
   props: {
     mode: String,
