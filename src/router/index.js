@@ -55,14 +55,14 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       {
-        path: 'profile',
+        path: 'profile/:id',
         name: 'profile',
         component: () => { return import(/* webpackChunkName: "profile" */ '@/views/UserProfile'); },
       },
       {
         path: 'demands',
         name: 'user-demands',
-        component: () => { return import(/* webpackChunkName: "user-demands" */ '@/views/UserDemands'); },
+        component: () => { return import(/* webpackChunkName: "user-demands" */ '@/components/demands/DemandsList'); },
       },
     ],
   },

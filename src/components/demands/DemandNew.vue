@@ -104,6 +104,7 @@
 <script>
 import { getDatabase, ref, set, push } from 'firebase/database';
 import { regions, filterPropertiesValues } from '@/env/constants';
+import getCurrentDate from '@/utils/getCurrentDate';
 
 export default {
   name: 'DemandNew',
@@ -124,11 +125,6 @@ export default {
   methods: {
     addDemand() {
       const db = getDatabase();
-
-      const date = new Date();
-      const [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
-      const currentTime = `${day.toString().padStart(2, '0')}.${(month + 1).toString().padStart(2, '0')}.${year}`;
-
       const demandListRef = ref(db, 'demands');
       const newDemandRef = push(demandListRef);
 
@@ -144,7 +140,7 @@ export default {
         },
         demand: this.demand,
         category: this.category,
-        createdTime: currentTime,
+        createdTime: getCurrentDate(),
         status: 'active',
         emergency: this.emergency,
       })

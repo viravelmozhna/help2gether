@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import { getDatabase, ref, onValue } from 'firebase/database';
 import { filterPropertiesValues } from '@/env/constants';
 import DemandItem from './DemandItem.vue';
 import SearchInput from '../filters/SearchInput.vue';
@@ -71,17 +70,6 @@ export default {
     demands() {
       return this.$store.getters.filteredDemands;
     },
-  },
-  created() {
-    const db = getDatabase();
-    const demands = ref(db, 'demands');
-    onValue(demands, (snapshot) => {
-      // Receive data from DB in objects, transforme it to array for easier maintenance and next interaction
-      const dataToArray = Object.entries(snapshot.val());
-      this.$store.dispatch('setDemands', {
-        data: dataToArray,
-      });
-    });
   },
   components: {
     DemandItem,

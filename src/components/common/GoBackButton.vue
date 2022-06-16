@@ -3,24 +3,25 @@
       @click="goBack"
       size="sm"
       variant="link"
-      class="mb-2"
+      class="mb-2 link"
     >
-      <u>Go back to the list</u>
+      <u>Go back</u>
     </b-button>
 </template>
 
 <script>
 export default {
   name: 'GoBackButton',
-  computed: {
-    goBackToUrl() {
-      return this.$store.state.goBackToUrl;
-    },
-  },
   methods: {
     goBack() {
-      this.$router.push({ path: this.goBackToUrl });
+      this.$router.go(-1);
     },
   },
 };
 </script>
+
+<style scoped>
+.link {
+  color: #325892;
+}
+</style>

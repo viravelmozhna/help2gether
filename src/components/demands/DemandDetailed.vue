@@ -1,30 +1,33 @@
 <template>
   <div class="container">
+
     <GoBackButton />
+    <ModalWindow title="Mark this demand as completed?" v-on:actionInModalWindow="actionInModalWindowHandler"/>
+
     <b-list-group
       flush
       tag="ul">
       <b-list-group-item tag="li">
         <div class="mb-2">
-          <span class="text mr-2">NAME:</span>
+          <span class="text mr-2 font-weight-bold">NAME:</span>
           <span>{{demandInfo.contactData.name}}</span>
         </div>
       </b-list-group-item>
       <b-list-group-item tag="li">
         <div class="mb-2">
-          <span class="text mr-2">PHONE:</span>
+          <span class="text mr-2 font-weight-bold">PHONE:</span>
           <span>{{demandInfo.contactData.phone}}</span>
         </div>
       </b-list-group-item>
       <b-list-group-item tag="li">
         <div class="mb-2">
-          <span class="text mr-2">ADDRESS:</span>
+          <span class="text mr-2 font-weight-bold">ADDRESS:</span>
           <span>{{demandInfo.contactData.address.region}}, {{demandInfo.contactData.address.city}}, {{demandInfo.contactData.address.street}}</span>
         </div>
       </b-list-group-item>
       <b-list-group-item tag="li">
         <div class="mb-2">
-          <span class="text mr-2">DEMAND:</span>
+          <span class="text mr-2 font-weight-bold">DEMAND:</span>
           <span>{{demandInfo.demand}}</span>
           <div>
             <b-badge
@@ -38,7 +41,12 @@
       </b-list-group-item>
       <b-list-group-item tag="li" >
         <div>
-          <span><i>The demand was created on {{demandInfo.createdTime}}</i></span>
+          <span><i>The demand was created on {{demandInfo.createdTime}}</i></span><br>
+          <span
+            v-if="demandInfo.completedTime"
+            key="completed-time"
+            ><i>The demand was completed on {{demandInfo.completedTime}}</i>
+          </span>
           <div>
             <span class="mr-2">
               <b-badge
@@ -77,22 +85,79 @@
           </div>
         </div>
       </b-list-group-item>
+      <b-list-group-item
+        v-if="demandInfo.assignedTo"
+        key="demand-was-assigned"
+        tag="li"
+      >
+        <span>
+          <i>
+            The demand
+            <span
+              v-if="demandInfo.completedTime"
+              key="demand-is-completed-by-user"
+            >
+            was completed by
+            </span>
+            <span
+              v-else
+              key="demand-is-assigned-to-user"
+            >
+            assigned to
+            </span>
+            <a @click="goToUserProfile"><u class="link">{{assigneeName}}</u></a>
+          </i>
+        </span>
+      </b-list-group-item>
+      <b-list-group-item
+        v-if="!demandInfo.assignedTo"
+        key="demand-is-not-assigned-yet"
+        tag="li"
+        >
+        <b-button
+          class="mt-3"
+          variant="info"
+          @click="assignDemand"
+          >Take demand</b-button>
+      </b-list-group-item>
+      <b-list-group-item
+        v-else-if="isCurrentLoggedUserAnAssignee && demandInfo.status !== 'completed'"
+        key="demand-is-assigned-to-current-user"
+        tag="li"
+        >
+        <b-button v-b-modal.modalWindow
+          class="mt-3 mr-3"
+          variant="success"
+          >Mark as completed</b-button>
+          <b-button
+          class="mt-3"
+          variant="danger"
+          @click="unassignDemand"
+          >Unassign demand</b-button>
+      </b-list-group-item>
     </b-list-group>
+
   </div>
 </template>
 
 <script>
-import { getDatabase, ref, onValue } from 'firebase/database';
+import { getDatabase, ref, onValue, update, get, child } from 'firebase/database';
+import { auth } from '@/firebase';
+import getCurrentDate from '@/utils/getCurrentDate';
 import GoBackButton from '../common/GoBackButton.vue';
+import ModalWindow from '../common/ModalWindow.vue';
 
 export default {
   name: 'DemandDetailed',
   components: {
     GoBackButton,
+    ModalWindow,
   },
   data() {
     return {
       id: this.$route.params.id,
+      assigneeName: '',
+      isCurrentLoggedUserAnAssignee: false,
     };
   },
   computed: {
@@ -108,7 +173,53 @@ export default {
       this.$store.dispatch('setDemandDetailedInfo', {
         data,
       });
+      if (data.assignedTo) {
+        get(child(ref(db), `users/${this.demandInfo.assignedTo}`))
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              const { currentUser } = auth;
+              if (this.demandInfo.assignedTo === currentUser.uid) {
+                this.isCurrentLoggedUserAnAssignee = true;
+              }
+
+              const assignee = snapshot.val();
+              this.assigneeName = `${assignee.firstName} ${assignee.lastName}`;
+            };
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
     });
+  },
+  methods: {
+    assignDemand() {
+      const { currentUser } = auth;
+      const db = getDatabase();
+      update(ref(db, 'demands/' + this.id), {
+        assignedTo: currentUser.uid,
+        status: 'in progress',
+      });
+    },
+    unassignDemand() {
+      const db = getDatabase();
+      update(ref(db, 'demands/' + this.id), {
+        assignedTo: null,
+        status: 'active',
+      });
+    },
+    actionInModalWindowHandler(e) {
+      if (e === 'approve') {
+        const db = getDatabase();
+        update(ref(db, 'demands/' + this.id), {
+          status: 'completed',
+          completedTime: getCurrentDate(),
+        });
+      }
+    },
+    goToUserProfile() {
+      this.$router.push({ path: `/user/profile/${this.demandInfo.assignedTo}` });
+    },
   },
 };
 </script>
@@ -116,5 +227,9 @@ export default {
 <style scoped>
 .text {
   font-size: 20px;
+}
+.link {
+  cursor: pointer;
+  color: #325892;
 }
 </style>

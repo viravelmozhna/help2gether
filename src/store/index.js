@@ -32,8 +32,6 @@ export default new Vuex.Store({
       emergency: [],
       category: [],
     },
-    // TODO: by default we return to the full list of demands; in the future 'user-demands' component we will change this 'goBackToUrl' path with action
-    goBackToUrl: '/demands/list',
   },
   getters: {
     isUserLoggedIn(state) {
@@ -74,9 +72,6 @@ export default new Vuex.Store({
     setDemandDetailedInfo(state, payload) {
       state.demandDetailedInfo = payload.data;
     },
-    setGoBackToUrl(state, payload) {
-      state.path = payload.path;
-    },
     deleteFilter(state, payload) {
       const { propertyName, propertyValue } = payload;
       state.activeFiltersList = {
@@ -115,9 +110,6 @@ export default new Vuex.Store({
     },
     setDemandDetailedInfo(context, payload) {
       context.commit('setDemandDetailedInfo', payload);
-    },
-    setGoBackToUrl(context, payload) {
-      context.commit('setGoBackToUrl', payload);
     },
     setActiveFiltersList(context, payload) {
       context.commit('setActiveFiltersList', payload);
