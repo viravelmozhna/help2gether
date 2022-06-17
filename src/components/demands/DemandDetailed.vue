@@ -128,7 +128,7 @@
       </b-list-group-item>
       <b-list-group-item
         v-else-if="isCurrentLoggedUserAnAssignee && demandInfo.status !== 'completed'"
-        key="demand-is-assigned-to-current-logged-user-and-is-not-completed-yet"
+        key="demand-is-assigned-to-current-user"
         tag="li"
         >
         <b-button v-b-modal.modalWindow
