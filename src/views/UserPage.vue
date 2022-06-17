@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavBar />
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
   </div>
 </template>
 
@@ -20,10 +20,16 @@ export default {
     const { currentUser } = auth;
     const demands = query(ref(db, 'demands'), orderByChild('assignedTo'), equalTo(currentUser.uid));
     onValue(demands, (snapshot) => {
-      const data = Object.entries(snapshot.val());
-      this.$store.dispatch('setDemands', {
-        data,
-      });
+      const data = snapshot.val();
+      if (data) {
+        this.$store.dispatch('setDemands', {
+          data: Object.entries(data),
+        });
+      } else {
+        this.$store.dispatch('setDemands', {
+          data: [],
+        });
+      };
     });
   },
 };

@@ -52,6 +52,7 @@
 <script>
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase';
+import { errors } from '@/env/constants';
 
 export default {
   name: 'LoginPage',
@@ -73,7 +74,7 @@ export default {
           this.$router.push('/demands/list');
         })
         .catch((error) => {
-          const errorMessage = error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found'
+          const errorMessage = error.code === errors.WRONG_PASSWORD || error.code === errors.USER_NOT_FOUND
             ? 'Incorrect email or password!'
             : 'Something went wrong! Try again later!';
           this.$toast.error(`${errorMessage}`, {

@@ -30,11 +30,8 @@ onAuthStateChanged(auth, (user) => {
   const { currentUser } = auth;
   if (currentUser) {
     store.dispatch('setUser', {
-      displayName: currentUser.displayName,
       email: currentUser.email,
       id: currentUser.uid,
     });
-  } else {
-    console.log('You are logged out');
   }
 });
