@@ -4,6 +4,11 @@
   </div>
 </template>
 
+<script>
+// import binarySearch from '@/utils/binarySearch';
+
+</script>
+
 <style>
 #app {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
