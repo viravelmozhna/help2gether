@@ -1,11 +1,22 @@
 <template>
-  <DemandFormData :mode="mode" :demandId="id" v-on:formSubmit="formSubmit"/>
+  <DemandFormData
+    :mode="mode"
+    v-on:formSubmit="formSubmit"
+    :category="demandData.category"
+    :demand="demandData.demand"
+    :emergency="demandData.emergency"
+    :name="demandData.contactData.name"
+    :phone="demandData.contactData.phone"
+    :region="demandData.contactData.address.region.split(' ')[0]"
+    :city="demandData.contactData.address.city"
+    :street="demandData.contactData.address.street"/>
 </template>
 
 <script>
-import { getDatabase, ref, update, set, push } from 'firebase/database';
+import { getDatabase, ref, update, set, push, get, child } from 'firebase/database';
 import DemandFormData from './DemandFormData.vue';
 import getCurrentDate from '@/utils/getCurrentDate';
+import { modes } from '@/env/constants';
 
 const db = getDatabase();
 
@@ -17,16 +28,46 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
+      modes: modes,
+      demandData: {
+        category: '',
+        demand: '',
+        emergency: '',
+        contactData: {
+          name: '',
+          phone: '',
+          address: {
+            city: '',
+            region: '',
+            street: '',
+          },
+        },
+      },
     };
   },
   computed: {
     mode() {
-      return this.id ? 'edit' : 'add';
+      return this.id ? modes.EDIT : modes.ADD;
     },
+  },
+  created() {
+    if (this.id) {
+      get(child(ref(db), `demands/${this.id}`))
+        .then((snapshot) => {
+          this.demandData = snapshot.val();
+        })
+        .catch((error) => {
+          console.log(error.code);
+          this.$toast.error('Something went wrong! Try again later!', {
+            timeout: 2500,
+          });
+          this.$router.go(-1);
+        });
+    }
   },
   methods: {
     formSubmit(e) {
-      if (this.mode === 'edit') {
+      if (this.mode === modes.EDIT) {
         update(ref(db, 'demands/' + this.id), {
           category: e.category,
           demand: e.demand,

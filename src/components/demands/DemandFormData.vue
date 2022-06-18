@@ -9,7 +9,7 @@
     >
 
       <h1 class="text-left title">
-        <span>{{mode === 'edit' ? 'Edit demand' : 'Add demand'}}</span>
+        <span>{{mode === modes.EDIT ? 'Edit demand' : 'Add demand'}}</span>
       </h1>
 
     <b-form @submit.prevent="formSubmit">
@@ -126,7 +126,7 @@
         size="lg"
         variant="dark"
       >
-        <span>{{mode === 'edit' ? 'Save changes' : 'Add demand'}}</span>
+        <span>{{mode === modes.EDIT ? 'Save changes' : 'Add demand'}}</span>
       </b-button>
     </b-form>
     </b-card>
@@ -134,12 +134,8 @@
 </template>
 
 <script>
-import { getDatabase, ref, child, get } from 'firebase/database';
-import { regions, filterPropertiesValues } from '@/env/constants';
-
+import { regions, filterPropertiesValues, modes } from '@/env/constants';
 import GoBackButton from '@/components/common/GoBackButton.vue';
-
-const db = getDatabase();
 
 export default {
   name: 'DemandFormData',
@@ -148,48 +144,35 @@ export default {
   },
   props: {
     mode: String,
-    demandId: String,
+    category: String,
+    demand: String,
+    emergency: String,
+    name: String,
+    phone: String,
+    region: String,
+    city: String,
+    street: String,
   },
   data() {
     return {
       regions: regions,
       filterPropertiesValues: filterPropertiesValues,
-      demandData: {
-        name: '',
-        phone: '',
-        region: 'Kharkiv',
-        city: '',
-        street: '',
-        demand: '',
-        category: '',
-        emergency: '',
-      },
+      modes: modes,
     };
   },
-  created() {
-    if (this.demandId) {
-      get(child(ref(db), `demands/${this.demandId}`))
-        .then((snapshot) => {
-          const data = snapshot.val();
-          this.demandData = {
-            name: data.contactData.name,
-            phone: data.contactData.phone,
-            region: data.contactData.address.region.split(' ')[0],
-            city: data.contactData.address.city,
-            street: data.contactData.address.street,
-            demand: data.demand,
-            category: data.category,
-            emergency: data.emergency,
-          };
-        })
-        .catch((error) => {
-          console.log(error.code);
-          this.$toast.error('Something went wrong! Try again later!', {
-            timeout: 2500,
-          });
-          this.$router.go(-1);
-        });
-    }
+  computed: {
+    demandData() {
+      return {
+        category: this.category,
+        demand: this.demand,
+        emergency: this.emergency,
+        name: this.name,
+        phone: this.phone,
+        region: this.region || 'Kharkiv',
+        city: this.city,
+        street: this.street,
+      };
+    },
   },
   methods: {
     formSubmit() {
