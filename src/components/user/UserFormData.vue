@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <div class="container">
 
     <GoBackButton v-if="mode === modes.EDIT"/>
 
