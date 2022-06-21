@@ -1,8 +1,8 @@
 <template>
    <div>
      <b-form
-      @submit.prevent="formSubmitHandler"
       class="mb-2 d-flex search-input position-relative"
+      @submit.prevent="getDemandsByRegion"
     >
       <b-input
         v-model="selectedRegion"
@@ -44,12 +44,6 @@ export default {
     };
   },
   methods: {
-    chooseMatchedRegion(region) {
-      this.selectedRegion = region;
-      this.setFilter();
-      this.selectedRegion = '';
-      this.resetMatchedRegionsList();
-    },
     setMatchedRegionsList(e) {
       this.matchedRegions = searchRegionsByQuery(e);
     },
@@ -62,9 +56,14 @@ export default {
         propertyValue: `${this.selectedRegion.toLowerCase()} region`,
       });
     },
-    formSubmitHandler() {
+    getDemandsByRegion() {
       this.resetMatchedRegionsList();
       this.setFilter();
+    },
+    chooseMatchedRegion(region) {
+      this.selectedRegion = region;
+      this.getDemandsByRegion();
+      this.selectedRegion = '';
     },
   },
 };
@@ -73,15 +72,16 @@ export default {
 <style scoped>
 .matched-regions-list {
   list-style: none;
-  background-color: white;
+  background-color: #ffffff;
   top: 110px;
   left: 30px;
-  width: 250px;
+  width: 200px;
   z-index: 999;
   box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
 }
-.matched-regions-list__item {
+.matched-regions-list__item:hover {
   cursor: pointer;
+  transform: scale(1.02);
 }
 @media screen and (max-width: 991px) {
   .search-input {
