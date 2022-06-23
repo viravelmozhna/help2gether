@@ -242,6 +242,9 @@ export default {
   top: 9px;
   right: 10px;
 }
+.demand-detailed-card {
+  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
+}
 @media screen and (max-width: 549px) {
   .demand-detailed-card {
     width: 90vw;
