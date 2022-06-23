@@ -10,7 +10,7 @@
     </b-collapse>
     <div v-if="isUserLoggedIn" class="ml-auto">
         <span class="mr-3">
-          Hello, <a @click="goToUserProfile"><u class="link"><i>{{ userName }}</i></u></a>
+          Hello, <router-link :to="`/user/profile/${userData.id}`"><u class="link"><i>{{ userName }}</i></u></router-link>
         </span>
         <span class="text-uppercase logout-button">
           <a @click="logout">Logout</a>
@@ -66,9 +66,6 @@ export default {
           });
           this.$router.push('/login');
         });
-    },
-    goToUserProfile() {
-      this.$router.push({ path: `/user/profile/${this.userData.id}` });
     },
   },
 };

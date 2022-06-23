@@ -18,7 +18,7 @@ const routes = [
   {
     path: '/signup',
     name: 'signup',
-    component: () => { return import(/* webpackChunkName: "signup" */ '@/components/UserDataForm'); },
+    component: () => { return import(/* webpackChunkName: "signup" */ '@/components/user/UserFormView'); },
   },
   {
     path: '/reset-password',
@@ -62,12 +62,12 @@ const routes = [
       {
         path: 'profile/:id',
         name: 'user-profile',
-        component: () => { return import(/* webpackChunkName: "user-profile" */ '@/components/UserProfile'); },
+        component: () => { return import(/* webpackChunkName: "user-profile" */ '@/components/user/UserProfile'); },
       },
       {
         path: 'edit',
         name: 'edit-user-profile',
-        component: () => { return import(/* webpackChunkName: "edit-user-profile" */ '@/components/UserDataForm'); },
+        component: () => { return import(/* webpackChunkName: "edit-user-profile" */ '@/components/user/UserFormView'); },
       },
       {
         path: 'demands',
