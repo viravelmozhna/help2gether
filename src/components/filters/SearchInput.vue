@@ -7,6 +7,7 @@
       <b-input
         v-model="selectedRegion"
         autocomplete="off"
+        placeholder="Search by regions"
         @input="e => setMatchedRegionsList(e)">
       </b-input>
 
@@ -26,7 +27,7 @@
           :key="region"
           @click="chooseMatchedRegion(region)"
           class="matched-regions-list__item mb-2">
-          {{region}}
+          <span>{{region}} region</span>
         </li>
     </b-card>
    </div>
