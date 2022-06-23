@@ -39,12 +39,17 @@ const routes = [
       {
         path: 'add',
         name: 'demand-new',
-        component: () => { return import(/* webpackChunkName: "demand-new" */ '@/components/demands/DemandNew'); },
+        component: () => { return import(/* webpackChunkName: "demand-new" */ '@/components/demands/DemandFormView'); },
       },
       {
         path: 'detailed/:id',
         name: 'demand-detailed',
         component: () => { return import(/* webpackChunkName: "demand-detailed" */ '@/components/demands/DemandDetailed'); },
+      },
+      {
+        path: 'edit/:id',
+        name: 'demand-edit',
+        component: () => { return import(/* webpackChunkName: "demand-edit" */ '@/components/demands/DemandFormView'); },
       },
     ],
   },
