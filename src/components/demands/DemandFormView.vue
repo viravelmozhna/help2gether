@@ -108,11 +108,12 @@ export default {
         contactData: {
           name: e.name,
           phone: e.phone,
-          address: {
-            region: e.region,
-            city: e.city,
-            street: e.street,
-          },
+          address: e.address,
+          // address: {
+          //   region: e.region,
+          //   city: e.city,
+          //   street: e.street,
+          // },
         },
         demand: e.demand,
         category: e.category,

@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
+import * as VueGoogleMaps from 'vue2-google-maps';
 
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
@@ -15,6 +16,14 @@ Vue.use(BootstrapVueIcons);
 Vue.use(Toast);
 
 Vue.config.productionTip = false;
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyAxPjA1r401hT6qtHozJnIj0rnZKaNVRgQ',
+    libraries: 'places',
+  },
+  installComponents: true,
+});
 
 new Vue({
   store,

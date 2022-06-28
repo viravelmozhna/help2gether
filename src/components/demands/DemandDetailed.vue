@@ -29,8 +29,18 @@
 
       <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">Address:</span>
-        <span>{{demandInfo.contactData.address.region}}, {{demandInfo.contactData.address.city}}, {{demandInfo.contactData.address.street}}</span>
+        <span v-if="demandInfo.contactData.address.formattedAddress">{{demandInfo.contactData.address.formattedAddress}}</span>
+        <span v-else>{{demandInfo.contactData.address.region}}, {{demandInfo.contactData.address.city}}, {{demandInfo.contactData.address.street}}</span>
       </b-card-text>
+
+      <GoogleMap
+        v-if="demandInfo.contactData.address.formattedAddress"
+        :center="demandInfo.contactData.address.coords"
+        :zoom="17">
+          <GoogleMarker
+            :marker="demandInfo.contactData.address.coords"
+          />
+      </GoogleMap>
 
       <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">Demand:</span>
@@ -152,12 +162,16 @@ import { auth } from '@/firebase';
 import getCurrentDate from '@/utils/getCurrentDate';
 import GoBackButton from '../common/GoBackButton.vue';
 import ModalWindow from '../common/ModalWindow.vue';
+import GoogleMarker from '../map/GoogleMarker.vue';
+import GoogleMap from '../map/GoogleMap.vue';
 
 export default {
   name: 'DemandDetailed',
   components: {
     GoBackButton,
     ModalWindow,
+    GoogleMarker,
+    GoogleMap,
   },
   data() {
     return {

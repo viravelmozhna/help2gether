@@ -45,6 +45,25 @@
       </b-form-group>
 
       <b-form-group
+        label="Address"
+        label-for="address"
+      >
+        <GoogleAutocomplete v-on:getAddress="getAddress"/>
+
+        <GoogleMap
+          :center="center"
+          :zoom="zoom"
+          class="mt-3">
+            <GoogleMarker
+              v-if="existingPlace"
+              :marker="existingPlace.coords"
+              @click="center=existingPlace.position"
+            />
+        </GoogleMap>
+
+      </b-form-group>
+
+      <!-- <b-form-group
         label="Region"
       >
         <b-form-select
@@ -82,7 +101,7 @@
           :value="demandData.street"
           @change="e => demandData.street = e.target.value"
         />
-      </b-form-group>
+      </b-form-group> -->
 
       <b-form-group
         label="Demand"
@@ -134,13 +153,20 @@
 </template>
 
 <script>
-import { regions, filterPropertiesValues, modes } from '@/env/constants';
+// import { regions, filterPropertiesValues, modes } from '@/env/constants';
+import { filterPropertiesValues, modes } from '@/env/constants';
 import GoBackButton from '@/components/common/GoBackButton.vue';
+import GoogleAutocomplete from '../map/GoogleAutocomplete.vue';
+import GoogleMarker from '../map/GoogleMarker.vue';
+import GoogleMap from '../map/GoogleMap.vue';
 
 export default {
   name: 'DemandFormData',
   components: {
     GoBackButton,
+    GoogleAutocomplete,
+    GoogleMarker,
+    GoogleMap,
   },
   props: {
     mode: String,
@@ -149,15 +175,21 @@ export default {
     emergency: String,
     name: String,
     phone: String,
-    region: String,
-    city: String,
-    street: String,
+    // region: String,
+    // city: String,
+    // street: String,
   },
   data() {
     return {
-      regions: regions,
+      // regions: regions,
       filterPropertiesValues: filterPropertiesValues,
       modes: modes,
+      existingPlace: null,
+      center: {
+        lat: 49.9935,
+        lng: 36.2304,
+      },
+      zoom: 13,
     };
   },
   computed: {
@@ -168,23 +200,33 @@ export default {
         emergency: this.emergency,
         name: this.name,
         phone: this.phone,
-        region: this.region || 'Kharkiv',
-        city: this.city,
-        street: this.street,
+        // region: this.region || 'Kharkiv',
+        // city: this.city,
+        // street: this.street,
       };
     },
   },
   methods: {
+    getAddress(e) {
+      this.existingPlace = e;
+      this.center = e.coords;
+      this.zoom = 17;
+      // console.log(e.formattedAddress);
+      // console.log(e.formattedAddress.split(',').slice(3, 4));
+      // this.demandData.city = e.formattedAddress.split(',').slice(2, 3);
+      // this.demandData.street = e.formattedAddress.split(',').slice(0, 2).join(',').trim();
+    },
     formSubmit() {
       const demandData = {
         name: this.demandData.name,
         phone: this.demandData.phone,
-        region: `${this.demandData.region} region`,
-        city: this.demandData.city,
-        street: this.demandData.street,
+        // region: `${this.demandData.region} region`,
+        // city: this.demandData.city,
+        // street: this.demandData.street,
         demand: this.demandData.demand,
         category: this.demandData.category,
         emergency: this.demandData.emergency,
+        address: this.existingPlace,
       };
       this.$emit('formSubmit', demandData);
     },
