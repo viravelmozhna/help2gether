@@ -18,6 +18,19 @@
         >Edit</b-button>
 
       <b-card-text class="mb-3">
+        <span class="mr-2 label font-weight-bold">Demand:</span>
+        <span>{{demandInfo.demand}}</span>
+        <div>
+              <b-badge
+                pill
+                variant="secondary"
+              >
+              {{demandInfo.category.toUpperCase()}}
+              </b-badge>
+            </div>
+      </b-card-text>
+
+      <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">Name:</span>
         <span>{{demandInfo.contactData.name}}</span>
       </b-card-text>
@@ -41,19 +54,6 @@
             :marker="demandInfo.contactData.address.coords"
           />
       </GoogleMap>
-
-      <b-card-text class="mb-3">
-        <span class="mr-2 label font-weight-bold">Demand:</span>
-        <span>{{demandInfo.demand}}</span>
-        <div>
-              <b-badge
-                pill
-                variant="secondary"
-              >
-              {{demandInfo.category.toUpperCase()}}
-              </b-badge>
-            </div>
-      </b-card-text>
 
       <b-card-text class="mb-3">
         <div>

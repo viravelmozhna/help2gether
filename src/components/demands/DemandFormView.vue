@@ -1,5 +1,5 @@
 <template>
-  <DemandFormData
+  <!-- <DemandFormData
     :mode="mode"
     v-on:formSubmit="formSubmit"
     :category="demandData.category"
@@ -9,7 +9,17 @@
     :phone="demandData.contactData.phone"
     :region="demandData.contactData.address.region.split(' ')[0]"
     :city="demandData.contactData.address.city"
-    :street="demandData.contactData.address.street"/>
+    :street="demandData.contactData.address.street"
+  /> -->
+  <DemandFormData
+    :mode="mode"
+    v-on:formSubmit="formSubmit"
+    :category="demandData.category"
+    :demand="demandData.demand"
+    :emergency="demandData.emergency"
+    :name="demandData.contactData.name"
+    :phone="demandData.contactData.phone"
+  />
 </template>
 
 <script>
@@ -84,11 +94,12 @@ export default {
         contactData: {
           name: e.name,
           phone: e.phone,
-          address: {
-            city: e.city,
-            region: e.region,
-            street: e.street,
-          },
+          address: e.address,
+          // address: {
+          //   city: e.city,
+          //   region: e.region,
+          //   street: e.street,
+          // },
         },
       })
         .then(() => {

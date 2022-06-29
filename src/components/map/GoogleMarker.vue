@@ -9,7 +9,6 @@ export default {
   name: 'GoogleMarker',
   props: {
     marker: Object,
-    index: Number,
   },
 };
 </script>

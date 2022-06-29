@@ -1,7 +1,7 @@
 <template>
   <gmap-map
-        :zoom="zoom"
-        :center="center"
+        :zoom="zoomMap"
+        :center="centerCoords"
         style="width:100%;  height: 400px;"
         class="mb-3"
       >
@@ -17,6 +17,17 @@ export default {
   props: {
     center: Object,
     zoom: Number,
+  },
+  computed: {
+    centerCoords() {
+      return this.center || {
+        lat: 49.9935,
+        lng: 36.2304,
+      };
+    },
+    zoomMap() {
+      return this.zoom || 13;
+    },
   },
 };
 </script>

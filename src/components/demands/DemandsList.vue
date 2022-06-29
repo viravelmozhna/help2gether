@@ -1,7 +1,9 @@
 <template>
 <b-container fluid>
-  <SearchInput />
+  <!-- <SearchInput /> -->
   <SelectedFilters />
+
+  <b-button @click="changeViewMode" class="mb-2">{{listMode ? 'Map view' : 'List view'}}</b-button>
 
   <div class="d-flex flex-column flex-sm-row flex-nowrap">
     <b-list-group class="flex-column filters-list">
@@ -20,7 +22,7 @@
 
     </b-list-group>
 
-    <b-container fluid v-if="demands">
+    <b-container fluid v-if="demands && listMode">
       <b-row
         cols="1"
         cols-sm="3"
@@ -49,21 +51,34 @@
 
       </b-row>
     </b-container>
+
+    <GoogleMap v-else-if="demands && !listMode" :zoom="zoom" class="ml-3 mr-2">
+      <GoogleMarker
+        v-for="demand in demands"
+        :marker="demand[1].contactData.address.coords"
+        :key="demand.index"
+        />
+    </GoogleMap>
   </div>
+
 </b-container>
 </template>
 
 <script>
 import { filterPropertiesValues } from '@/env/constants';
 import DemandItem from './DemandItem.vue';
-import SearchInput from '../filters/SearchInput.vue';
+// import SearchInput from '../filters/SearchInput.vue';
 import SelectedFilters from '../filters/SelectedFilters.vue';
 import FilterComponent from '../filters/FilterComponent.vue';
+import GoogleMap from '../map/GoogleMap.vue';
+import GoogleMarker from '../map/GoogleMarker.vue';
 
 export default {
   data() {
     return {
       filterProperties: filterPropertiesValues,
+      listMode: true,
+      zoom: 6,
     };
   },
   computed: {
@@ -73,9 +88,17 @@ export default {
   },
   components: {
     DemandItem,
-    SearchInput,
+    // SearchInput,
     SelectedFilters,
     FilterComponent,
+    GoogleMap,
+    GoogleMarker,
+  },
+  methods: {
+    changeViewMode() {
+      this.listMode = !this.listMode;
+      this.zoom = 11;
+    },
   },
 };
 </script>
