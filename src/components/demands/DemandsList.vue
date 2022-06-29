@@ -3,7 +3,7 @@
   <!-- <SearchInput /> -->
   <SelectedFilters />
 
-  <b-button @click="changeViewMode" class="mb-2">{{listMode ? 'Map view' : 'List view'}}</b-button>
+  <b-button @click="changeViewMode" class="mb-2" variant="light"><b>Map view</b> | List view</b-button>
 
   <div class="d-flex flex-column flex-sm-row flex-nowrap">
     <b-list-group class="flex-column filters-list">
@@ -41,7 +41,6 @@
             :status="demand[1].status"
             :emergency="demand[1].emergency"
             :category="demand[1].category"
-            :city="demand[1].contactData.address.city"
             :demand="demand[1].demand"
             :createdTime="demand[1].createdTime"
             :id="demand[0]"
@@ -56,7 +55,7 @@
       <GoogleMarker
         v-for="demand in demands"
         :marker="demand[1].contactData.address.coords"
-        :key="demand.index"
+        :key="demand[0]"
         />
     </GoogleMap>
   </div>

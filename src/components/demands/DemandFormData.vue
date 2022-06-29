@@ -50,58 +50,22 @@
       >
         <GoogleAutocomplete v-on:getAddress="getAddress"/>
 
+        <b-card-text class="mb-3" v-if="formattedAddress">
+          <span class="mr-2 label font-weight-bold">Current address:</span>
+          <span>{{formattedAddress}}</span>
+        </b-card-text>
+
         <GoogleMap
-          :center="center"
+          :center="this.coords || center"
           :zoom="zoom"
           class="mt-3">
             <GoogleMarker
-              v-if="existingPlace"
-              :marker="existingPlace.coords"
-              @click="center=existingPlace.position"
+              v-if="demandData.coords"
+              :marker="demandData.coords"
             />
         </GoogleMap>
 
       </b-form-group>
-
-      <!-- <b-form-group
-        label="Region"
-      >
-        <b-form-select
-          :options="regions"
-          required
-          v-model="demandData.region"
-        ></b-form-select>
-      </b-form-group>
-
-      <b-form-group
-        label="City"
-        label-for="city"
-      >
-        <input
-          id="city"
-          type="text"
-          class="form-control"
-          autocomplete="off"
-          required
-          :value="demandData.city"
-          @change="e => demandData.city = e.target.value"
-        />
-      </b-form-group>
-
-      <b-form-group
-        label="Street"
-        label-for="street"
-      >
-        <input
-          id="street"
-          type="text"
-          class="form-control"
-          autocomplete="off"
-          required
-          :value="demandData.street"
-          @change="e => demandData.street = e.target.value"
-        />
-      </b-form-group> -->
 
       <b-form-group
         label="Demand"
@@ -153,7 +117,6 @@
 </template>
 
 <script>
-// import { regions, filterPropertiesValues, modes } from '@/env/constants';
 import { filterPropertiesValues, modes } from '@/env/constants';
 import GoBackButton from '@/components/common/GoBackButton.vue';
 import GoogleAutocomplete from '../map/GoogleAutocomplete.vue';
@@ -175,21 +138,19 @@ export default {
     emergency: String,
     name: String,
     phone: String,
-    // region: String,
-    // city: String,
-    // street: String,
+    coords: Object,
+    formattedAddress: String,
+    city: String,
   },
   data() {
     return {
-      // regions: regions,
       filterPropertiesValues: filterPropertiesValues,
       modes: modes,
-      existingPlace: null,
+      zoom: this.mode === modes.EDIT ? 17 : null,
       center: {
         lat: 49.9935,
         lng: 36.2304,
       },
-      zoom: 13,
     };
   },
   computed: {
@@ -200,33 +161,30 @@ export default {
         emergency: this.emergency,
         name: this.name,
         phone: this.phone,
-        // region: this.region || 'Kharkiv',
-        // city: this.city,
-        // street: this.street,
+        coords: this.coords,
+        formattedAddress: this.formattedAddress,
+        city: this.city,
       };
     },
   },
   methods: {
     getAddress(e) {
-      this.existingPlace = e;
-      this.center = e.coords;
+      this.demandData.coords = e.coords;
+      this.demandData.formattedAddress = e.formattedAddress;
+      this.demandData.city = e.city;
       this.zoom = 17;
-      // console.log(e.formattedAddress);
-      // console.log(e.formattedAddress.split(',').slice(3, 4));
-      // this.demandData.city = e.formattedAddress.split(',').slice(2, 3);
-      // this.demandData.street = e.formattedAddress.split(',').slice(0, 2).join(',').trim();
+      this.center = e.coords;
     },
     formSubmit() {
       const demandData = {
         name: this.demandData.name,
         phone: this.demandData.phone,
-        // region: `${this.demandData.region} region`,
-        // city: this.demandData.city,
-        // street: this.demandData.street,
         demand: this.demandData.demand,
         category: this.demandData.category,
         emergency: this.demandData.emergency,
-        address: this.existingPlace,
+        coords: this.demandData.coords,
+        formattedAddress: this.demandData.formattedAddress,
+        city: this.demandData.city,
       };
       this.$emit('formSubmit', demandData);
     },

@@ -11,9 +11,11 @@ export default {
   name: 'GoogleAutocomplete',
   methods: {
     getAddress(loc) {
-      console.log(loc);
-      console.log(loc.formatted_address);
+      const city = loc.address_components.find((item) => {
+        return item.types.includes('locality');
+      });
       const address = {
+        city: city.long_name,
         formattedAddress: loc.formatted_address,
         coords: {
           lat: loc.geometry.location.lat(),

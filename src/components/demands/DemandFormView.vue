@@ -1,16 +1,4 @@
 <template>
-  <!-- <DemandFormData
-    :mode="mode"
-    v-on:formSubmit="formSubmit"
-    :category="demandData.category"
-    :demand="demandData.demand"
-    :emergency="demandData.emergency"
-    :name="demandData.contactData.name"
-    :phone="demandData.contactData.phone"
-    :region="demandData.contactData.address.region.split(' ')[0]"
-    :city="demandData.contactData.address.city"
-    :street="demandData.contactData.address.street"
-  /> -->
   <DemandFormData
     :mode="mode"
     v-on:formSubmit="formSubmit"
@@ -19,6 +7,9 @@
     :emergency="demandData.emergency"
     :name="demandData.contactData.name"
     :phone="demandData.contactData.phone"
+    :formattedAddress="demandData.contactData.address.formattedAddress"
+    :coords="demandData.contactData.address.coords"
+    :city="demandData.contactData.address.city"
   />
 </template>
 
@@ -47,9 +38,9 @@ export default {
           name: '',
           phone: '',
           address: {
+            formattedAddress: '',
+            coords: null,
             city: '',
-            region: '',
-            street: '',
           },
         },
       },
@@ -94,12 +85,11 @@ export default {
         contactData: {
           name: e.name,
           phone: e.phone,
-          address: e.address,
-          // address: {
-          //   city: e.city,
-          //   region: e.region,
-          //   street: e.street,
-          // },
+          address: {
+            city: e.city,
+            coords: e.coords,
+            formattedAddress: e.formattedAddress,
+          },
         },
       })
         .then(() => {
@@ -119,12 +109,11 @@ export default {
         contactData: {
           name: e.name,
           phone: e.phone,
-          address: e.address,
-          // address: {
-          //   region: e.region,
-          //   city: e.city,
-          //   street: e.street,
-          // },
+          address: {
+            city: e.city,
+            coords: e.coords,
+            formattedAddress: e.formattedAddress,
+          },
         },
         demand: e.demand,
         category: e.category,
