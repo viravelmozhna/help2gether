@@ -42,8 +42,7 @@
 
       <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">Address:</span>
-        <span v-if="demandInfo.contactData.address.formattedAddress">{{demandInfo.contactData.address.formattedAddress}}</span>
-        <span v-else>{{demandInfo.contactData.address.region}}, {{demandInfo.contactData.address.city}}, {{demandInfo.contactData.address.street}}</span>
+        <span>{{demandInfo.contactData.address.formattedAddress}}</span>
       </b-card-text>
 
       <GoogleMap
