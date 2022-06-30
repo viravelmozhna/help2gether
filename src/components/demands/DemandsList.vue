@@ -1,9 +1,15 @@
 <template>
 <b-container fluid>
+  <!-- TODO: implement search by city -->
   <!-- <SearchInput /> -->
   <SelectedFilters />
 
-  <b-button @click="changeViewMode" class="mb-2" variant="light"><b>Map view</b> | List view</b-button>
+  <b-button
+    @click="changeViewMode"
+    class="mb-2"
+    variant="light">
+      <span><b>Map view</b> | List view</span>
+  </b-button>
 
   <div class="d-flex flex-column flex-sm-row flex-nowrap">
     <b-list-group class="flex-column filters-list">
@@ -22,18 +28,19 @@
 
     </b-list-group>
 
-    <b-container fluid v-if="demands && listMode">
-      <b-row
-        cols="1"
-        cols-sm="3"
-        cols-md="4"
-        cols-lg="5"
-        cols-xl="6"
-        tag="ul"
-        no-gutters
-        class="p-0 mw-100 demands-list"
-        align-h="center"
-      >
+    <b-container
+      fluid
+      v-if="demands && listMode">
+        <b-row
+          cols="1"
+          cols-sm="3"
+          cols-md="4"
+          cols-lg="5"
+          cols-xl="6"
+          tag="ul"
+          no-gutters
+          class="p-0 mw-100 demands-list"
+          align-h="center">
 
         <!-- Structure of demand: ['demand-id', {demand-data}] -->
         <template v-for="demand in demands">
@@ -52,12 +59,15 @@
       </b-row>
     </b-container>
 
-    <GoogleMap v-else-if="demands && !listMode" :zoom="zoom" class="ml-3 mr-2">
-      <GoogleMarker
-        v-for="demand in demands"
-        :marker="demand[1].contactData.address.coords"
-        :key="demand[0]"
-        />
+    <GoogleMap
+      v-else-if="demands && !listMode"
+      :zoom="zoom"
+      class="ml-3 mr-2">
+        <GoogleMarker
+          v-for="demand in demands"
+          :marker="demand[1].contactData.address.coords"
+          :key="demand[0]"
+          />
     </GoogleMap>
   </div>
 

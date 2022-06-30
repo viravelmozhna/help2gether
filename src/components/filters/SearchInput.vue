@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import searchRegionsByQuery from '@/utils/binarySearchTree';
+// import searchRegionsByQuery from '@/utils/binarySearchTree';
 
 export default {
   name: 'SearchInput',
@@ -46,7 +46,8 @@ export default {
   },
   methods: {
     setMatchedRegionsList(e) {
-      this.matchedRegions = searchRegionsByQuery(e);
+      // TODO: implement search by city
+      // this.matchedRegions = searchRegionsByQuery(e);
     },
     resetMatchedRegionsList() {
       this.matchedRegions = null;
