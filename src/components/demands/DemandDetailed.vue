@@ -47,8 +47,8 @@
 
       <GoogleMap
         v-if="demandInfo.contactData.address.formattedAddress"
-        :center="demandInfo.contactData.address.coords"
-        :zoom="17">
+        :centeredCoords="demandInfo.contactData.address.coords">
+
           <GoogleMarker
             :marker="demandInfo.contactData.address.coords"
           />

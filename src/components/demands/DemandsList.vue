@@ -61,8 +61,9 @@
 
     <GoogleMap
       v-else-if="demands && !listMode"
-      :zoom="zoom"
+      :zoomNumber="zoomNumber"
       class="ml-3 mr-2">
+
         <GoogleMarker
           v-for="demand in demands"
           :marker="demand[1].contactData.address.coords"
@@ -75,7 +76,7 @@
 </template>
 
 <script>
-import { filterPropertiesValues } from '@/env/constants';
+import { filterPropertiesValues, zoomMapNumbers } from '@/env/constants';
 import DemandItem from './DemandItem.vue';
 // import SearchInput from '../filters/SearchInput.vue';
 import SelectedFilters from '../filters/SelectedFilters.vue';
@@ -88,7 +89,7 @@ export default {
     return {
       filterProperties: filterPropertiesValues,
       listMode: true,
-      zoom: 6,
+      zoomNumber: zoomMapNumbers.MAP_LIST_VALUE,
     };
   },
   computed: {
@@ -107,7 +108,7 @@ export default {
   methods: {
     changeViewMode() {
       this.listMode = !this.listMode;
-      this.zoom = 11;
+      // this.zoomNumber = 11;
     },
   },
 };
