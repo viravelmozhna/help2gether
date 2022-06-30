@@ -63,10 +63,31 @@
       v-else-if="demands && !listMode"
       :zoom="zoom"
       class="ml-3 mr-2">
+
+      <GoogleInfoWindow
+        v-if="currentMarker"
+        :position="currentMarker[1].contactData.address.coords"
+        :isInfoWindowOpen="isInfoWindowOpen"
+        v-on:closeInfoWindow="closeInfoWindow">
+
+        <DemandItem
+            :status="currentMarker[1].status"
+            :emergency="currentMarker[1].emergency"
+            :category="currentMarker[1].category"
+            :demand="currentMarker[1].demand"
+            :createdTime="currentMarker[1].createdTime"
+            :city="currentMarker[1].contactData.address.city"
+            :id="currentMarker[0]"
+          />
+
+      </GoogleInfoWindow>
+
         <GoogleMarker
-          v-for="demand in demands"
+          v-for="(demand, index) in demands"
           :marker="demand[1].contactData.address.coords"
+          :index="index"
           :key="demand[0]"
+          v-on:clickOnMarker="clickOnMarker"
           />
     </GoogleMap>
   </div>
@@ -82,6 +103,7 @@ import SelectedFilters from '../filters/SelectedFilters.vue';
 import FilterComponent from '../filters/FilterComponent.vue';
 import GoogleMap from '../map/GoogleMap.vue';
 import GoogleMarker from '../map/GoogleMarker.vue';
+import GoogleInfoWindow from '../map/GoogleInfoWindow.vue';
 
 export default {
   data() {
@@ -89,6 +111,9 @@ export default {
       filterProperties: filterPropertiesValues,
       listMode: true,
       zoom: 6,
+      currentMarker: null,
+      currentMarkerIndex: null,
+      isInfoWindowOpen: false,
     };
   },
   computed: {
@@ -103,11 +128,25 @@ export default {
     FilterComponent,
     GoogleMap,
     GoogleMarker,
+    GoogleInfoWindow,
   },
   methods: {
     changeViewMode() {
       this.listMode = !this.listMode;
       this.zoom = 11;
+    },
+    clickOnMarker(e) {
+      this.currentMarker = this.demands[e.index];
+
+      if (this.currentMarkerIndex === e.index) {
+        this.isInfoWindowOpen = !this.isInfoWindowOpen;
+      } else {
+        this.isInfoWindowOpen = true;
+        this.currentMarkerIndex = e.index;
+      };
+    },
+    closeInfoWindow() {
+      this.isInfoWindowOpen = false;
     },
   },
 };
