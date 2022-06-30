@@ -1,15 +1,28 @@
 <template>
 <b-container fluid>
-  <!-- TODO: implement search by city -->
-  <!-- <SearchInput /> -->
-  <SelectedFilters />
 
-  <b-button
-    @click="changeViewMode"
-    class="mb-2"
-    variant="light">
-      <span><b>Map view</b> | List view</span>
-  </b-button>
+  <div class="controls-wrapper">
+    <!-- TODO: implement search by city -->
+    <!-- <SearchInput /> -->
+    <SelectedFilters />
+
+    <div class="buttons">
+      <b-button
+        @click="changeViewMode('map')"
+        class="mb-2 view-mode-button"
+        :class="{ active: viewMode === 'map' }"
+        variant="link">
+          <span>Map view</span>
+      </b-button>
+      <b-button
+        @click="changeViewMode('list')"
+        class="mb-2 view-mode-button"
+        :class="{ active: viewMode === 'list' }"
+        variant="link">
+          <span>List view</span>
+      </b-button>
+    </div>
+  </div>
 
   <div class="d-flex flex-column flex-sm-row flex-nowrap">
     <b-list-group class="flex-column filters-list">
@@ -30,7 +43,7 @@
 
     <b-container
       fluid
-      v-if="demands && listMode">
+      v-if="demands && viewMode === 'list'">
         <b-row
           cols="1"
           cols-sm="3"
@@ -60,7 +73,7 @@
     </b-container>
 
     <GoogleMap
-      v-else-if="demands && !listMode"
+      v-else-if="demands && viewMode === 'map'"
       :zoom="zoom"
       class="ml-3 mr-2">
 
@@ -109,7 +122,7 @@ export default {
   data() {
     return {
       filterProperties: filterPropertiesValues,
-      listMode: true,
+      viewMode: 'list',
       zoom: 6,
       currentMarker: null,
       currentMarkerIndex: null,
@@ -131,8 +144,8 @@ export default {
     GoogleInfoWindow,
   },
   methods: {
-    changeViewMode() {
-      this.listMode = !this.listMode;
+    changeViewMode(mode) {
+      this.viewMode = mode;
       this.zoom = 11;
     },
     clickOnMarker(e) {
@@ -153,6 +166,14 @@ export default {
 </script>
 
 <style scoped>
+.active {
+  text-decoration: underline;
+  font-weight: 500;
+}
+.view-mode-button {
+  font-size: 18px;
+  color: #325892;
+}
 .demands-list {
   list-style: none;
 }
@@ -168,6 +189,19 @@ export default {
 @media screen and (min-width: 715px ) {
     .filters-list {
     width: 25vw;
+    }
+    .controls-wrapper {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+    }
+    .buttons {
+      margin-left: auto;
+      margin-right: 115px;
+    }
+    .view-mode-button {
+      padding: 0;
+      margin-right: 24px;
     }
 }
 </style>
