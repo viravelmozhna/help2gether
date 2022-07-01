@@ -10,7 +10,8 @@
         :isInfoWindowOpen="isInfoWindowOpen"
         v-on:closeInfoWindow="closeInfoWindow">
 
-        <DemandItem
+        <div class="info-window">
+          <DemandItem
             :status="currentMarker[1].status"
             :emergency="currentMarker[1].emergency"
             :category="currentMarker[1].category"
@@ -19,6 +20,7 @@
             :city="currentMarker[1].contactData.address.city"
             :id="currentMarker[0]"
           />
+        </div>
 
       </GoogleInfoWindow>
 
@@ -78,3 +80,14 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.info-window {
+  min-width: 180px;
+}
+@media screen and (min-width: 715px ) {
+  .info-window {
+    min-width: 250px;
+  }
+}
+</style>

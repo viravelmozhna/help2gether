@@ -8,13 +8,13 @@
 
     <div class="view-links">
       <b-link
-        to="/demands/list/list-view"
+        to="list-view"
         class="link mr-3"
         exact-active-class="active"
       >List view</b-link>
 
       <b-link
-        to="/demands/list/map-view"
+        to="map-view"
         class="link"
         exact-active-class="active"
       >Map view</b-link>
@@ -76,8 +76,10 @@ export default {
   text-decoration: underline;
   font-weight: 500;
 }
-.info-window {
-  min-width: 180px;
+@media screen and (max-width: 576px ) {
+    .view-links {
+      margin-bottom: 10px;
+    }
 }
 @media screen and (min-width: 576px ) {
     .filters-list {
@@ -96,9 +98,6 @@ export default {
     .view-links {
       margin-left: auto;
       margin-right: 150px;
-    }
-    .info-window {
-      min-width: 250px;
     }
 }
 </style>
