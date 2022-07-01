@@ -37,7 +37,7 @@ module.exports = {
     'space-before-function-paren': [1, { named: 'never' }],
     'comma-dangle': [1, 'always-multiline'],
     semi: [2, 'always'],
-    radix: 2,
+    // radix: 2,
     'no-underscore-dangle': 1,
   },
 };

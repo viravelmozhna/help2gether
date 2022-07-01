@@ -100,6 +100,9 @@ export default {
   top: 1px;
   right: 10px;
 }
+.user-profile-card {
+  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
+}
 @media screen and (max-width: 549px) {
   .user-profile-card {
     width: 90vw;

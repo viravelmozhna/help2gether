@@ -67,8 +67,8 @@ export default {
 <style scoped>
 .item:hover {
   transform: scale(1.02);
-  border-color: #325892;
   cursor: pointer;
+  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
 }
 .text {
   font-size: 20px;

@@ -45,43 +45,27 @@
       </b-form-group>
 
       <b-form-group
-        label="Region"
+        label="Address"
+        label-for="address"
       >
-        <b-form-select
-          :options="regions"
-          required
-          v-model="demandData.region"
-        ></b-form-select>
-      </b-form-group>
+        <GoogleAutocomplete v-on:getAddress="getAddress"/>
 
-      <b-form-group
-        label="City"
-        label-for="city"
-      >
-        <input
-          id="city"
-          type="text"
-          class="form-control"
-          autocomplete="off"
-          required
-          :value="demandData.city"
-          @change="e => demandData.city = e.target.value"
-        />
-      </b-form-group>
+        <b-card-text class="mb-3" v-if="formattedAddress">
+          <span class="mr-2 label font-weight-bold">Current address:</span>
+          <span>{{formattedAddress}}</span>
+        </b-card-text>
 
-      <b-form-group
-        label="Street"
-        label-for="street"
-      >
-        <input
-          id="street"
-          type="text"
-          class="form-control"
-          autocomplete="off"
-          required
-          :value="demandData.street"
-          @change="e => demandData.street = e.target.value"
-        />
+        <GoogleMap
+          :centeredCoords="centeredCoords || coords"
+          :zoomNumber="zoomNumber"
+          class="mt-3">
+
+            <GoogleMarker
+              v-if="demandData.coords"
+              :marker="demandData.coords"
+            />
+        </GoogleMap>
+
       </b-form-group>
 
       <b-form-group
@@ -134,13 +118,19 @@
 </template>
 
 <script>
-import { regions, filterPropertiesValues, modes } from '@/env/constants';
+import { filterPropertiesValues, modes, zoomMapNumbers } from '@/env/constants';
 import GoBackButton from '@/components/common/GoBackButton.vue';
+import GoogleAutocomplete from '../map/GoogleAutocomplete.vue';
+import GoogleMarker from '../map/GoogleMarker.vue';
+import GoogleMap from '../map/GoogleMap.vue';
 
 export default {
   name: 'DemandFormData',
   components: {
     GoBackButton,
+    GoogleAutocomplete,
+    GoogleMarker,
+    GoogleMap,
   },
   props: {
     mode: String,
@@ -149,15 +139,19 @@ export default {
     emergency: String,
     name: String,
     phone: String,
-    region: String,
+    coords: Object,
+    formattedAddress: String,
     city: String,
-    street: String,
   },
   data() {
     return {
-      regions: regions,
       filterPropertiesValues: filterPropertiesValues,
       modes: modes,
+      zoomNumber:
+        this.mode === modes.EDIT
+          ? zoomMapNumbers.DEFAULT_VALUE
+          : zoomMapNumbers.DEMAND_FORM_ADD_MODE_VALUE,
+      centeredCoords: null,
     };
   },
   computed: {
@@ -168,23 +162,30 @@ export default {
         emergency: this.emergency,
         name: this.name,
         phone: this.phone,
-        region: this.region || 'Kharkiv',
+        coords: this.coords,
+        formattedAddress: this.formattedAddress,
         city: this.city,
-        street: this.street,
       };
     },
   },
   methods: {
+    getAddress(e) {
+      this.demandData.coords = e.coords;
+      this.demandData.formattedAddress = e.formattedAddress;
+      this.demandData.city = e.city;
+      this.zoomNumber = zoomMapNumbers.DEFAULT_VALUE;
+      this.centeredCoords = e.coords;
+    },
     formSubmit() {
       const demandData = {
         name: this.demandData.name,
         phone: this.demandData.phone,
-        region: `${this.demandData.region} region`,
-        city: this.demandData.city,
-        street: this.demandData.street,
         demand: this.demandData.demand,
         category: this.demandData.category,
         emergency: this.demandData.emergency,
+        coords: this.demandData.coords,
+        formattedAddress: this.demandData.formattedAddress,
+        city: this.demandData.city,
       };
       this.$emit('formSubmit', demandData);
     },

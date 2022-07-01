@@ -7,9 +7,10 @@
     :emergency="demandData.emergency"
     :name="demandData.contactData.name"
     :phone="demandData.contactData.phone"
-    :region="demandData.contactData.address.region.split(' ')[0]"
+    :formattedAddress="demandData.contactData.address.formattedAddress"
+    :coords="demandData.contactData.address.coords"
     :city="demandData.contactData.address.city"
-    :street="demandData.contactData.address.street"/>
+  />
 </template>
 
 <script>
@@ -37,9 +38,9 @@ export default {
           name: '',
           phone: '',
           address: {
+            formattedAddress: '',
+            coords: null,
             city: '',
-            region: '',
-            street: '',
           },
         },
       },
@@ -86,8 +87,8 @@ export default {
           phone: e.phone,
           address: {
             city: e.city,
-            region: e.region,
-            street: e.street,
+            coords: e.coords,
+            formattedAddress: e.formattedAddress,
           },
         },
       })
@@ -109,9 +110,9 @@ export default {
           name: e.name,
           phone: e.phone,
           address: {
-            region: e.region,
             city: e.city,
-            street: e.street,
+            coords: e.coords,
+            formattedAddress: e.formattedAddress,
           },
         },
         demand: e.demand,

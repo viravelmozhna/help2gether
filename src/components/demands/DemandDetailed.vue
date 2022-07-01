@@ -18,21 +18,6 @@
         >Edit</b-button>
 
       <b-card-text class="mb-3">
-        <span class="mr-2 label font-weight-bold">Name:</span>
-        <span>{{demandInfo.contactData.name}}</span>
-      </b-card-text>
-
-      <b-card-text class="mb-3">
-        <span class="mr-2 label font-weight-bold">Phone:</span>
-        <span>{{demandInfo.contactData.phone}}</span>
-      </b-card-text>
-
-      <b-card-text class="mb-3">
-        <span class="mr-2 label font-weight-bold">Address:</span>
-        <span>{{demandInfo.contactData.address.region}}, {{demandInfo.contactData.address.city}}, {{demandInfo.contactData.address.street}}</span>
-      </b-card-text>
-
-      <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">Demand:</span>
         <span>{{demandInfo.demand}}</span>
         <div>
@@ -44,6 +29,30 @@
               </b-badge>
             </div>
       </b-card-text>
+
+      <b-card-text class="mb-3">
+        <span class="mr-2 label font-weight-bold">Name:</span>
+        <span>{{demandInfo.contactData.name}}</span>
+      </b-card-text>
+
+      <b-card-text class="mb-3">
+        <span class="mr-2 label font-weight-bold">Phone:</span>
+        <span>{{demandInfo.contactData.phone}}</span>
+      </b-card-text>
+
+      <b-card-text class="mb-3">
+        <span class="mr-2 label font-weight-bold">Address:</span>
+        <span>{{demandInfo.contactData.address.formattedAddress}}</span>
+      </b-card-text>
+
+      <GoogleMap
+        v-if="demandInfo.contactData.address.formattedAddress"
+        :centeredCoords="demandInfo.contactData.address.coords">
+
+          <GoogleMarker
+            :marker="demandInfo.contactData.address.coords"
+          />
+      </GoogleMap>
 
       <b-card-text class="mb-3">
         <div>
@@ -152,12 +161,16 @@ import { auth } from '@/firebase';
 import getCurrentDate from '@/utils/getCurrentDate';
 import GoBackButton from '../common/GoBackButton.vue';
 import ModalWindow from '../common/ModalWindow.vue';
+import GoogleMarker from '../map/GoogleMarker.vue';
+import GoogleMap from '../map/GoogleMap.vue';
 
 export default {
   name: 'DemandDetailed',
   components: {
     GoBackButton,
     ModalWindow,
+    GoogleMarker,
+    GoogleMap,
   },
   data() {
     return {
@@ -241,6 +254,9 @@ export default {
 .edit-button {
   top: 9px;
   right: 10px;
+}
+.demand-detailed-card {
+  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
 }
 @media screen and (max-width: 549px) {
   .demand-detailed-card {
