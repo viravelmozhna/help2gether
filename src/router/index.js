@@ -82,11 +82,24 @@ const routes = [
         name: 'edit-user-profile',
         component: () => { return import(/* webpackChunkName: "edit-user-profile" */ '@/components/user/UserFormView'); },
       },
-      // {
-      //   path: 'demands',
-      //   name: 'user-demands',
-      //   component: () => { return import(/* webpackChunkName: "user-demands" */ '@/components/demands/DemandsList'); },
-      // },
+      {
+        path: 'demands',
+        name: 'user-demands',
+        component: () => { return import(/* webpackChunkName: "user-demands" */ '@/components/demands/DemandsList'); },
+        redirect: '/user/demands/list-view',
+        children: [
+          {
+            path: 'list-view',
+            name: 'user-list-view',
+            component: () => { return import(/* webpackChunkName: "user-list-view" */ '@/components/demands/DemandViewList'); },
+          },
+          {
+            path: 'map-view',
+            name: 'user-map-view',
+            component: () => { return import(/* webpackChunkName: "user-map-view" */ '@/components/demands/DemandViewMap'); },
+          },
+        ],
+      },
     ],
   },
   {
