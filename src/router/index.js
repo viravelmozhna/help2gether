@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/',
     name: 'start',
-    redirect: '/demands/list',
+    redirect: '/demands/list/list-view',
   },
   {
     path: '/login',
@@ -35,6 +35,19 @@ const routes = [
         path: 'list',
         name: 'list',
         component: () => { return import(/* webpackChunkName: "list" */ '@/components/demands/DemandsList'); },
+        redirect: '/demands/list/list-view',
+        children: [
+          {
+            path: 'list-view',
+            name: 'list-view',
+            component: () => { return import(/* webpackChunkName: "list-view" */ '@/components/demands/DemandViewList'); },
+          },
+          {
+            path: 'map-view',
+            name: 'map-view',
+            component: () => { return import(/* webpackChunkName: "map-view" */ '@/components/demands/DemandViewMap'); },
+          },
+        ],
       },
       {
         path: 'add',
@@ -69,11 +82,11 @@ const routes = [
         name: 'edit-user-profile',
         component: () => { return import(/* webpackChunkName: "edit-user-profile" */ '@/components/user/UserFormView'); },
       },
-      {
-        path: 'demands',
-        name: 'user-demands',
-        component: () => { return import(/* webpackChunkName: "user-demands" */ '@/components/demands/DemandsList'); },
-      },
+      // {
+      //   path: 'demands',
+      //   name: 'user-demands',
+      //   component: () => { return import(/* webpackChunkName: "user-demands" */ '@/components/demands/DemandsList'); },
+      // },
     ],
   },
   {

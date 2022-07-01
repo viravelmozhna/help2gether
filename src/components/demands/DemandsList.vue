@@ -6,21 +6,19 @@
     <!-- <SearchInput /> -->
     <SelectedFilters />
 
-    <div class="buttons">
-      <b-button
-        @click="changeViewMode('map')"
-        class="mb-2 view-mode-button"
-        :class="{ active: viewMode === modes.MAP_VIEW }"
-        variant="link">
-          <span>Map view</span>
-      </b-button>
-      <b-button
-        @click="changeViewMode('list')"
-        class="mb-2 view-mode-button"
-        :class="{ active: viewMode === modes.LIST_VIEW }"
-        variant="link">
-          <span>List view</span>
-      </b-button>
+    <div class="view-links">
+      <b-link
+        to="/demands/list/list-view"
+        class="link mr-3"
+        exact-active-class="active"
+      >List view</b-link>
+
+      <b-link
+        to="/demands/list/map-view"
+        class="link"
+        exact-active-class="active"
+      >Map view</b-link>
+
     </div>
   </div>
 
@@ -41,149 +39,51 @@
 
     </b-list-group>
 
-    <b-container
-      fluid
-      v-if="demands && viewMode === modes.LIST_VIEW">
-        <b-row
-          cols="1"
-          cols-sm="3"
-          cols-md="4"
-          cols-lg="5"
-          cols-xl="6"
-          tag="ul"
-          no-gutters
-          class="p-0 mw-100 demands-list"
-          align-h="center">
+    <router-view></router-view>
 
-        <!-- Structure of demand: ['demand-id', {demand-data}] -->
-        <template v-for="demand in demands">
-          <DemandItem
-            :status="demand[1].status"
-            :emergency="demand[1].emergency"
-            :category="demand[1].category"
-            :demand="demand[1].demand"
-            :createdTime="demand[1].createdTime"
-            :city="demand[1].contactData.address.city"
-            :id="demand[0]"
-            :key="demand[0]"
-          />
-        </template>
-
-      </b-row>
-    </b-container>
-
-    <GoogleMap
-      v-else-if="demands && viewMode === modes.MAP_VIEW"
-      :zoomNumber="zoomNumber"
-      class="">
-
-      <GoogleInfoWindow
-        v-if="currentMarker"
-        :position="currentMarker[1].contactData.address.coords"
-        :isInfoWindowOpen="isInfoWindowOpen"
-        v-on:closeInfoWindow="closeInfoWindow">
-
-        <DemandItem
-            :status="currentMarker[1].status"
-            :emergency="currentMarker[1].emergency"
-            :category="currentMarker[1].category"
-            :demand="currentMarker[1].demand"
-            :createdTime="currentMarker[1].createdTime"
-            :city="currentMarker[1].contactData.address.city"
-            :id="currentMarker[0]"
-          />
-
-      </GoogleInfoWindow>
-
-        <GoogleMarker
-          v-for="(demand, index) in demands"
-          :marker="demand[1].contactData.address.coords"
-          :index="index"
-          :key="demand[0]"
-          v-on:clickOnMarker="clickOnMarker"
-          />
-    </GoogleMap>
   </div>
 
 </b-container>
 </template>
 
 <script>
-import { filterPropertiesValues, zoomMapNumbers, modes } from '@/env/constants';
-import DemandItem from './DemandItem.vue';
+import { filterPropertiesValues, modes } from '@/env/constants';
 // import SearchInput from '../filters/SearchInput.vue';
 import SelectedFilters from '../filters/SelectedFilters.vue';
 import FilterComponent from '../filters/FilterComponent.vue';
-import GoogleMap from '../map/GoogleMap.vue';
-import GoogleMarker from '../map/GoogleMarker.vue';
-import GoogleInfoWindow from '../map/GoogleInfoWindow.vue';
 
 export default {
+  name: 'DemandList',
   data() {
     return {
       filterProperties: filterPropertiesValues,
       modes: modes,
-      viewMode: modes.LIST_VIEW,
-      zoomNumber: zoomMapNumbers.MAP_LIST_VALUE,
-      currentMarker: null,
-      currentMarkerIndex: null,
-      isInfoWindowOpen: false,
     };
   },
-  computed: {
-    demands() {
-      return this.$store.getters.filteredDemands;
-    },
-  },
   components: {
-    DemandItem,
-    // SearchInput,
     SelectedFilters,
     FilterComponent,
-    GoogleMap,
-    GoogleMarker,
-    GoogleInfoWindow,
   },
   methods: {
     changeViewMode(mode) {
       this.viewMode = mode;
-    },
-    clickOnMarker(e) {
-      this.currentMarker = this.demands[e.index];
-
-      if (this.currentMarkerIndex === e.index) {
-        this.isInfoWindowOpen = !this.isInfoWindowOpen;
-      } else {
-        this.isInfoWindowOpen = true;
-        this.currentMarkerIndex = e.index;
-      };
-    },
-    closeInfoWindow() {
-      this.isInfoWindowOpen = false;
     },
   },
 };
 </script>
 
 <style scoped>
+.link {
+  cursor: pointer;
+  color: #325892;
+}
 .active {
   text-decoration: underline;
   font-weight: 500;
 }
-.view-mode-button {
-  font-size: 18px;
-  color: #325892;
-}
-.demands-list {
-  list-style: none;
-}
 @media screen and (min-width: 576px ) {
     .filters-list {
     width: 35vw;
-    }
-    .demands-list {
-      justify-content: left !important;
-      margin-top: -8px;
     }
 }
 @media screen and (min-width: 715px ) {
@@ -195,13 +95,9 @@ export default {
       flex-direction: row;
       flex-wrap: nowrap;
     }
-    .buttons {
+    .view-links {
       margin-left: auto;
-      margin-right: 115px;
-    }
-    .view-mode-button {
-      padding: 0;
-      margin-right: 24px;
+      margin-right: 150px;
     }
 }
 </style>
