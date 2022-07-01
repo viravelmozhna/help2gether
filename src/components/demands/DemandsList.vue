@@ -77,12 +77,13 @@
       :zoomNumber="zoomNumber"
       class="">
 
-      <GoogleInfoWindow
+        <GoogleInfoWindow
         v-if="currentMarker"
         :position="currentMarker[1].contactData.address.coords"
         :isInfoWindowOpen="isInfoWindowOpen"
         v-on:closeInfoWindow="closeInfoWindow">
 
+        <div class="info-window">
         <DemandItem
             :status="currentMarker[1].status"
             :emergency="currentMarker[1].emergency"
@@ -92,6 +93,7 @@
             :city="currentMarker[1].contactData.address.city"
             :id="currentMarker[0]"
           />
+        </div>
 
       </GoogleInfoWindow>
 
@@ -177,6 +179,9 @@ export default {
 .demands-list {
   list-style: none;
 }
+.info-window {
+  min-width: 180px;
+}
 @media screen and (min-width: 576px ) {
     .filters-list {
     width: 35vw;
@@ -202,6 +207,9 @@ export default {
     .view-mode-button {
       padding: 0;
       margin-right: 24px;
+    }
+    .info-window {
+      min-width: 250px;
     }
 }
 </style>
