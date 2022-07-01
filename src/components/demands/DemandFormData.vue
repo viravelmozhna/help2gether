@@ -5,7 +5,7 @@
 
     <b-card
       bg-variant="light"
-      class="mt-2 mr-auto ml-auto demand-data-form"
+      class="mt-2 mb-5 mr-auto ml-auto demand-data-form"
     >
 
       <h1 class="text-left title">
@@ -197,6 +197,9 @@ export default {
 <style scoped>
 .title {
   font-size: 30px;
+}
+.demand-data-form {
+  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
 }
 @media screen and (max-width: 549px) {
   .demand-data-form {

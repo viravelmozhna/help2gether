@@ -16,17 +16,36 @@ export default {
     NavBar,
   },
   created() {
+    this.$store.dispatch('deleteAllFilters');
+
     const db = getDatabase();
     const { currentUser } = auth;
     const demands = query(ref(db, 'demands'), orderByChild('assignedTo'), equalTo(currentUser.uid));
     onValue(demands, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
+      const dataToArray = Object.entries(snapshot.val());
+
+      const cities = [];
+      dataToArray.map((item) => {
+        const city = item[1].contactData.address.city;
+        if (cities.includes(city)) {
+          return item;
+        }
+        cities.push(city);
+        return item;
+      });
+
+      if (dataToArray) {
         this.$store.dispatch('setDemands', {
-          data: Object.entries(data),
+          data: dataToArray,
+        });
+        this.$store.dispatch('setCities', {
+          data: cities,
         });
       } else {
         this.$store.dispatch('setDemands', {
+          data: [],
+        });
+        this.$store.dispatch('setCities', {
           data: [],
         });
       };

@@ -87,6 +87,9 @@ export default {
 </script>
 
 <style scoped>
+.login-form {
+  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
+}
 @media screen and (max-width: 549px) {
   .login-form {
     width: 90vw;

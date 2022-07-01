@@ -2,9 +2,9 @@ import { filterProperties } from '@/env/constants';
 
 const filterDemands = function (demands, propertyName, propertyValue) {
   if (propertyValue.length > 0) {
-    if (propertyName === filterProperties.REGION) {
+    if (propertyName === filterProperties.CITY) {
       const filteredListOfDemands = demands.filter((demand) => {
-        return propertyValue.includes(demand[1].contactData.address.region.toLowerCase());
+        return propertyValue.includes(demand[1].contactData.address.city.toLowerCase());
       });
       return filteredListOfDemands;
     };

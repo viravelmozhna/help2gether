@@ -2,13 +2,13 @@
    <div>
      <b-form
       class="mb-2 d-flex search-input position-relative"
-      @submit.prevent="getDemandsByRegion"
+      @submit.prevent="getDemandsByCity"
     >
       <b-input
-        v-model="selectedRegion"
+        v-model="selectedCity"
         autocomplete="off"
-        placeholder="Search by regions"
-        @input="e => setMatchedRegionsList(e)">
+        placeholder="Search by city"
+        @input="e => setMatchedCityList(e)">
       </b-input>
 
       <b-button
@@ -20,52 +20,61 @@
     </b-form>
 
     <b-card
-      v-if="matchedRegions !== null"
+      v-if="matchedCities.length !== 0"
       class="position-absolute matched-regions-list">
         <li
-          v-for="region in matchedRegions"
-          :key="region"
-          @click="chooseMatchedRegion(region)"
+          v-for="city in matchedCities"
+          :key="city"
+          @click="chooseMatchedCity(city)"
           class="matched-regions-list__item mb-2">
-          <span>{{region}} region</span>
+          <span>{{city}}</span>
         </li>
     </b-card>
    </div>
 </template>
 
 <script>
-// import searchRegionsByQuery from '@/utils/binarySearchTree';
-
 export default {
   name: 'SearchInput',
   data() {
     return {
-      selectedRegion: '',
-      matchedRegions: null,
+      searchQuery: '',
+      selectedCity: '',
+      matchedCities: [],
     };
   },
-  methods: {
-    setMatchedRegionsList(e) {
-      // TODO: implement search by city
-      // this.matchedRegions = searchRegionsByQuery(e);
+  computed: {
+    cities() {
+      return this.$store.state.cities;
     },
-    resetMatchedRegionsList() {
-      this.matchedRegions = null;
+  },
+  methods: {
+    setMatchedCityList(e) {
+      this.searchQuery = e.toLowerCase();
+      this.resetMatchedCitiesList();
+      this.cities.forEach((city) => {
+        if (city.toLowerCase().includes(this.searchQuery)) {
+          this.matchedCities.push(city);
+        }
+      });
+    },
+    resetMatchedCitiesList() {
+      this.matchedCities.length = 0;
     },
     setFilter() {
       this.$store.dispatch('addFilter', {
-        propertyName: 'region',
-        propertyValue: `${this.selectedRegion.toLowerCase()} region`,
+        propertyName: 'city',
+        propertyValue: `${this.selectedCity.toLowerCase()}`,
       });
     },
-    getDemandsByRegion() {
-      this.resetMatchedRegionsList();
+    getDemandsByCity() {
+      this.resetMatchedCitiesList();
       this.setFilter();
     },
-    chooseMatchedRegion(region) {
-      this.selectedRegion = region;
-      this.getDemandsByRegion();
-      this.selectedRegion = '';
+    chooseMatchedCity(city) {
+      this.selectedCity = city;
+      this.getDemandsByCity();
+      this.selectedCity = '';
     },
   },
 };

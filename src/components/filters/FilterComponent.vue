@@ -8,6 +8,7 @@
       >
         <input
           type="checkbox"
+          class="filter-option"
           :id="filterName + filterOption"
           :value="filterOption"
           :checked="activeFilters.includes(filterOption)"
@@ -15,7 +16,7 @@
         />
         <label
           :for="filterName + filterOption"
-          class="ml-2 text-capitalize"
+          class="ml-2 text-capitalize filter-option"
         >
         {{filterOption}}
         </label>
@@ -59,5 +60,11 @@ export default {
 <style scoped>
 .filter-options-list {
   list-style: none;
+}
+.filter-option__item {
+  cursor: pointer;
+}
+.filter-option {
+  cursor: pointer;
 }
 </style>

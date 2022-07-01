@@ -12,6 +12,7 @@ export default new Vuex.Store({
       data: null,
     },
     demands: [],
+    cities: [],
     demandDetailedInfo: {
       contactData: {
         name: '',
@@ -27,7 +28,7 @@ export default new Vuex.Store({
       emergency: '',
     },
     activeFiltersList: {
-      region: [],
+      city: [],
       status: [],
       emergency: [],
       category: [],
@@ -41,7 +42,7 @@ export default new Vuex.Store({
       return state.user.data;
     },
     filteredDemands: (state) => {
-      const { region, status, emergency, category } = state.activeFiltersList;
+      const { city, status, emergency, category } = state.activeFiltersList;
 
       const filteredByCategory = function (demands) {
         return filterDemands(demands, filterProperties.CATEGORY, category);
@@ -49,14 +50,14 @@ export default new Vuex.Store({
       const filteredByStatus = function (demands) {
         return filterDemands(demands, filterProperties.STATUS, status);
       };
-      const filteredByRegion = function (demands) {
-        return filterDemands(demands, filterProperties.REGION, region);
+      const filteredByCity = function (demands) {
+        return filterDemands(demands, filterProperties.CITY, city);
       };
       const filteredByEmergency = function (demands) {
         return filterDemands(demands, filterProperties.EMERGENCY, emergency);
       };
 
-      return filteredByEmergency(filteredByRegion(filteredByCategory(filteredByStatus(state.demands))));
+      return filteredByEmergency(filteredByCity(filteredByCategory(filteredByStatus(state.demands))));
     },
   },
   mutations: {
@@ -68,6 +69,9 @@ export default new Vuex.Store({
     },
     setDemands(state, payload) {
       state.demands = payload.data;
+    },
+    setCities(state, payload) {
+      state.cities = payload.data;
     },
     setDemandDetailedInfo(state, payload) {
       state.demandDetailedInfo = payload.data;
@@ -83,7 +87,7 @@ export default new Vuex.Store({
     },
     deleteAllFilters(state) {
       state.activeFiltersList = {
-        region: [],
+        city: [],
         status: [],
         emergency: [],
         category: [],
@@ -107,6 +111,9 @@ export default new Vuex.Store({
     },
     setDemands(context, payload) {
       context.commit('setDemands', payload);
+    },
+    setCities(context, payload) {
+      context.commit('setCities', payload);
     },
     setDemandDetailedInfo(context, payload) {
       context.commit('setDemandDetailedInfo', payload);
