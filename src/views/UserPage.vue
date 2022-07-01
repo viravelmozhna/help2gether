@@ -16,6 +16,8 @@ export default {
     NavBar,
   },
   created() {
+    this.$store.dispatch('deleteAllFilters');
+
     const db = getDatabase();
     const { currentUser } = auth;
     const demands = query(ref(db, 'demands'), orderByChild('assignedTo'), equalTo(currentUser.uid));

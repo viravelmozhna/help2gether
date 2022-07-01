@@ -15,6 +15,8 @@ export default {
     NavBar,
   },
   created() {
+    this.$store.dispatch('deleteAllFilters');
+
     const db = getDatabase();
     const demands = ref(db, 'demands');
     onValue(demands, (snapshot) => {
