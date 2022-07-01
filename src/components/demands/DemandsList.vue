@@ -2,7 +2,6 @@
 <b-container fluid>
 
   <div class="controls-wrapper d-flex flex-column">
-    <!-- TODO: implement search by city -->
     <SearchInput />
 
     <div class="style-wrapper">
