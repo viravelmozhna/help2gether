@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     deleteOneFilter(filter) {
-      let propertyName = filterProperties.REGION;
+      let propertyName = filterProperties.CITY;
       if (filterPropertiesValues[filterProperties.STATUS].includes(filter)) {
         propertyName = filterProperties.STATUS;
       }

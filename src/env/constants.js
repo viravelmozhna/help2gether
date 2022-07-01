@@ -2,7 +2,7 @@ export const filterProperties = {
   EMERGENCY: 'emergency',
   STATUS: 'status',
   CATEGORY: 'category',
-  REGION: 'region',
+  CITY: 'city',
 };
 
 export const filterPropertiesValues = {
@@ -10,33 +10,6 @@ export const filterPropertiesValues = {
   emergency: ['urgent', 'non-urgent'],
   category: ['food', 'clothes', 'medicines', 'other'],
 };
-
-export const regions = [
-  'Cherkasy',
-  'Chernihiv',
-  'Chernivtsi',
-  'Dnipropetrovsk',
-  'Donetsk',
-  'Ivano-Frankivsk',
-  'Kharkiv',
-  'Kherson',
-  'Khmelnytskyi',
-  'Kyiv',
-  'Kirovohrad',
-  'Luhansk',
-  'Lviv',
-  'Mykolaiv',
-  'Odessa',
-  'Poltava',
-  'Rivne',
-  'Sumy',
-  'Ternopil',
-  'Vinnytsia',
-  'Volyn',
-  'Zakarpattia',
-  'Zaporizhzhia',
-  'Zhytomyr',
-];
 
 export const modes = {
   EDIT: 'edit',
