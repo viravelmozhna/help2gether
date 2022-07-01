@@ -2,8 +2,7 @@
   <gmap-info-window
     :position="position"
     :opened="isInfoWindowOpen"
-    @closeclick="closeInfoWindow"
-  >
+    @closeclick="closeInfoWindow">
   <slot></slot>
   </gmap-info-window>
 </template>

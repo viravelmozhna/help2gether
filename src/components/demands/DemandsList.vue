@@ -64,11 +64,6 @@ export default {
     SelectedFilters,
     FilterComponent,
   },
-  methods: {
-    changeViewMode(mode) {
-      this.viewMode = mode;
-    },
-  },
 };
 </script>
 
@@ -80,6 +75,9 @@ export default {
 .active {
   text-decoration: underline;
   font-weight: 500;
+}
+.info-window {
+  min-width: 180px;
 }
 @media screen and (min-width: 576px ) {
     .filters-list {
@@ -98,6 +96,9 @@ export default {
     .view-links {
       margin-left: auto;
       margin-right: 150px;
+    }
+    .info-window {
+      min-width: 250px;
     }
 }
 </style>
