@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/',
     name: 'start',
-    redirect: '/demands/list',
+    redirect: '/demands/list/list-view',
   },
   {
     path: '/login',
@@ -30,11 +30,25 @@ const routes = [
     name: 'demands',
     component: () => { return import(/* webpackChunkName: "demands" */ '@/views/DemandsPage'); },
     meta: { requiresAuth: true },
+    redirect: '/demands/list/list-view',
     children: [
       {
         path: 'list',
         name: 'list',
         component: () => { return import(/* webpackChunkName: "list" */ '@/components/demands/DemandsList'); },
+        redirect: '/demands/list/list-view',
+        children: [
+          {
+            path: 'list-view',
+            name: 'list-view',
+            component: () => { return import(/* webpackChunkName: "list-view" */ '@/components/demands/DemandViewList'); },
+          },
+          {
+            path: 'map-view',
+            name: 'map-view',
+            component: () => { return import(/* webpackChunkName: "map-view" */ '@/components/demands/DemandViewMap'); },
+          },
+        ],
       },
       {
         path: 'add',
@@ -73,6 +87,19 @@ const routes = [
         path: 'demands',
         name: 'user-demands',
         component: () => { return import(/* webpackChunkName: "user-demands" */ '@/components/demands/DemandsList'); },
+        redirect: '/user/demands/list-view',
+        children: [
+          {
+            path: 'list-view',
+            name: 'user-list-view',
+            component: () => { return import(/* webpackChunkName: "user-list-view" */ '@/components/demands/DemandViewList'); },
+          },
+          {
+            path: 'map-view',
+            name: 'user-map-view',
+            component: () => { return import(/* webpackChunkName: "user-map-view" */ '@/components/demands/DemandViewMap'); },
+          },
+        ],
       },
     ],
   },

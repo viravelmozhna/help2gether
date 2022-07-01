@@ -12,7 +12,7 @@
         <span>{{mode === modes.EDIT ? 'Edit demand' : 'Add demand'}}</span>
       </h1>
 
-    <b-form @submit.prevent="formSubmit">
+    <b-form @submit.prevent="formSubmit" @keydown.enter.prevent>
 
       <b-form-group
         label="Name"
