@@ -2,7 +2,7 @@
  <div class="container">
     <b-card
       bg-variant="light"
-      class="w-50 mt-5 mr-auto ml-auto"
+      class="reset-password-form mt-5 mr-auto ml-auto"
     >
       <h1 class="text-center title">Reset Password</h1>
       <b-form @submit.prevent="forgetPassword">
@@ -60,3 +60,21 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@media screen and (max-width: 549px) {
+  .reset-password-form {
+    width: 90vw;
+  }
+}
+@media screen and (min-width: 550px) {
+  .reset-password-form {
+    width: 400px;
+  }
+}
+@media screen and (min-width: 900px) {
+  .reset-password-form {
+    width: 450px;
+  }
+}
+</style>

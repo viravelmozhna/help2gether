@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { filterPropertiesValues, modes } from '@/env/constants';
+import { filterPropertiesValues } from '@/env/constants';
 // import SearchInput from '../filters/SearchInput.vue';
 import SelectedFilters from '../filters/SelectedFilters.vue';
 import FilterComponent from '../filters/FilterComponent.vue';
@@ -57,7 +57,6 @@ export default {
   data() {
     return {
       filterProperties: filterPropertiesValues,
-      modes: modes,
     };
   },
   components: {
@@ -76,19 +75,19 @@ export default {
   text-decoration: underline;
   font-weight: 500;
 }
-@media screen and (max-width: 576px ) {
+@media screen and (max-width: 575px ) {
     .view-links {
       margin-bottom: 10px;
     }
 }
 @media screen and (min-width: 576px ) {
     .filters-list {
-    width: 35vw;
+        width: 35vw !important;
     }
 }
 @media screen and (min-width: 715px ) {
     .filters-list {
-    width: 25vw;
+      width: 25vw !important;
     }
     .controls-wrapper {
       display: flex;

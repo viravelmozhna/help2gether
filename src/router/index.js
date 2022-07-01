@@ -30,6 +30,7 @@ const routes = [
     name: 'demands',
     component: () => { return import(/* webpackChunkName: "demands" */ '@/views/DemandsPage'); },
     meta: { requiresAuth: true },
+    redirect: '/demands/list/list-view',
     children: [
       {
         path: 'list',

@@ -2,7 +2,7 @@
   <div class="container">
     <b-card
       bg-variant="light"
-      class="w-50 mt-5 mr-auto ml-auto"
+      class="mt-5 mr-auto ml-auto login-form"
     >
       <h1 class="text-center title">Log In</h1>
       <b-form @submit.prevent="userLogin">
@@ -85,3 +85,21 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@media screen and (max-width: 549px) {
+  .login-form {
+    width: 90vw;
+  }
+}
+@media screen and (min-width: 550px) {
+  .login-form {
+    width: 400px;
+  }
+}
+@media screen and (min-width: 900px) {
+  .login-form {
+    width: 450px;
+  }
+}
+</style>

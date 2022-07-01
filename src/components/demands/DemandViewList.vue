@@ -1,17 +1,20 @@
 <template>
-  <b-container
+    <b-container
       fluid
-      v-if="demands">
-        <b-row
-          cols="1"
-          cols-sm="3"
-          cols-md="4"
-          cols-lg="5"
-          cols-xl="6"
-          tag="ul"
-          no-gutters
-          class="p-0 mw-100 demands-list"
-          align-h="center">
+      >
+      <span v-if="demands.length === 0">The list is empty...</span>
+
+      <b-row
+        cols="1"
+        cols-sm="3"
+        cols-md="4"
+        cols-lg="5"
+        cols-xl="6"
+        tag="ul"
+        no-gutters
+        class="p-0 mw-100 demands-list"
+        align-h="center"
+        >
 
         <!-- Structure of demand: ['demand-id', {demand-data}] -->
         <template v-for="demand in demands">
@@ -26,7 +29,6 @@
             :key="demand[0]"
           />
         </template>
-
       </b-row>
     </b-container>
 </template>
