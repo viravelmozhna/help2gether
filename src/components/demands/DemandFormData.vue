@@ -58,7 +58,8 @@
         <GoogleMap
           :centeredCoords="centeredCoords || coords"
           :zoomNumber="zoomNumber"
-          class="mt-3">
+          class="mt-3"
+          :isHeightSet="true">
 
             <GoogleMarker
               v-if="demandData.coords"
