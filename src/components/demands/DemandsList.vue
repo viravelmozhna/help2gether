@@ -26,7 +26,13 @@
 
   <div class="d-flex flex-column flex-sm-row flex-nowrap">
 
-      <b-list-group class="flex-column filters-list">
+      <b-button
+        class="show-filters-button w-50 mb-3"
+        @click="toggleFilters"
+        size="sm"
+      >Show filters</b-button>
+
+      <b-list-group class="flex-column filters-list" :class="{ isOpen: isOpen }">
 
         <template v-for="(propertyOptions, propertyName) in filterProperties">
           <b-list-group-item
@@ -60,12 +66,18 @@ export default {
   data() {
     return {
       filterProperties: filterPropertiesValues,
+      isOpen: false,
     };
   },
   components: {
     SearchInput,
     SelectedFilters,
     FilterComponent,
+  },
+  methods: {
+    toggleFilters() {
+      this.isOpen = !this.isOpen;
+    },
   },
 };
 </script>
@@ -84,10 +96,22 @@ export default {
       margin-bottom: 10px;
       margin-left: 10px;
     }
+    .filters-list {
+      display: none;
+    }
+    .filters-list.isOpen {
+      display: block;
+    }
 }
 @media screen and (min-width: 576px ) {
     .filters-list {
         width: 35vw !important;
+    }
+    .show-filters-button {
+      display: none;
+    }
+    .filters-list {
+      display: block;
     }
 }
 @media screen and (min-width: 715px ) {

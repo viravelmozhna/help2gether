@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-5">
 
     <GoBackButton v-if="mode === modes.EDIT"/>
 
@@ -143,6 +143,9 @@ export default {
 <style scoped>
 .title {
   font-size: 30px;
+}
+.user-data-form {
+  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
 }
 @media screen and (max-width: 549px) {
   .user-data-form {
