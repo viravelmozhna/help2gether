@@ -10,14 +10,14 @@
       <b-button
         @click="changeViewMode('map')"
         class="mb-2 view-mode-button"
-        :class="{ active: viewMode === 'map' }"
+        :class="{ active: viewMode === modes.MAP_VIEW }"
         variant="link">
           <span>Map view</span>
       </b-button>
       <b-button
         @click="changeViewMode('list')"
         class="mb-2 view-mode-button"
-        :class="{ active: viewMode === 'list' }"
+        :class="{ active: viewMode === modes.LIST_VIEW }"
         variant="link">
           <span>List view</span>
       </b-button>
@@ -43,7 +43,7 @@
 
     <b-container
       fluid
-      v-if="demands && viewMode === 'list'">
+      v-if="demands && viewMode === modes.LIST_VIEW">
         <b-row
           cols="1"
           cols-sm="3"
@@ -73,9 +73,9 @@
     </b-container>
 
     <GoogleMap
-      v-else-if="demands && viewMode === 'map'"
+      v-else-if="demands && viewMode === modes.MAP_VIEW"
       :zoomNumber="zoomNumber"
-      class="ml-3 mr-2">
+      class="">
 
       <GoogleInfoWindow
         v-if="currentMarker"
@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { filterPropertiesValues, zoomMapNumbers } from '@/env/constants';
+import { filterPropertiesValues, zoomMapNumbers, modes } from '@/env/constants';
 import DemandItem from './DemandItem.vue';
 // import SearchInput from '../filters/SearchInput.vue';
 import SelectedFilters from '../filters/SelectedFilters.vue';
@@ -122,7 +122,8 @@ export default {
   data() {
     return {
       filterProperties: filterPropertiesValues,
-      viewMode: 'list',
+      modes: modes,
+      viewMode: modes.LIST_VIEW,
       zoomNumber: zoomMapNumbers.MAP_LIST_VALUE,
       currentMarker: null,
       currentMarkerIndex: null,
@@ -146,7 +147,6 @@ export default {
   methods: {
     changeViewMode(mode) {
       this.viewMode = mode;
-      // this.zoom = 11;
     },
     clickOnMarker(e) {
       this.currentMarker = this.demands[e.index];

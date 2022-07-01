@@ -42,6 +42,8 @@ export const modes = {
   EDIT: 'edit',
   SIGNUP: 'signup',
   ADD: 'add',
+  MAP_VIEW: 'map',
+  LIST_VIEW: 'list',
 };
 
 export const errors = {

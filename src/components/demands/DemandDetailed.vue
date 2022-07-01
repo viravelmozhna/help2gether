@@ -47,7 +47,8 @@
 
       <GoogleMap
         v-if="demandInfo.contactData.address.formattedAddress"
-        :centeredCoords="demandInfo.contactData.address.coords">
+        :centeredCoords="demandInfo.contactData.address.coords"
+        :isHeightSet="true">
 
           <GoogleMarker
             :marker="demandInfo.contactData.address.coords"

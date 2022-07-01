@@ -2,8 +2,8 @@
     <gmap-map
         :zoom="zoomMap"
         :center="centeredMapAtCoords"
-        style="width:100%;  height: 400px;"
-        class="mb-3"
+        class="map-view"
+        :class="{ formMap: isHeightSet }"
       >
 
       <slot>
@@ -20,6 +20,7 @@ export default {
   props: {
     centeredCoords: Object,
     zoomNumber: Number,
+    isHeightSet: Boolean,
   },
   computed: {
     centeredMapAtCoords() {
@@ -31,3 +32,22 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@media screen and (max-width: 575px ) {
+    .map-view {
+      height: 400px;
+    }
+}
+@media screen and (min-width: 576px ) {
+    .map-view {
+      width: 100vw;
+      margin-left: 12px;
+    }
+    .formMap {
+      height: 400px;
+      width: 100%;
+      margin-left: 0;
+    }
+}
+</style>
