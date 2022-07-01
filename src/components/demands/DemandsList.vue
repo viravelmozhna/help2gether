@@ -74,7 +74,7 @@
 
     <GoogleMap
       v-else-if="demands && viewMode === 'map'"
-      :zoom="zoom"
+      :zoomNumber="zoomNumber"
       class="ml-3 mr-2">
 
       <GoogleInfoWindow
@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { filterPropertiesValues } from '@/env/constants';
+import { filterPropertiesValues, zoomMapNumbers } from '@/env/constants';
 import DemandItem from './DemandItem.vue';
 // import SearchInput from '../filters/SearchInput.vue';
 import SelectedFilters from '../filters/SelectedFilters.vue';
@@ -123,7 +123,7 @@ export default {
     return {
       filterProperties: filterPropertiesValues,
       viewMode: 'list',
-      zoom: 6,
+      zoomNumber: zoomMapNumbers.MAP_LIST_VALUE,
       currentMarker: null,
       currentMarkerIndex: null,
       isInfoWindowOpen: false,
@@ -146,7 +146,7 @@ export default {
   methods: {
     changeViewMode(mode) {
       this.viewMode = mode;
-      this.zoom = 11;
+      // this.zoom = 11;
     },
     clickOnMarker(e) {
       this.currentMarker = this.demands[e.index];

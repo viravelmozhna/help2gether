@@ -1,32 +1,32 @@
 <template>
-  <gmap-map
+    <gmap-map
         :zoom="zoomMap"
-        :center="centerCoords"
+        :center="centeredMapAtCoords"
         style="width:100%;  height: 400px;"
         class="mb-3"
       >
 
-      <slot></slot>
+      <slot>
+      </slot>
 
     </gmap-map>
 </template>
 
 <script>
+import { coords, zoomMapNumbers } from '@/env/constants';
+
 export default {
   name: 'GoogleMap',
   props: {
-    center: Object,
-    zoom: Number,
+    centeredCoords: Object,
+    zoomNumber: Number,
   },
   computed: {
-    centerCoords() {
-      return this.center || {
-        lat: 49.9935,
-        lng: 36.2304,
-      };
+    centeredMapAtCoords() {
+      return this.centeredCoords || coords.KHARKIV_COORDS;
     },
     zoomMap() {
-      return this.zoom || 13;
+      return this.zoomNumber || zoomMapNumbers.DEFAULT_VALUE;
     },
   },
 };

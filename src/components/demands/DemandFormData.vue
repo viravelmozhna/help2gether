@@ -56,9 +56,10 @@
         </b-card-text>
 
         <GoogleMap
-          :center="this.coords || center"
-          :zoom="zoom"
+          :centeredCoords="centeredCoords || coords"
+          :zoomNumber="zoomNumber"
           class="mt-3">
+
             <GoogleMarker
               v-if="demandData.coords"
               :marker="demandData.coords"
@@ -117,7 +118,7 @@
 </template>
 
 <script>
-import { filterPropertiesValues, modes } from '@/env/constants';
+import { filterPropertiesValues, modes, zoomMapNumbers } from '@/env/constants';
 import GoBackButton from '@/components/common/GoBackButton.vue';
 import GoogleAutocomplete from '../map/GoogleAutocomplete.vue';
 import GoogleMarker from '../map/GoogleMarker.vue';
@@ -146,11 +147,11 @@ export default {
     return {
       filterPropertiesValues: filterPropertiesValues,
       modes: modes,
-      zoom: this.mode === modes.EDIT ? 17 : null,
-      center: {
-        lat: 49.9935,
-        lng: 36.2304,
-      },
+      zoomNumber:
+        this.mode === modes.EDIT
+          ? zoomMapNumbers.DEFAULT_VALUE
+          : zoomMapNumbers.DEMAND_FORM_ADD_MODE_VALUE,
+      centeredCoords: null,
     };
   },
   computed: {
@@ -172,8 +173,8 @@ export default {
       this.demandData.coords = e.coords;
       this.demandData.formattedAddress = e.formattedAddress;
       this.demandData.city = e.city;
-      this.zoom = 17;
-      this.center = e.coords;
+      this.zoomNumber = zoomMapNumbers.DEFAULT_VALUE;
+      this.centeredCoords = e.coords;
     },
     formSubmit() {
       const demandData = {
