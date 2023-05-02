@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavBar />
-    <router-view :key="$route.fullPath"/>
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 
@@ -14,29 +14,38 @@ export default {
   components: {
     NavBar,
   },
+  data() {
+    return {
+      unsubscribe: null,
+      demands: [],
+      cities: [],
+    };
+  },
+  beforeDestroy() {
+    this.unsubscribe();
+  },
   created() {
     this.$store.dispatch('deleteAllFilters');
 
     const db = getDatabase();
     const demands = ref(db, 'demands');
-    onValue(demands, (snapshot) => {
-      const dataToArray = Object.entries(snapshot.val());
+    this.unsubscribe = onValue(demands, (snapshot) => {
+      this.demands = Object.entries(snapshot.val());
 
-      const cities = [];
-      dataToArray.map((item) => {
+      this.demands.map((item) => {
         const city = item[1].contactData.address.city;
-        if (cities.includes(city)) {
+        if (this.cities.includes(city)) {
           return item;
         }
-        cities.push(city);
+        this.cities.push(city);
         return item;
       });
 
       this.$store.dispatch('setDemands', {
-        data: dataToArray,
+        data: this.demands,
       });
       this.$store.dispatch('setCities', {
-        data: cities,
+        data: this.cities,
       });
     });
   },

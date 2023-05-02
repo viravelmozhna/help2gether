@@ -22,6 +22,16 @@ export default {
   components: {
     NavBar,
   },
+  data() {
+    return {
+      unsubscribe: null,
+      demands: [],
+      cities: [],
+    };
+  },
+  beforeDestroy() {
+    this.unsubscribe();
+  },
   created() {
     this.$store.dispatch('deleteAllFilters');
 
@@ -32,39 +42,28 @@ export default {
       orderByChild('assignedTo'),
       equalTo(currentUser.uid)
     );
-    onValue(demands, (snapshot) => {
-      let dataToArray;
-      const cities = [];
 
+    this.unsubscribe = onValue(demands, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        dataToArray = Object.entries(data);
+        this.demands = Object.entries(data);
 
-        dataToArray.map((item) => {
+        this.demands.map((item) => {
           const city = item[1].contactData.address.city;
-          if (cities.includes(city)) {
+          if (this.cities.includes(city)) {
             return item;
           }
-          cities.push(city);
+          this.cities.push(city);
           return item;
         });
       }
 
-      if (dataToArray) {
-        this.$store.dispatch('setDemands', {
-          data: dataToArray,
-        });
-        this.$store.dispatch('setCities', {
-          data: cities,
-        });
-      } else {
-        this.$store.dispatch('setDemands', {
-          data: [],
-        });
-        this.$store.dispatch('setCities', {
-          data: [],
-        });
-      }
+      this.$store.dispatch('setDemands', {
+        data: this.demands,
+      });
+      this.$store.dispatch('setCities', {
+        data: this.demands,
+      });
     });
   },
 };
