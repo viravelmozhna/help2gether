@@ -44,7 +44,9 @@ export default {
       const dataSnapshot = snapshot.val();
 
       if (dataSnapshot) {
-        this.demands.push(Object.entries(dataSnapshot)).map((item) => {
+        this.demands = Object.entries(dataSnapshot);
+
+        this.demands.map((item) => {
           const city = item[1].contactData.address.city;
           if (!this.cities.includes(city)) {
             this.cities.push(city);
