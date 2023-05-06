@@ -37,7 +37,9 @@
     >
       Urgent
     </b-badge>
-    <b-card-text class="font-weight-bold text-uppercase text m-0">{{ city }}</b-card-text>
+    <b-card-text class="font-weight-bold text-uppercase text m-0">
+      {{ city }}
+    </b-card-text>
     <b-card-text class="text-uppercase">{{ category }}</b-card-text>
     <b-card-text>{{ demand }}</b-card-text>
     <b-card-text class="time position-absolute">{{ createdTime }}</b-card-text>
@@ -68,7 +70,7 @@ export default {
 .item:hover {
   transform: scale(1.02);
   cursor: pointer;
-  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
+  box-shadow: 7px 7px 29px -6px rgba(0, 0, 0, 0.24);
 }
 .text {
   font-size: 20px;

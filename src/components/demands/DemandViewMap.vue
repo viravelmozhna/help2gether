@@ -1,37 +1,36 @@
 <template>
   <GoogleMap
-      v-if="demands"
-      :zoomNumber="zoomNumber"
-      class="">
+    v-if="demands"
+    :zoomNumber="zoomNumber"
+    class=""
+  >
+    <GoogleInfoWindow
+      v-if="currentMarker"
+      :position="currentMarker[1].contactData.address.coords"
+      :isInfoWindowOpen="isInfoWindowOpen"
+      v-on:closeInfoWindow="closeInfoWindow"
+    >
+      <div class="info-window">
+        <DemandItem
+          :status="currentMarker[1].status"
+          :emergency="currentMarker[1].emergency"
+          :category="currentMarker[1].category"
+          :demand="currentMarker[1].demand"
+          :createdTime="currentMarker[1].createdTime"
+          :city="currentMarker[1].contactData.address.city"
+          :id="currentMarker[0]"
+        />
+      </div>
+    </GoogleInfoWindow>
 
-      <GoogleInfoWindow
-        v-if="currentMarker"
-        :position="currentMarker[1].contactData.address.coords"
-        :isInfoWindowOpen="isInfoWindowOpen"
-        v-on:closeInfoWindow="closeInfoWindow">
-
-        <div class="info-window">
-          <DemandItem
-            :status="currentMarker[1].status"
-            :emergency="currentMarker[1].emergency"
-            :category="currentMarker[1].category"
-            :demand="currentMarker[1].demand"
-            :createdTime="currentMarker[1].createdTime"
-            :city="currentMarker[1].contactData.address.city"
-            :id="currentMarker[0]"
-          />
-        </div>
-
-      </GoogleInfoWindow>
-
-        <GoogleMarker
-          v-for="(demand, index) in demands"
-          :marker="demand[1].contactData.address.coords"
-          :index="index"
-          :key="demand[0]"
-          v-on:clickOnMarker="clickOnMarker"
-          />
-    </GoogleMap>
+    <GoogleMarker
+      v-for="(demand, index) in demands"
+      :marker="demand[1].contactData.address.coords"
+      :index="index"
+      :key="demand[0]"
+      v-on:clickOnMarker="clickOnMarker"
+    />
+  </GoogleMap>
 </template>
 
 <script>
@@ -72,7 +71,7 @@ export default {
       } else {
         this.isInfoWindowOpen = true;
         this.currentMarkerIndex = e.index;
-      };
+      }
     },
     closeInfoWindow() {
       this.isInfoWindowOpen = false;
@@ -85,7 +84,7 @@ export default {
 .info-window {
   min-width: 180px;
 }
-@media screen and (min-width: 715px ) {
+@media screen and (min-width: 715px) {
   .info-window {
     min-width: 250px;
   }

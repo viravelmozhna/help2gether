@@ -1,67 +1,76 @@
 <template>
-  <b-container class="d-flex flex-column justify-content-center position-relative">
-
+  <b-container
+    class="d-flex flex-column justify-content-center position-relative"
+  >
     <GoBackButton />
-    <ModalWindow title="Mark this demand as completed?" v-on:actionInModalWindow="actionInModalWindowHandler"/>
+    <ModalWindow
+      title="Mark this demand as completed?"
+      v-on:actionInModalWindow="actionInModalWindowHandler"
+    />
 
     <b-card
       header-bg-variant="dark"
       header="DEMAND INFO"
       header-text-variant="white"
-      class="ml-auto mr-auto mb-5 demand-detailed-card">
-
+      class="ml-auto mr-auto mb-5 demand-detailed-card"
+    >
       <b-button
         class="mb-3 position-absolute edit-button"
         variant="light"
         size="sm"
         @click="editDemand"
-        >Edit</b-button>
+      >
+        Edit
+      </b-button>
 
       <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">Demand:</span>
-        <span>{{demandInfo.demand}}</span>
+        <span>{{ demandInfo.demand }}</span>
         <div>
-              <b-badge
-                pill
-                variant="secondary"
-              >
-              {{demandInfo.category.toUpperCase()}}
-              </b-badge>
-            </div>
+          <b-badge
+            pill
+            variant="secondary"
+          >
+            {{ demandInfo.category.toUpperCase() }}
+          </b-badge>
+        </div>
       </b-card-text>
 
       <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">Name:</span>
-        <span>{{demandInfo.contactData.name}}</span>
+        <span>{{ demandInfo.contactData.name }}</span>
       </b-card-text>
 
       <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">Phone:</span>
-        <span>{{demandInfo.contactData.phone}}</span>
+        <span>{{ demandInfo.contactData.phone }}</span>
       </b-card-text>
 
       <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">Address:</span>
-        <span>{{demandInfo.contactData.address.formattedAddress}}</span>
+        <span>{{ demandInfo.contactData.address.formattedAddress }}</span>
       </b-card-text>
 
       <GoogleMap
         v-if="demandInfo.contactData.address.formattedAddress"
         :centeredCoords="demandInfo.contactData.address.coords"
-        :isHeightSet="true">
-
-          <GoogleMarker
-            :marker="demandInfo.contactData.address.coords"
-          />
+        :isHeightSet="true"
+      >
+        <GoogleMarker :marker="demandInfo.contactData.address.coords" />
       </GoogleMap>
 
       <b-card-text class="mb-3">
         <div>
-          <span><i>The demand was created on {{demandInfo.createdTime}}</i></span><br>
+          <span>
+            <i>The demand was created on {{ demandInfo.createdTime }}</i>
+          </span>
+          <br />
+
           <span
             v-if="demandInfo.completedTime"
             key="completed-time"
-            ><i>The demand was completed on {{demandInfo.completedTime}}</i>
+          >
+            <i>The demand was completed on {{ demandInfo.completedTime }}</i>
           </span>
           <div>
             <span class="mr-2">
@@ -71,7 +80,7 @@
                 pill
                 variant="success"
               >
-              ACTIVE
+                ACTIVE
               </b-badge>
               <b-badge
                 v-else-if="demandInfo.status === 'in progress'"
@@ -79,7 +88,7 @@
                 pill
                 variant="info"
               >
-              IN PROGRESS
+                IN PROGRESS
               </b-badge>
               <b-badge
                 v-else
@@ -87,22 +96,26 @@
                 pill
                 variant="light"
               >
-              COMPLETED
+                COMPLETED
               </b-badge>
             </span>
             <b-badge
-              v-if="demandInfo.emergency === 'urgent' && demandInfo.status === 'active'"
+              v-if="
+                demandInfo.emergency === 'urgent' &&
+                demandInfo.status === 'active'
+              "
               key="demand-emergency"
               pill
               variant="danger"
             >
-            URGENT
+              URGENT
             </b-badge>
           </div>
         </div>
       </b-card-text>
 
-      <b-card-text class="mb-3"
+      <b-card-text
+        class="mb-3"
         v-if="demandInfo.assignedTo"
         key="demand-was-assigned"
         tag="li"
@@ -114,15 +127,17 @@
               v-if="demandInfo.completedTime"
               key="demand-is-completed-by-user"
             >
-            was completed by
+              was completed by
             </span>
             <span
               v-else
               key="demand-is-assigned-to-user"
             >
-            assigned to
+              assigned to
             </span>
-            <a @click="goToUserProfile"><u class="link">{{assigneeName}}</u></a>
+            <a @click="goToUserProfile">
+              <u class="link">{{ assigneeName }}</u>
+            </a>
           </i>
         </span>
       </b-card-text>
@@ -133,37 +148,53 @@
         class="mt-2"
         variant="info"
         @click="assignDemand"
-        >Take demand</b-button>
+      >
+        Take demand
+      </b-button>
 
       <div
-        v-else-if="isCurrentLoggedUserAnAssignee && demandInfo.status !== 'completed'"
+        v-else-if="
+          isCurrentLoggedUserAnAssignee && demandInfo.status !== 'completed'
+        "
         key="demand-is-assigned-to-current-user"
         tag="li"
-        >
-        <b-button v-b-modal.modalWindow
+      >
+        <b-button
+          v-b-modal.modalWindow
           class="mt-2 mr-3"
           variant="success"
-          >Mark as completed</b-button>
-          <b-button
+        >
+          Mark as completed
+        </b-button>
+        <b-button
           class="mt-2"
           variant="danger"
           @click="unassignDemand"
-          >Unassign demand</b-button>
+        >
+          Unassign demand
+        </b-button>
       </div>
-
     </b-card>
-
   </b-container>
 </template>
 
 <script>
-import { getDatabase, ref, onValue, update, get, child } from 'firebase/database';
+import {
+  getDatabase,
+  ref,
+  onValue,
+  update,
+  get,
+  child,
+} from 'firebase/database';
 import { auth } from '@/firebase';
 import getCurrentDate from '@/utils/getCurrentDate';
 import GoBackButton from '../common/GoBackButton.vue';
 import ModalWindow from '../common/ModalWindow.vue';
 import GoogleMarker from '../map/GoogleMarker.vue';
 import GoogleMap from '../map/GoogleMap.vue';
+
+const db = getDatabase();
 
 export default {
   name: 'DemandDetailed',
@@ -175,9 +206,11 @@ export default {
   },
   data() {
     return {
-      id: this.$route.params.id,
+      unsubscribe: null,
+      demandId: this.$route.params.id,
       assigneeName: '',
       isCurrentLoggedUserAnAssignee: false,
+      currentUserId: auth.currentUser.uid,
     };
   },
   computed: {
@@ -186,62 +219,66 @@ export default {
     },
   },
   created() {
-    const db = getDatabase();
-    const demandInfo = ref(db, 'demands/' + this.id);
-    onValue(demandInfo, (snapshot) => {
-      const data = snapshot.val();
-      this.$store.dispatch('setDemandDetailedInfo', {
-        data,
-      });
-      if (data.assignedTo) {
-        get(child(ref(db), `users/${this.demandInfo.assignedTo}`))
-          .then((snapshot) => {
-            if (snapshot.exists()) {
-              const { currentUser } = auth;
-              if (this.demandInfo.assignedTo === currentUser.uid) {
-                this.isCurrentLoggedUserAnAssignee = true;
-              }
+    const demandInfo = ref(db, 'demands/' + this.demandId);
 
-              const assignee = snapshot.val();
-              this.assigneeName = `${assignee.firstName} ${assignee.lastName}`;
-            };
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      };
+    this.unsubscribe = onValue(demandInfo, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        this.$store.dispatch('setDemandDetailedInfo', {
+          data,
+        });
+
+        if (data.assignedTo) {
+          get(child(ref(db), `users/${this.demandInfo.assignedTo}`))
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                if (this.demandInfo.assignedTo === this.currentUserId) {
+                  this.isCurrentLoggedUserAnAssignee = true;
+                }
+
+                const assignee = snapshot.val();
+                this.assigneeName = `${assignee.firstName} ${assignee.lastName}`;
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      }
     });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
   methods: {
     assignDemand() {
-      const { currentUser } = auth;
-      const db = getDatabase();
-      update(ref(db, 'demands/' + this.id), {
-        assignedTo: currentUser.uid,
+      update(ref(db, 'demands/' + this.demandId), {
+        assignedTo: this.currentUserId,
         status: 'in progress',
       });
     },
     unassignDemand() {
-      const db = getDatabase();
-      update(ref(db, 'demands/' + this.id), {
+      update(ref(db, 'demands/' + this.demandId), {
         assignedTo: null,
         status: 'active',
       });
     },
     actionInModalWindowHandler(e) {
       if (e === 'approve') {
-        const db = getDatabase();
-        update(ref(db, 'demands/' + this.id), {
+        update(ref(db, 'demands/' + this.demandId), {
           status: 'completed',
           completedTime: getCurrentDate(),
         });
       }
     },
     goToUserProfile() {
-      this.$router.push({ path: `/user/profile/${this.demandInfo.assignedTo}` });
+      this.$router.push({
+        path: `/user/profile/${this.demandInfo.assignedTo}`,
+      });
     },
     editDemand() {
-      this.$router.push({ path: `/demands/edit/${this.id}` });
+      this.$router.push({ path: `/demands/edit/${this.demandId}` });
     },
   },
 };
@@ -257,7 +294,7 @@ export default {
   right: 10px;
 }
 .demand-detailed-card {
-  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
+  box-shadow: 7px 7px 29px -6px rgba(0, 0, 0, 0.24);
 }
 @media screen and (max-width: 549px) {
   .demand-detailed-card {
