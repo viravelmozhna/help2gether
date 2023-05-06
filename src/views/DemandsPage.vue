@@ -21,25 +21,24 @@ export default {
       cities: [],
     };
   },
-  beforeDestroy() {
-    this.unsubscribe();
-  },
   created() {
     this.$store.dispatch('deleteAllFilters');
 
     const db = getDatabase();
-    const demands = ref(db, 'demands');
-    this.unsubscribe = onValue(demands, (snapshot) => {
-      this.demands = Object.entries(snapshot.val());
+    const sourceDemands = ref(db, 'demands');
+    this.unsubscribe = onValue(sourceDemands, (snapshot) => {
+      const dataSnapshot = snapshot.val();
 
-      this.demands.map((item) => {
-        const city = item[1].contactData.address.city;
-        if (this.cities.includes(city)) {
+      if (dataSnapshot) {
+        this.demands.push(Object.entries(dataSnapshot)).map((item) => {
+          const city = item[1].contactData.address.city;
+          if (this.cities.includes(city)) {
+            return item;
+          }
+          this.cities.push(city);
           return item;
-        }
-        this.cities.push(city);
-        return item;
-      });
+        });
+      }
 
       this.$store.dispatch('setDemands', {
         data: this.demands,
@@ -48,6 +47,9 @@ export default {
         data: this.cities,
       });
     });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
 };
 </script>

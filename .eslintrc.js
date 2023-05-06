@@ -1,10 +1,7 @@
 module.exports = {
   root: true,
   env: { node: true },
-  extends: [
-    'plugin:vue/essential',
-    '@vue/standard',
-  ],
+  extends: ['plugin:vue/essential', '@vue/standard'],
   parserOptions: { parser: '@babel/eslint-parser' },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -26,12 +23,20 @@ module.exports = {
     'implicit-arrow-linebreak': 2,
     'class-methods-use-this': 1,
     'object-curly-newline': 2,
-    'no-restricted-syntax': [2, 'WithStatement', "BinaryExpression[operator='in']"],
+    'no-restricted-syntax': [
+      2,
+      'WithStatement',
+      "BinaryExpression[operator='in']",
+    ],
     'generator-star-spacing': [2, { before: false, after: true }],
     'no-undef': 2,
     'no-multi-assign': [2, { ignoreNonDeclaration: true }],
     'no-plusplus': 2,
-    'operator-linebreak': [2, 'none', { overrides: { '?': 'before', ':': 'before' } }],
+    'operator-linebreak': [
+      2,
+      'none',
+      { overrides: { '?': 'before', ':': 'before' } },
+    ],
     'no-nested-ternary': 2,
     'no-else-return': 1,
     'space-before-function-paren': [1, { named: 'never' }],
