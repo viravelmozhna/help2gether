@@ -7,10 +7,8 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'prefer-const': 1,
-    // 'object-shorthand': [1, 'always', { avoidQuotes: true }],
     'quote-props': 1,
     'prefer-object-spread': 2,
-    // 'prefer-destructuring': [1, { array: true, object: true }],
     'func-style': [2, 'expression'],
     'no-loop-func': 2,
     'prefer-rest-params': 1,
@@ -42,7 +40,6 @@ module.exports = {
     'space-before-function-paren': [1, { named: 'never' }],
     'comma-dangle': [1, 'always-multiline'],
     semi: [2, 'always'],
-    // radix: 2,
     'no-underscore-dangle': 1,
   },
 };

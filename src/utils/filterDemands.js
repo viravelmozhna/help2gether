@@ -4,10 +4,12 @@ const filterDemands = function (demands, propertyName, propertyValue) {
   if (propertyValue.length > 0) {
     if (propertyName === filterProperties.CITY) {
       const filteredListOfDemands = demands.filter((demand) => {
-        return propertyValue.includes(demand[1].contactData.address.city.toLowerCase());
+        return propertyValue.includes(
+          demand[1].contactData.address.city.toLowerCase(),
+        );
       });
       return filteredListOfDemands;
-    };
+    }
 
     if (propertyName === filterProperties.EMERGENCY) {
       const filteredListOfDemands = demands.filter((demand) => {
@@ -21,7 +23,7 @@ const filterDemands = function (demands, propertyName, propertyValue) {
     });
 
     return filteredListOfDemands;
-  };
+  }
 
   return demands;
 };
