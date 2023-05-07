@@ -2,7 +2,7 @@
   <gmap-marker
     :position="marker"
     :clickable="true"
-    @click="toggleInfoWindow()"
+    @click="toggleInfoWindow"
   ></gmap-marker>
 </template>
 

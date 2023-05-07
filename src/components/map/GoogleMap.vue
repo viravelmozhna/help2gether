@@ -1,15 +1,12 @@
 <template>
-    <gmap-map
-        :zoom="zoomMap"
-        :center="centeredMapAtCoords"
-        class="map-view"
-        :class="{ formMap: isHeightSet }"
-      >
-
-      <slot>
-      </slot>
-
-    </gmap-map>
+  <gmap-map
+    :zoom="zoomMap"
+    :center="centeredMapAtCoords"
+    class="map-view"
+    :class="{ formMap: isHeightSet }"
+  >
+    <slot></slot>
+  </gmap-map>
 </template>
 
 <script>
@@ -34,20 +31,20 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (max-width: 575px ) {
-    .map-view {
-      height: 400px;
-    }
+@media screen and (max-width: 575px) {
+  .map-view {
+    height: 400px;
+  }
 }
-@media screen and (min-width: 576px ) {
-    .map-view {
-      width: 100vw;
-      margin-left: 12px;
-    }
-    .formMap {
-      height: 400px;
-      width: 100%;
-      margin-left: 0;
-    }
+@media screen and (min-width: 576px) {
+  .map-view {
+    width: 100vw;
+    margin-left: 12px;
+  }
+  .formMap {
+    height: 400px;
+    width: 100%;
+    margin-left: 0;
+  }
 }
 </style>
