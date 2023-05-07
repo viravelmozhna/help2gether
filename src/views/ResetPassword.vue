@@ -1,5 +1,5 @@
 <template>
- <div class="container">
+  <div class="container">
     <b-card
       bg-variant="light"
       class="reset-password-form mt-5 mr-auto ml-auto"
@@ -27,7 +27,7 @@
         </b-button>
       </b-form>
     </b-card>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -46,14 +46,16 @@ export default {
     forgetPassword() {
       sendPasswordResetEmail(auth, this.user.email)
         .then(() => {
-          this.$toast.info('Check your registered email to reset the password!', {
-            timeout: 3500,
-          });
+          this.$toast.info(
+            'Check your registered email to reset the password!',
+            { timeout: 3500 },
+          );
           this.user = {
             email: '',
           };
           this.$router.push('/login');
-        }).catch((error) => {
+        })
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -63,7 +65,7 @@ export default {
 
 <style scoped>
 .reset-password-form {
-  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
+  box-shadow: 7px 7px 29px -6px rgba(0, 0, 0, 0.24);
 }
 @media screen and (max-width: 549px) {
   .reset-password-form {

@@ -1,14 +1,15 @@
 <template>
-   <div>
-     <b-form
+  <div>
+    <b-form
       class="mb-2 d-flex search-input position-relative"
       @submit.prevent="getDemandsByCity"
     >
       <b-input
-        v-model="selectedCity"
+        v-model="searchQuery"
         autocomplete="off"
         placeholder="Search by city"
-        @input="e => setMatchedCityList(e)">
+        @input="setMatchedCityList"
+      >
       </b-input>
 
       <b-button
@@ -21,16 +22,18 @@
 
     <b-card
       v-if="matchedCities.length !== 0"
-      class="position-absolute matched-regions-list">
-        <li
-          v-for="city in matchedCities"
-          :key="city"
-          @click="chooseMatchedCity(city)"
-          class="matched-regions-list__item mb-2">
-          <span>{{city}}</span>
-        </li>
+      class="position-absolute matched-regions-list"
+    >
+      <li
+        v-for="city in matchedCities"
+        :key="city"
+        @click="chooseMatchedCity(city)"
+        class="matched-regions-list__item mb-2"
+      >
+        <span>{{ city }}</span>
+      </li>
     </b-card>
-   </div>
+  </div>
 </template>
 
 <script>
@@ -39,7 +42,6 @@ export default {
   data() {
     return {
       searchQuery: '',
-      selectedCity: '',
       matchedCities: [],
     };
   },
@@ -49,32 +51,35 @@ export default {
     },
   },
   methods: {
-    setMatchedCityList(e) {
-      this.searchQuery = e.toLowerCase();
+    setFilter() {
+      if (this.searchQuery.trim().length) {
+        this.$store.dispatch('addFilter', {
+          propertyName: 'city',
+          propertyValue: `${this.searchQuery.toLowerCase()}`,
+        });
+      }
+    },
+    setMatchedCityList() {
       this.resetMatchedCitiesList();
-      this.cities.forEach((city) => {
-        if (city.toLowerCase().includes(this.searchQuery)) {
-          this.matchedCities.push(city);
-        }
-      });
+      if (this.searchQuery.trim().length) {
+        this.cities.forEach((city) => {
+          if (city.toLowerCase().includes(this.searchQuery.toLowerCase())) {
+            this.matchedCities.push(city);
+          }
+        });
+      }
     },
     resetMatchedCitiesList() {
       this.matchedCities.length = 0;
     },
-    setFilter() {
-      this.$store.dispatch('addFilter', {
-        propertyName: 'city',
-        propertyValue: `${this.selectedCity.toLowerCase()}`,
-      });
-    },
     getDemandsByCity() {
-      this.resetMatchedCitiesList();
       this.setFilter();
+      this.resetMatchedCitiesList();
+      this.searchQuery = '';
     },
     chooseMatchedCity(city) {
-      this.selectedCity = city;
+      this.searchQuery = city;
       this.getDemandsByCity();
-      this.selectedCity = '';
     },
   },
 };
@@ -88,7 +93,7 @@ export default {
   left: 30px;
   width: 200px;
   z-index: 999;
-  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
+  box-shadow: 7px 7px 29px -6px rgba(0, 0, 0, 0.24);
 }
 .matched-regions-list__item:hover {
   cursor: pointer;

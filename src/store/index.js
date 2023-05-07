@@ -57,7 +57,9 @@ export default new Vuex.Store({
         return filterDemands(demands, filterProperties.EMERGENCY, emergency);
       };
 
-      return filteredByEmergency(filteredByCity(filteredByCategory(filteredByStatus(state.demands))));
+      return filteredByEmergency(
+        filteredByCity(filteredByCategory(filteredByStatus(state.demands))),
+      );
     },
   },
   mutations: {
@@ -80,9 +82,11 @@ export default new Vuex.Store({
       const { propertyName, propertyValue } = payload;
       state.activeFiltersList = {
         ...state.activeFiltersList,
-        [propertyName]: state.activeFiltersList[propertyName].filter((property) => {
-          return property !== propertyValue;
-        }),
+        [propertyName]: state.activeFiltersList[propertyName].filter(
+          (property) => {
+            return property !== propertyValue;
+          },
+        ),
       };
     },
     deleteAllFilters(state) {
@@ -100,7 +104,10 @@ export default new Vuex.Store({
       }
       state.activeFiltersList = {
         ...state.activeFiltersList,
-        [propertyName]: [...state.activeFiltersList[propertyName], propertyValue],
+        [propertyName]: [
+          ...state.activeFiltersList[propertyName],
+          propertyValue,
+        ],
       };
     },
   },
@@ -131,6 +138,5 @@ export default new Vuex.Store({
       context.commit('addFilter', payload);
     },
   },
-  modules: {
-  },
+  modules: {},
 });

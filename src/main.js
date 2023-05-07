@@ -30,5 +30,7 @@ Vue.use(VueGoogleMaps, {
 new Vue({
   store,
   router,
-  render: (h) => { return h(App); },
+  render: (h) => {
+    return h(App);
+  },
 }).$mount('#app');

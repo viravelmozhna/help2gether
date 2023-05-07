@@ -29,31 +29,28 @@ export default {
       cities: [],
     };
   },
-  beforeDestroy() {
-    this.unsubscribe();
-  },
   created() {
     this.$store.dispatch('deleteAllFilters');
 
     const db = getDatabase();
     const { currentUser } = auth;
-    const demands = query(
+    const sourceDemands = query(
       ref(db, 'demands'),
       orderByChild('assignedTo'),
-      equalTo(currentUser.uid)
+      equalTo(currentUser.uid),
     );
 
-    this.unsubscribe = onValue(demands, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        this.demands = Object.entries(data);
+    this.unsubscribe = onValue(sourceDemands, (snapshot) => {
+      const dataSnapshot = snapshot.val();
+
+      if (dataSnapshot) {
+        this.demands = Object.entries(dataSnapshot);
 
         this.demands.map((item) => {
           const city = item[1].contactData.address.city;
-          if (this.cities.includes(city)) {
-            return item;
+          if (!this.cities.includes(city)) {
+            this.cities.push(city);
           }
-          this.cities.push(city);
           return item;
         });
       }
@@ -65,6 +62,9 @@ export default {
         data: this.demands,
       });
     });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
 };
 </script>
