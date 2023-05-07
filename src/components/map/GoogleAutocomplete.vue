@@ -1,9 +1,10 @@
 <template>
-    <gmap-autocomplete
-      @place_changed="getAddress"
-      :componentRestrictions="{country: 'ua'}"
-      class="w-100 autocomplete rounded"
-      ></gmap-autocomplete>
+  <gmap-autocomplete
+    disabled
+    @place_changed="getAddress"
+    :componentRestrictions="{ country: 'ua' }"
+    class="w-100 autocomplete rounded"
+  ></gmap-autocomplete>
 </template>
 
 <script>
@@ -37,7 +38,7 @@ export default {
 <style scoped>
 .autocomplete {
   height: 40px;
-  border: 1px solid lightgray;
+  border: 1px solid #d3d3d3;
   color: #495057;
   padding-left: 12px;
 }

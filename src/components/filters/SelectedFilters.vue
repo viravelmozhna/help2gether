@@ -18,8 +18,12 @@
             @click="deleteOneFilter(filter)"
             class="p-0 d-flex border-0 bg-transparent align-items-center"
           >
-            <img src="@/assets/cross.png" width="10" height="10">
-            <span class="text ml-2 text-uppercase">{{filter}}</span>
+            <img
+              src="@/assets/cross.png"
+              width="10"
+              height="10"
+            />
+            <span class="text ml-2 text-uppercase">{{ filter }}</span>
           </button>
         </b-badge>
       </li>
@@ -42,7 +46,9 @@ export default {
   name: 'SelectedFilters',
   computed: {
     selectedFilters() {
-      const activeFiltersListFromStore = Object.entries(this.$store.state.activeFiltersList);
+      const activeFiltersListFromStore = Object.entries(
+        this.$store.state.activeFiltersList,
+      );
       const selectedFilters = [];
 
       activeFiltersListFromStore.map((filter) => {

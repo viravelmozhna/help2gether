@@ -1,6 +1,8 @@
 <template>
   <div>
-    <p class="border-bottom text-uppercase font-weight-bold">{{filterName}}:</p>
+    <p class="border-bottom text-uppercase font-weight-bold">
+      {{ filterName }}:
+    </p>
     <ul class="filter-options-list pl-0">
       <li
         v-for="filterOption in filterOptions"
@@ -18,7 +20,7 @@
           :for="filterName + filterOption"
           class="ml-2 text-capitalize filter-option"
         >
-        {{filterOption}}
+          {{ filterOption }}
         </label>
       </li>
     </ul>
@@ -26,7 +28,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'FilterComponent',
   props: {
@@ -35,8 +36,7 @@ export default {
   },
   computed: {
     activeFilters() {
-      const activeFilters = this.$store.state.activeFiltersList[this.filterName];
-      return activeFilters;
+      return this.$store.state.activeFiltersList[this.filterName];
     },
   },
   methods: {

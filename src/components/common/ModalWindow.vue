@@ -1,14 +1,24 @@
 <template>
-  <b-modal id="modalWindow" ref="modalWindow" hide-footer :title="title" centered>
+  <b-modal
+    id="modalWindow"
+    ref="modalWindow"
+    hide-footer
+    :title="title"
+    centered
+  >
     <div>
       <b-button
         @click="chooseOption('cancel')"
         class="mr-2"
-      >Cancel</b-button>
+      >
+        Cancel
+      </b-button>
       <b-button
         @click="chooseOption('approve')"
         variant="success"
-      >Yes</b-button>
+      >
+        Yes
+      </b-button>
     </div>
   </b-modal>
 </template>

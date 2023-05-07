@@ -5,7 +5,8 @@ import store from './store';
 const firebaseConfig = {
   apiKey: 'AIzaSyA7jP2FD-YA9RClr7yxoJngzVAO_WlA1Zk',
   authDomain: 'help2gether-a15a6.firebaseapp.com',
-  databaseURL: 'https://help2gether-a15a6-default-rtdb.europe-west1.firebasedatabase.app',
+  databaseURL:
+    'https://help2gether-a15a6-default-rtdb.europe-west1.firebasedatabase.app',
   projectId: 'help2gether-a15a6',
   storageBucket: 'help2gether-a15a6.appspot.com',
   messagingSenderId: '773867655973',
@@ -18,10 +19,14 @@ export const auth = getAuth(app);
 // The function to check is user logged in or not before enter to routes
 export const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      unsubscribe();
-      resolve(user);
-    }, reject);
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubscribe();
+        resolve(user);
+      },
+      reject,
+    );
   });
 };
 

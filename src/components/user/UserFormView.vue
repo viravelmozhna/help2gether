@@ -4,11 +4,15 @@
     :userFirstName="userData.firstName"
     :userLastName="userData.lastName"
     :userPhone="userData.phone"
-    v-on:formSubmit="formSubmit"/>
+    v-on:formSubmit="formSubmit"
+  />
 </template>
 
 <script>
-import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from 'firebase/auth';
 import { getDatabase, ref, update, set, get, child } from 'firebase/database';
 import { auth } from '@/firebase';
 import UserFormData from './UserFormData.vue';
@@ -54,7 +58,7 @@ export default {
           });
           this.$router.go(-1);
         });
-    };
+    }
   },
   methods: {
     formSubmit(e) {
@@ -105,7 +109,6 @@ export default {
             this.$toast.error(errorMessage, {
               timeout: 2500,
             });
-            console.log(error.code);
           });
       }
     },

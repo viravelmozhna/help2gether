@@ -1,14 +1,13 @@
 <template>
   <div class="container mt-5">
-
-    <GoBackButton v-if="mode === modes.EDIT"/>
+    <GoBackButton v-if="mode === modes.EDIT" />
 
     <b-card
       bg-variant="light"
       class="mt-2 mr-auto ml-auto user-data-form"
     >
       <h1 class="text-center title">
-        <span>{{mode === modes.EDIT ? 'Edit profile' : 'Sign Up'}}</span>
+        <span>{{ mode === modes.EDIT ? 'Edit profile' : 'Sign Up' }}</span>
       </h1>
       <b-form @submit.prevent="userDataFormHandler">
         <b-form-group
@@ -21,7 +20,8 @@
             class="form-control"
             required
             :value="userData.firstName"
-            @change="e => userData.firstName = e.target.value"/>
+            @change="(e) => (userData.firstName = e.target.value)"
+          />
         </b-form-group>
         <b-form-group
           label="Last name"
@@ -33,7 +33,8 @@
             class="form-control"
             required
             :value="userData.lastName"
-            @change="e => userData.lastName = e.target.value"/>
+            @change="(e) => (userData.lastName = e.target.value)"
+          />
         </b-form-group>
         <b-form-group
           label="Phone"
@@ -45,7 +46,8 @@
             class="form-control"
             required
             :value="userData.phone"
-            @change="e => userData.phone = e.target.value"/>
+            @change="(e) => (userData.phone = e.target.value)"
+          />
         </b-form-group>
         <b-form-group
           v-if="mode !== modes.EDIT"
@@ -57,7 +59,8 @@
             type="email"
             class="form-control"
             required
-            @change="e => userData.email = e.target.value"/>
+            @change="(e) => (userData.email = e.target.value)"
+          />
         </b-form-group>
         <b-form-group
           v-if="mode !== modes.EDIT"
@@ -70,7 +73,8 @@
             minlength="8"
             required
             class="form-control"
-            @change="e => userData.password = e.target.value"/>
+            @change="(e) => (userData.password = e.target.value)"
+          />
         </b-form-group>
 
         <b-button
@@ -79,7 +83,7 @@
           size="lg"
           variant="dark"
         >
-          <span>{{mode === modes.EDIT ? 'Save changes' : 'Sign Up'}}</span>
+          <span>{{ mode === modes.EDIT ? 'Save changes' : 'Sign Up' }}</span>
         </b-button>
 
         <p
@@ -145,7 +149,7 @@ export default {
   font-size: 30px;
 }
 .user-data-form {
-  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
+  box-shadow: 7px 7px 29px -6px rgba(0, 0, 0, 0.24);
 }
 @media screen and (max-width: 549px) {
   .user-data-form {

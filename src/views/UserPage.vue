@@ -1,12 +1,19 @@
 <template>
   <div>
     <NavBar />
-    <router-view :key="$route.fullPath"/>
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 
 <script>
-import { getDatabase, ref, onValue, query, orderByChild, equalTo } from 'firebase/database';
+import {
+  getDatabase,
+  ref,
+  onValue,
+  query,
+  orderByChild,
+  equalTo,
+} from 'firebase/database';
 import { auth } from '@/firebase';
 import NavBar from '@/components/common/NavBar.vue';
 
@@ -15,41 +22,49 @@ export default {
   components: {
     NavBar,
   },
+  data() {
+    return {
+      unsubscribe: null,
+      demands: [],
+      cities: [],
+    };
+  },
   created() {
     this.$store.dispatch('deleteAllFilters');
 
     const db = getDatabase();
     const { currentUser } = auth;
-    const demands = query(ref(db, 'demands'), orderByChild('assignedTo'), equalTo(currentUser.uid));
-    onValue(demands, (snapshot) => {
-      const dataToArray = Object.entries(snapshot.val());
+    const sourceDemands = query(
+      ref(db, 'demands'),
+      orderByChild('assignedTo'),
+      equalTo(currentUser.uid),
+    );
 
-      const cities = [];
-      dataToArray.map((item) => {
-        const city = item[1].contactData.address.city;
-        if (cities.includes(city)) {
+    this.unsubscribe = onValue(sourceDemands, (snapshot) => {
+      const dataSnapshot = snapshot.val();
+
+      if (dataSnapshot) {
+        this.demands = Object.entries(dataSnapshot);
+
+        this.demands.map((item) => {
+          const city = item[1].contactData.address.city;
+          if (!this.cities.includes(city)) {
+            this.cities.push(city);
+          }
           return item;
-        }
-        cities.push(city);
-        return item;
-      });
+        });
+      }
 
-      if (dataToArray) {
-        this.$store.dispatch('setDemands', {
-          data: dataToArray,
-        });
-        this.$store.dispatch('setCities', {
-          data: cities,
-        });
-      } else {
-        this.$store.dispatch('setDemands', {
-          data: [],
-        });
-        this.$store.dispatch('setCities', {
-          data: [],
-        });
-      };
+      this.$store.dispatch('setDemands', {
+        data: this.demands,
+      });
+      this.$store.dispatch('setCities', {
+        data: this.demands,
+      });
     });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
 };
 </script>

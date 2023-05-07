@@ -1,119 +1,131 @@
 <template>
   <div class="container">
-
     <GoBackButton />
 
     <b-card
       bg-variant="light"
       class="mt-2 mb-5 mr-auto ml-auto demand-data-form"
     >
-
       <h1 class="text-left title">
-        <span>{{mode === modes.EDIT ? 'Edit demand' : 'Add demand'}}</span>
+        <span>{{ mode === modes.EDIT ? 'Edit demand' : 'Add demand' }}</span>
       </h1>
 
-    <b-form @submit.prevent="formSubmit" @keydown.enter.prevent>
-
-      <b-form-group
-        label="Name"
-        label-for="name"
+      <b-form
+        @submit.prevent="formSubmit"
+        @keydown.enter.prevent
       >
-        <input
-          id="name"
-          type="text"
-          class="form-control"
-          autocomplete="off"
-          required
-          :value="demandData.name"
-          @change="e => demandData.name = e.target.value"
-        />
-      </b-form-group>
+        <b-form-group
+          label="Name"
+          label-for="name"
+        >
+          <input
+            id="name"
+            type="text"
+            class="form-control"
+            autocomplete="off"
+            required
+            :value="demandData.name"
+            @change="(e) => (demandData.name = e.target.value)"
+          />
+        </b-form-group>
 
-      <b-form-group
-        label="Phone"
-        label-for="phone"
-      >
-        <input
-          id="phone"
-          type="tel"
-          class="form-control"
-          autocomplete="off"
-          required
-          :value="demandData.phone"
-          @change="e => demandData.phone = e.target.value"
-        />
-      </b-form-group>
+        <b-form-group
+          label="Phone"
+          label-for="phone"
+        >
+          <input
+            id="phone"
+            type="tel"
+            class="form-control"
+            autocomplete="off"
+            required
+            :value="demandData.phone"
+            @change="(e) => (demandData.phone = e.target.value)"
+          />
+        </b-form-group>
 
-      <b-form-group
-        label="Address"
-        label-for="address"
-      >
-        <GoogleAutocomplete v-on:getAddress="getAddress"/>
+        <b-form-group
+          label="Address"
+          label-for="address"
+        >
+          <GoogleAutocomplete v-on:getAddress="getAddress" />
+          <p class="notification mt-2">
+            <span>Important!</span>
+            <br />
+            For this learning project, a free trial period of the Google Cloud
+            service was used (which includes Places API and Autocomplete), so
+            now it is not possible to add or update an address. But this has no
+            effect on all other features, such as creating a demand, or viewing
+            already created demands in map view. Newly created demands are
+            always available in list view.
+          </p>
 
-        <b-card-text class="mb-3" v-if="formattedAddress">
-          <span class="mr-2 label font-weight-bold">Current address:</span>
-          <span>{{formattedAddress}}</span>
-        </b-card-text>
+          <b-card-text
+            class="mb-3"
+            v-if="formattedAddress"
+          >
+            <span class="mr-2 label font-weight-bold">Current address:</span>
+            <span>{{ formattedAddress }}</span>
+          </b-card-text>
 
-        <GoogleMap
-          :centeredCoords="centeredCoords || coords"
-          :zoomNumber="zoomNumber"
-          class="mt-3"
-          :isHeightSet="true">
-
+          <GoogleMap
+            :centeredCoords="centeredCoords || coords"
+            :zoomNumber="zoomNumber"
+            class="mt-3"
+            :isHeightSet="true"
+          >
             <GoogleMarker
               v-if="demandData.coords"
               :marker="demandData.coords"
             />
-        </GoogleMap>
+          </GoogleMap>
+        </b-form-group>
 
-      </b-form-group>
+        <b-form-group
+          label="Demand"
+          label-for="demand"
+        >
+          <textarea
+            id="demand"
+            type="text"
+            class="form-control"
+            rows="3"
+            required
+            autocomplete="off"
+            :value="demandData.demand"
+            @change="(e) => (demandData.demand = e.target.value)"
+          />
+        </b-form-group>
 
-      <b-form-group
-        label="Demand"
-        label-for="demand"
-      >
-        <textarea
-          id="demand"
-          type="text"
-          class="form-control"
-          rows="3"
-          required
-          autocomplete="off"
-          :value="demandData.demand"
-          @change="e => demandData.demand = e.target.value"
-        />
-      </b-form-group>
+        <b-form-group label="Category">
+          <b-form-radio-group
+            id="categories"
+            name="categories"
+            :options="filterPropertiesValues.category"
+            required
+            v-model="demandData.category"
+          ></b-form-radio-group>
+        </b-form-group>
 
-      <b-form-group label="Category">
-        <b-form-radio-group
-          id="categories"
-          name="categories"
-          :options="filterPropertiesValues.category"
-          required
-          v-model="demandData.category"
-        ></b-form-radio-group>
-      </b-form-group>
+        <b-form-group label="Emergency">
+          <b-form-radio-group
+            id="emergency"
+            name="emergency"
+            :options="filterPropertiesValues.emergency"
+            required
+            v-model="demandData.emergency"
+          ></b-form-radio-group>
+        </b-form-group>
 
-      <b-form-group label="Emergency">
-        <b-form-radio-group
-          id="emergency"
-          name="emergency"
-          :options="filterPropertiesValues.emergency"
-          required
-          v-model="demandData.emergency"
-        ></b-form-radio-group>
-      </b-form-group>
-
-      <b-button
-        type="submit"
-        class="w-100 mb-2"
-        size="lg"
-        variant="dark"
-      >
-        <span>{{mode === modes.EDIT ? 'Save changes' : 'Add demand'}}</span>
-      </b-button>
-    </b-form>
+        <b-button
+          type="submit"
+          class="w-100 mb-2"
+          size="lg"
+          variant="dark"
+        >
+          <span>{{ mode === modes.EDIT ? 'Save changes' : 'Add demand' }}</span>
+        </b-button>
+      </b-form>
     </b-card>
   </div>
 </template>
@@ -195,11 +207,19 @@ export default {
 </script>
 
 <style scoped>
+.notification {
+  font-size: 14px;
+  color: #454545;
+}
+.notification > span {
+  font-weight: 700;
+  color: red;
+}
 .title {
   font-size: 30px;
 }
 .demand-data-form {
-  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
+  box-shadow: 7px 7px 29px -6px rgba(0, 0, 0, 0.24);
 }
 @media screen and (max-width: 549px) {
   .demand-data-form {

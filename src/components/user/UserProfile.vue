@@ -1,14 +1,15 @@
 <template>
-  <b-container class="d-flex flex-column justify-content-center position-relative">
-
+  <b-container
+    class="d-flex flex-column justify-content-center position-relative"
+  >
     <GoBackButton />
 
     <b-card
       header-bg-variant="dark"
       header-text-variant="white"
       header="USER INFO"
-      class="ml-auto mr-auto user-profile-card">
-
+      class="ml-auto mr-auto user-profile-card"
+    >
       <b-button
         v-if="isItProfileOfCurrentLoggedUser"
         key="profile-of-current-logged-user"
@@ -16,27 +17,27 @@
         variant="light"
         size="sm"
         @click="editUserProfile"
-        >Edit</b-button>
+      >
+        Edit
+      </b-button>
 
       <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">First name:</span>
-        <span>{{userData.firstName}}</span>
+        <span>{{ userData.firstName }}</span>
       </b-card-text>
       <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">Last name:</span>
-        <span>{{userData.lastName}}</span>
+        <span>{{ userData.lastName }}</span>
       </b-card-text>
       <b-card-text>
         <span class="mr-2 label font-weight-bold">Phone:</span>
-        <span>{{userData.phone}}</span>
+        <span>{{ userData.phone }}</span>
       </b-card-text>
       <b-card-text>
         <span class="mr-2 label font-weight-bold">Email:</span>
-        <span>{{userData.email}}</span>
+        <span>{{ userData.email }}</span>
       </b-card-text>
-
     </b-card>
-
   </b-container>
 </template>
 
@@ -74,7 +75,7 @@ export default {
           if (this.id === currentUser.uid) {
             this.isItProfileOfCurrentLoggedUser = true;
           }
-        };
+        }
       })
       .catch((error) => {
         console.log(error.code);
@@ -101,7 +102,7 @@ export default {
   right: 10px;
 }
 .user-profile-card {
-  box-shadow: 7px 7px 29px -6px rgba(0,0,0,0.24);
+  box-shadow: 7px 7px 29px -6px rgba(0, 0, 0, 0.24);
 }
 @media screen and (max-width: 549px) {
   .user-profile-card {

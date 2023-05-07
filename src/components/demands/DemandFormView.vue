@@ -1,7 +1,7 @@
 <template>
   <DemandFormData
-    :mode="mode"
     v-on:formSubmit="formSubmit"
+    :mode="mode"
     :category="demandData.category"
     :demand="demandData.demand"
     :emergency="demandData.emergency"
@@ -14,7 +14,15 @@
 </template>
 
 <script>
-import { getDatabase, ref, update, set, push, get, child } from 'firebase/database';
+import {
+  getDatabase,
+  ref,
+  update,
+  set,
+  push,
+  get,
+  child,
+} from 'firebase/database';
 import DemandFormData from './DemandFormData.vue';
 import getCurrentDate from '@/utils/getCurrentDate';
 import { modes } from '@/env/constants';
@@ -75,7 +83,7 @@ export default {
         const demandListRef = ref(db, 'demands');
         const newDemandRef = push(demandListRef);
         this.addDemand(e, newDemandRef);
-      };
+      }
     },
     updateDemand(e) {
       update(ref(db, 'demands/' + this.id), {
@@ -97,8 +105,7 @@ export default {
             timeout: 2500,
           });
         })
-        .catch((error) => {
-          console.log(error.code);
+        .catch(() => {
           this.$toast.error('Something went wrong! Try again later!', {
             timeout: 2500,
           });
