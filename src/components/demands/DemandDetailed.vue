@@ -73,6 +73,15 @@
             <i>The demand was completed on {{ demandInfo.completedTime }}</i>
           </span>
           <div>
+            <b-badge
+              v-if="isNewlyCreatedDemand"
+              key="status-newly-created"
+              pill
+              variant="warning"
+              class="mr-2"
+            >
+              NEW
+            </b-badge>
             <span class="mr-2">
               <b-badge
                 v-if="demandInfo.status === 'active'"
@@ -189,6 +198,7 @@ import {
 } from 'firebase/database';
 import { auth } from '@/firebase';
 import getCurrentDate from '@/utils/getCurrentDate';
+import isLessThan24HoursAgo from '@/utils/isLessThan24HoursAgo';
 import GoBackButton from '../common/GoBackButton.vue';
 import ModalWindow from '../common/ModalWindow.vue';
 import GoogleMarker from '../map/GoogleMarker.vue';
@@ -216,6 +226,9 @@ export default {
   computed: {
     demandInfo() {
       return this.$store.state.demandDetailedInfo;
+    },
+    isNewlyCreatedDemand() {
+      return isLessThan24HoursAgo(this.demandInfo.createdTime);
     },
   },
   created() {

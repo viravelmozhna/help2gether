@@ -37,6 +37,14 @@
     >
       Urgent
     </b-badge>
+    <b-badge
+      v-if="isNewlyCreatedDemand"
+      key="status-warning"
+      class="badge--newly position-absolute"
+      variant="warning"
+    >
+      New
+    </b-badge>
     <b-card-text class="font-weight-bold text-uppercase text m-0">
       {{ city }}
     </b-card-text>
@@ -47,6 +55,8 @@
 </template>
 
 <script>
+import isLessThan24HoursAgo from '@/utils/isLessThan24HoursAgo';
+
 export default {
   name: 'DemandItem',
   props: {
@@ -57,6 +67,11 @@ export default {
     city: String,
     demand: String,
     id: String,
+  },
+  computed: {
+    isNewlyCreatedDemand() {
+      return isLessThan24HoursAgo(this.createdTime);
+    },
   },
   methods: {
     demandDetailedInfoPageOpenHandler(id) {
@@ -76,11 +91,15 @@ export default {
   font-size: 20px;
 }
 .badge {
-  top: 5px;
+  top: 10px;
   right: 5px;
 }
 .badge--urgent {
-  top: 25px;
+  top: 30px;
+}
+.badge--newly {
+  top: -10px;
+  right: 5px;
 }
 .time {
   bottom: 5px;

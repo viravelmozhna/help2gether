@@ -32,7 +32,7 @@
         @click="toggleFilters"
         size="sm"
       >
-        Show filters
+        {{ isOpen ? 'Hide filters' : 'Show filters' }}
       </b-button>
 
       <b-list-group
@@ -85,7 +85,11 @@ export default {
 </script>
 
 <style scoped>
+.view-links {
+  display: flex;
+}
 .link {
+  width: 75px;
   cursor: pointer;
   color: #325892;
 }
@@ -127,7 +131,10 @@ export default {
   }
   .view-links {
     margin-left: auto;
-    margin-right: 150px;
+    margin-right: 100px;
+  }
+  .view-links > .link:first-of-type {
+    margin-left: 10px;
   }
 }
 </style>

@@ -49,6 +49,16 @@
           label-for="address"
         >
           <GoogleAutocomplete v-on:getAddress="getAddress" />
+          <p class="notification mt-2">
+            <span>Important!</span>
+            <br />
+            For this learning project, a free trial period of the Google Cloud
+            service was used (which includes Places API and Autocomplete), so
+            now it is not possible to add or update an address. But this has no
+            effect on all other features, such as creating a demand, or viewing
+            already created demands in map view. Newly created demands are
+            always available in list view.
+          </p>
 
           <b-card-text
             class="mb-3"
@@ -197,6 +207,14 @@ export default {
 </script>
 
 <style scoped>
+.notification {
+  font-size: 14px;
+  color: #454545;
+}
+.notification > span {
+  font-weight: 700;
+  color: red;
+}
 .title {
   font-size: 30px;
 }

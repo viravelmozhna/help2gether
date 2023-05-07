@@ -1,5 +1,6 @@
 <template>
   <gmap-autocomplete
+    disabled
     @place_changed="getAddress"
     :componentRestrictions="{ country: 'ua' }"
     class="w-100 autocomplete rounded"
