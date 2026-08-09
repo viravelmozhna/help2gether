@@ -63,8 +63,8 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    setUserLoggedIn(state) {
-      state.user.isLoggedIn = !state.user.isLoggedIn;
+    setUserLoggedIn(state, isLoggedIn) {
+      state.user.isLoggedIn = Boolean(isLoggedIn);
     },
     setUserData(state, payload) {
       state.user.data = payload;
@@ -113,8 +113,13 @@ export default new Vuex.Store({
   },
   actions: {
     setUser(context, payload) {
-      context.commit('setUserLoggedIn');
-      context.commit('setUserData', payload);
+      if (payload) {
+        context.commit('setUserLoggedIn', true);
+        context.commit('setUserData', payload);
+      } else {
+        context.commit('setUserLoggedIn', false);
+        context.commit('setUserData', null);
+      }
     },
     setDemands(context, payload) {
       context.commit('setDemands', payload);

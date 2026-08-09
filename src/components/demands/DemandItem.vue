@@ -45,8 +45,16 @@
     >
       New
     </b-badge>
+    <b-badge
+      v-if="hasLocation === false"
+      key="no-location"
+      class="badge--no-location position-absolute"
+      variant="secondary"
+    >
+      No map
+    </b-badge>
     <b-card-text class="font-weight-bold text-uppercase text m-0">
-      {{ city }}
+      {{ city || 'No city' }}
     </b-card-text>
     <b-card-text class="text-uppercase">{{ category }}</b-card-text>
     <b-card-text>{{ demand }}</b-card-text>
@@ -67,6 +75,10 @@ export default {
     city: String,
     demand: String,
     id: String,
+    hasLocation: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     isNewlyCreatedDemand() {
@@ -99,6 +111,11 @@ export default {
 }
 .badge--newly {
   top: -10px;
+  right: 5px;
+}
+.badge--no-location {
+  top: auto;
+  bottom: 28px;
   right: 5px;
 }
 .time {

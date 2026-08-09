@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    },
+    "demands": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["assignedTo", "status", "category", "emergency"]
+    }
+  }
+}

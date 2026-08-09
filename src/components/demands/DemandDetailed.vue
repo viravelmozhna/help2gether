@@ -48,16 +48,35 @@
 
       <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">Address:</span>
-        <span>{{ demandInfo.contactData.address.formattedAddress }}</span>
+        <span>
+          {{ demandAddressLabel }}
+        </span>
       </b-card-text>
 
-      <GoogleMap
-        v-if="demandInfo.contactData.address.formattedAddress"
+      <LeafletMap
+        v-if="hasDemandCoords"
+        key="demand-map"
         :centeredCoords="demandInfo.contactData.address.coords"
         :isHeightSet="true"
       >
-        <GoogleMarker :marker="demandInfo.contactData.address.coords" />
-      </GoogleMap>
+        <MapMarker :marker="demandInfo.contactData.address.coords" />
+      </LeafletMap>
+
+      <b-alert
+        v-else
+        key="missing-coords"
+        show
+        variant="warning"
+        class="mt-2"
+      >
+        This demand has no map location. Open
+        <a
+          href="#"
+          class="alert-link"
+          @click.prevent="editDemand"
+        >Edit</a>
+        and choose an address from the suggestions.
+      </b-alert>
 
       <b-card-text class="mb-3">
         <div>
@@ -144,9 +163,19 @@
             >
               assigned to
             </span>
-            <a @click="goToUserProfile">
-              <u class="link">{{ assigneeName }}</u>
+            <a
+              v-if="hasKnownAssignee"
+              key="known-assignee"
+              @click="goToUserProfile"
+            >
+              <u class="link">{{ displayAssigneeName }}</u>
             </a>
+            <span
+              v-else
+              key="unknown-assignee"
+            >
+              {{ displayAssigneeName }}
+            </span>
           </i>
         </span>
       </b-card-text>
@@ -199,10 +228,11 @@ import {
 import { auth } from '@/firebase';
 import getCurrentDate from '@/utils/getCurrentDate';
 import isLessThan24HoursAgo from '@/utils/isLessThan24HoursAgo';
+import checkValidCoords from '@/utils/hasValidCoords';
 import GoBackButton from '../common/GoBackButton.vue';
 import ModalWindow from '../common/ModalWindow.vue';
-import GoogleMarker from '../map/GoogleMarker.vue';
-import GoogleMap from '../map/GoogleMap.vue';
+import MapMarker from '../map/MapMarker.vue';
+import LeafletMap from '../map/LeafletMap.vue';
 
 const db = getDatabase();
 
@@ -211,8 +241,8 @@ export default {
   components: {
     GoBackButton,
     ModalWindow,
-    GoogleMarker,
-    GoogleMap,
+    MapMarker,
+    LeafletMap,
   },
   data() {
     return {
@@ -230,6 +260,20 @@ export default {
     isNewlyCreatedDemand() {
       return isLessThan24HoursAgo(this.demandInfo.createdTime);
     },
+    displayAssigneeName() {
+      return this.assigneeName || 'Unknown user';
+    },
+    hasKnownAssignee() {
+      return Boolean(this.assigneeName) && this.assigneeName !== 'Unknown user';
+    },
+    hasDemandCoords() {
+      const address = this.demandInfo && this.demandInfo.contactData && this.demandInfo.contactData.address;
+      return checkValidCoords(address && address.coords);
+    },
+    demandAddressLabel() {
+      const address = this.demandInfo && this.demandInfo.contactData && this.demandInfo.contactData.address;
+      return (address && address.formattedAddress) || 'No address selected';
+    },
   },
   created() {
     const demandInfo = ref(db, 'demands/' + this.demandId);
@@ -243,20 +287,36 @@ export default {
         });
 
         if (data.assignedTo) {
-          get(child(ref(db), `users/${this.demandInfo.assignedTo}`))
-            .then((snapshot) => {
-              if (snapshot.exists()) {
-                if (this.demandInfo.assignedTo === this.currentUserId) {
-                  this.isCurrentLoggedUserAnAssignee = true;
-                }
+          this.isCurrentLoggedUserAnAssignee = data.assignedTo === this.currentUserId;
+          this.assigneeName = '';
 
-                const assignee = snapshot.val();
-                this.assigneeName = `${assignee.firstName} ${assignee.lastName}`;
+          get(child(ref(db), `users/${data.assignedTo}`))
+            .then((userSnapshot) => {
+              const profile = userSnapshot.val();
+              const authEmail = data.assignedTo === this.currentUserId && auth.currentUser
+                ? auth.currentUser.email
+                : '';
+
+              // Same order as NavBar: first/last name, then email
+              if (profile && (profile.firstName || profile.lastName)) {
+                this.assigneeName = `${profile.firstName || ''} ${
+                  profile.lastName || ''
+                }`.trim();
+                return;
               }
+
+              this.assigneeName = (profile && profile.email) || authEmail || 'Unknown user';
             })
             .catch((error) => {
               console.error(error);
+              const authEmail = data.assignedTo === this.currentUserId && auth.currentUser
+                ? auth.currentUser.email
+                : '';
+              this.assigneeName = authEmail || 'Unknown user';
             });
+        } else {
+          this.isCurrentLoggedUserAnAssignee = false;
+          this.assigneeName = '';
         }
       }
     });

@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import store from './store';
+import ensureUserProfile from './utils/ensureUserProfile';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyA7jP2FD-YA9RClr7yxoJngzVAO_WlA1Zk',
@@ -32,11 +33,16 @@ export const getCurrentUser = () => {
 
 // Checking is user logged in or not and setting his data to the store
 onAuthStateChanged(auth, (user) => {
-  const { currentUser } = auth;
-  if (currentUser) {
+  if (user) {
     store.dispatch('setUser', {
-      email: currentUser.email,
-      id: currentUser.uid,
+      email: user.email,
+      id: user.uid,
     });
+
+    ensureUserProfile(user).catch((error) => {
+      console.log(error);
+    });
+  } else {
+    store.dispatch('setUser', null);
   }
 });

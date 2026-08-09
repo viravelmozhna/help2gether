@@ -24,8 +24,7 @@
             class="form-control"
             autocomplete="off"
             required
-            :value="demandData.name"
-            @change="(e) => (demandData.name = e.target.value)"
+            v-model="localName"
           />
         </b-form-group>
 
@@ -39,8 +38,7 @@
             class="form-control"
             autocomplete="off"
             required
-            :value="demandData.phone"
-            @change="(e) => (demandData.phone = e.target.value)"
+            v-model="localPhone"
           />
         </b-form-group>
 
@@ -48,37 +46,27 @@
           label="Address"
           label-for="address"
         >
-          <GoogleAutocomplete v-on:getAddress="getAddress" />
-          <p class="notification mt-2">
-            <span>Important!</span>
-            <br />
-            For this learning project, a free trial period of the Google Cloud
-            service was used (which includes Places API and Autocomplete), so
-            now it is not possible to add or update an address. But this has no
-            effect on all other features, such as creating a demand, or viewing
-            already created demands in map view. Newly created demands are
-            always available in list view.
-          </p>
+          <AddressAutocomplete v-on:getAddress="getAddress" />
 
           <b-card-text
-            class="mb-3"
-            v-if="formattedAddress"
+            class="mb-3 mt-2"
+            v-if="selectedFormattedAddress"
           >
             <span class="mr-2 label font-weight-bold">Current address:</span>
-            <span>{{ formattedAddress }}</span>
+            <span>{{ selectedFormattedAddress }}</span>
           </b-card-text>
 
-          <GoogleMap
-            :centeredCoords="centeredCoords || coords"
+          <LeafletMap
+            :centeredCoords="centeredCoords || selectedCoords || coords"
             :zoomNumber="zoomNumber"
             class="mt-3"
             :isHeightSet="true"
           >
-            <GoogleMarker
-              v-if="demandData.coords"
-              :marker="demandData.coords"
+            <MapMarker
+              v-if="selectedCoords || coords"
+              :marker="selectedCoords || coords"
             />
-          </GoogleMap>
+          </LeafletMap>
         </b-form-group>
 
         <b-form-group
@@ -92,8 +80,7 @@
             rows="3"
             required
             autocomplete="off"
-            :value="demandData.demand"
-            @change="(e) => (demandData.demand = e.target.value)"
+            v-model="localDemand"
           />
         </b-form-group>
 
@@ -103,7 +90,7 @@
             name="categories"
             :options="filterPropertiesValues.category"
             required
-            v-model="demandData.category"
+            v-model="localCategory"
           ></b-form-radio-group>
         </b-form-group>
 
@@ -113,7 +100,7 @@
             name="emergency"
             :options="filterPropertiesValues.emergency"
             required
-            v-model="demandData.emergency"
+            v-model="localEmergency"
           ></b-form-radio-group>
         </b-form-group>
 
@@ -133,17 +120,17 @@
 <script>
 import { filterPropertiesValues, modes, zoomMapNumbers } from '@/env/constants';
 import GoBackButton from '@/components/common/GoBackButton.vue';
-import GoogleAutocomplete from '../map/GoogleAutocomplete.vue';
-import GoogleMarker from '../map/GoogleMarker.vue';
-import GoogleMap from '../map/GoogleMap.vue';
+import AddressAutocomplete from '../map/AddressAutocomplete.vue';
+import MapMarker from '../map/MapMarker.vue';
+import LeafletMap from '../map/LeafletMap.vue';
 
 export default {
   name: 'DemandFormData',
   components: {
     GoBackButton,
-    GoogleAutocomplete,
-    GoogleMarker,
-    GoogleMap,
+    AddressAutocomplete,
+    MapMarker,
+    LeafletMap,
   },
   props: {
     mode: String,
@@ -165,31 +152,72 @@ export default {
           ? zoomMapNumbers.DEFAULT_VALUE
           : zoomMapNumbers.DEMAND_FORM_ADD_MODE_VALUE,
       centeredCoords: null,
+      selectedCoords: null,
+      selectedFormattedAddress: this.formattedAddress || '',
+      selectedCity: this.city || '',
+      localName: this.name || '',
+      localPhone: this.phone || '',
+      localDemand: this.demand || '',
+      localCategory: this.category || '',
+      localEmergency: this.emergency || '',
     };
+  },
+  watch: {
+    formattedAddress(value) {
+      this.selectedFormattedAddress = value || '';
+    },
+    coords(value) {
+      this.selectedCoords = value || null;
+    },
+    city(value) {
+      this.selectedCity = value || '';
+    },
+    name(value) {
+      this.localName = value || '';
+    },
+    phone(value) {
+      this.localPhone = value || '';
+    },
+    demand(value) {
+      this.localDemand = value || '';
+    },
+    category(value) {
+      this.localCategory = value || '';
+    },
+    emergency(value) {
+      this.localEmergency = value || '';
+    },
   },
   computed: {
     demandData() {
       return {
-        category: this.category,
-        demand: this.demand,
-        emergency: this.emergency,
-        name: this.name,
-        phone: this.phone,
-        coords: this.coords,
-        formattedAddress: this.formattedAddress,
-        city: this.city,
+        category: this.localCategory,
+        demand: this.localDemand,
+        emergency: this.localEmergency,
+        name: this.localName,
+        phone: this.localPhone,
+        coords: this.selectedCoords || this.coords,
+        formattedAddress: this.selectedFormattedAddress,
+        city: this.selectedCity,
       };
     },
   },
   methods: {
     getAddress(e) {
-      this.demandData.coords = e.coords;
-      this.demandData.formattedAddress = e.formattedAddress;
-      this.demandData.city = e.city;
+      this.selectedCoords = e.coords;
+      this.selectedFormattedAddress = e.formattedAddress;
+      this.selectedCity = e.city;
       this.zoomNumber = zoomMapNumbers.DEFAULT_VALUE;
       this.centeredCoords = e.coords;
     },
     formSubmit() {
+      if (!this.demandData.coords || !this.demandData.city) {
+        this.$toast.error('Please select an address from the suggestions', {
+          timeout: 3000,
+        });
+        return;
+      }
+
       const demandData = {
         name: this.demandData.name,
         phone: this.demandData.phone,
@@ -207,14 +235,6 @@ export default {
 </script>
 
 <style scoped>
-.notification {
-  font-size: 14px;
-  color: #454545;
-}
-.notification > span {
-  font-weight: 700;
-  color: red;
-}
 .title {
   font-size: 30px;
 }

@@ -1,23 +1,35 @@
 <template>
-  <gmap-map
+  <l-map
     :zoom="zoomMap"
     :center="centeredMapAtCoords"
+    :options="{ scrollWheelZoom: true }"
     class="map-view"
     :class="{ formMap: isHeightSet }"
   >
+    <l-tile-layer
+      :url="tileUrl"
+      :attribution="attribution"
+    />
     <slot></slot>
-  </gmap-map>
+  </l-map>
 </template>
 
 <script>
 import { coords, zoomMapNumbers } from '@/env/constants';
 
 export default {
-  name: 'GoogleMap',
+  name: 'LeafletMap',
   props: {
     centeredCoords: Object,
     zoomNumber: Number,
     isHeightSet: Boolean,
+  },
+  data() {
+    return {
+      tileUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    };
   },
   computed: {
     centeredMapAtCoords() {
@@ -31,10 +43,10 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (max-width: 575px) {
-  .map-view {
-    height: 400px;
-  }
+.map-view {
+  height: 70vh;
+  min-height: 400px;
+  z-index: 0;
 }
 @media screen and (min-width: 576px) {
   .map-view {
@@ -43,6 +55,7 @@ export default {
   }
   .formMap {
     height: 400px;
+    min-height: 400px;
     width: 100%;
     margin-left: 0;
   }

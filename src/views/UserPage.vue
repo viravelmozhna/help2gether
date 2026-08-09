@@ -59,7 +59,7 @@ export default {
         data: this.demands,
       });
       this.$store.dispatch('setCities', {
-        data: this.demands,
+        data: this.cities,
       });
     });
   },
