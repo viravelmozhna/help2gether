@@ -10,6 +10,11 @@
       ".read": "auth != null",
       ".write": "auth != null",
       ".indexOn": ["assignedTo", "status", "category", "emergency"]
+    },
+    "publicDemands": {
+      ".read": true,
+      ".write": "auth != null",
+      ".indexOn": ["assignedTo", "status", "category", "emergency"]
     }
   }
 }

@@ -41,7 +41,6 @@ const routes = [
     component: () => {
       return import(/* webpackChunkName: "demands" */ '@/views/DemandsPage');
     },
-    meta: { requiresAuth: true },
     redirect: '/demands/list/list-view',
     children: [
       {
@@ -77,6 +76,7 @@ const routes = [
       {
         path: 'add',
         name: 'demand-new',
+        meta: { requiresAuth: true },
         component: () => {
           return import(
             /* webpackChunkName: "demand-new" */ '@/components/demands/DemandFormView'
@@ -95,6 +95,7 @@ const routes = [
       {
         path: 'edit/:id',
         name: 'demand-edit',
+        meta: { requiresAuth: true },
         component: () => {
           return import(
             /* webpackChunkName: "demand-edit" */ '@/components/demands/DemandFormView'
@@ -185,6 +186,7 @@ router.beforeEach(async (to, from, next) => {
   if (requiresAuth && !(await getCurrentUser())) {
     next({
       path: '/login',
+      query: { redirect: to.fullPath },
     });
   } else {
     next();

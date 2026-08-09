@@ -25,6 +25,7 @@ import {
 } from 'firebase/database';
 import DemandFormData from './DemandFormData.vue';
 import getCurrentDate from '@/utils/getCurrentDate';
+import syncPublicDemand from '@/utils/syncPublicDemand';
 import { modes } from '@/env/constants';
 
 const db = getDatabase();
@@ -86,7 +87,7 @@ export default {
       }
     },
     updateDemand(e) {
-      update(ref(db, 'demands/' + this.id), {
+      const payload = {
         category: e.category,
         demand: e.demand,
         emergency: e.emergency,
@@ -99,7 +100,12 @@ export default {
             formattedAddress: e.formattedAddress,
           },
         },
-      })
+      };
+
+      update(ref(db, 'demands/' + this.id), payload)
+        .then(() => {
+          return syncPublicDemand(this.id);
+        })
         .then(() => {
           this.$toast.success('The demand was updated!', {
             timeout: 2500,
@@ -112,7 +118,7 @@ export default {
         });
     },
     addDemand(e, demandRef) {
-      set(demandRef, {
+      const payload = {
         contactData: {
           name: e.name,
           phone: e.phone,
@@ -127,7 +133,12 @@ export default {
         createdTime: getCurrentDate(),
         status: 'active',
         emergency: e.emergency,
-      })
+      };
+
+      set(demandRef, payload)
+        .then(() => {
+          return syncPublicDemand(demandRef.key, payload);
+        })
         .then(() => {
           this.$toast.success('The demand was added!', {
             timeout: 2500,

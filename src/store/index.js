@@ -18,7 +18,9 @@ export default new Vuex.Store({
         name: '',
         phone: '',
         address: {
-          region: '',
+          city: '',
+          coords: null,
+          formattedAddress: '',
         },
       },
       demand: '',
@@ -26,6 +28,7 @@ export default new Vuex.Store({
       createdTime: '',
       status: '',
       emergency: '',
+      assignedTo: null,
     },
     activeFiltersList: {
       city: [],
