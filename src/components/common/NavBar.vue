@@ -19,6 +19,7 @@
           All demands
         </b-nav-item>
         <b-nav-item
+          v-if="isUserLoggedIn"
           to="/user/demands"
           active-class="active"
           class="text-uppercase"
@@ -26,6 +27,7 @@
           Your demands
         </b-nav-item>
         <b-nav-item
+          v-if="isUserLoggedIn"
           to="/demands/add"
           active-class="active"
           class="text-uppercase"
@@ -49,6 +51,23 @@
       <span class="text-uppercase logout-button">
         <a @click="logout">Logout</a>
       </span>
+    </div>
+    <div
+      v-else
+      class="ml-auto text-uppercase"
+    >
+      <router-link
+        to="/login"
+        class="mr-3 link"
+      >
+        Log in
+      </router-link>
+      <router-link
+        to="/signup"
+        class="link"
+      >
+        Sign up
+      </router-link>
     </div>
   </b-navbar>
 </template>
@@ -86,7 +105,6 @@ export default {
             }`.trim();
             return;
           }
-          // No name on profile — fall back to email (profile or auth)
           this.userName = (profile && profile.email) || this.userData.email || '';
         })
         .catch((error) => {
@@ -106,7 +124,7 @@ export default {
         this.$toast.warning('You was logged out!', {
           timeout: 2000,
         });
-        this.$router.push('/login');
+        this.$router.push('/demands/list');
       });
     },
   },

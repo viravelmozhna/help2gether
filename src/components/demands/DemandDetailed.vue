@@ -15,6 +15,7 @@
       class="ml-auto mr-auto mb-5 demand-detailed-card"
     >
       <b-button
+        v-if="isUserLoggedIn"
         class="mb-3 position-absolute edit-button"
         variant="light"
         size="sm"
@@ -31,20 +32,41 @@
             pill
             variant="secondary"
           >
-            {{ demandInfo.category.toUpperCase() }}
+            {{ (demandInfo.category || '').toUpperCase() }}
           </b-badge>
         </div>
       </b-card-text>
 
-      <b-card-text class="mb-3">
-        <span class="mr-2 label font-weight-bold">Name:</span>
-        <span>{{ demandInfo.contactData.name }}</span>
-      </b-card-text>
+      <template v-if="isUserLoggedIn">
+        <b-card-text
+          class="mb-3"
+          key="contact-name"
+        >
+          <span class="mr-2 label font-weight-bold">Name:</span>
+          <span>{{ demandInfo.contactData.name }}</span>
+        </b-card-text>
 
-      <b-card-text class="mb-3">
-        <span class="mr-2 label font-weight-bold">Phone:</span>
-        <span>{{ demandInfo.contactData.phone }}</span>
-      </b-card-text>
+        <b-card-text
+          class="mb-3"
+          key="contact-phone"
+        >
+          <span class="mr-2 label font-weight-bold">Phone:</span>
+          <span>{{ demandInfo.contactData.phone }}</span>
+        </b-card-text>
+      </template>
+      <b-alert
+        v-else
+        key="guest-contact-hidden"
+        show
+        variant="info"
+        class="mb-3"
+      >
+        Contact name and phone are hidden.
+        <router-link :to="{ path: '/login', query: { redirect: $route.fullPath } }">
+          Log in
+        </router-link>
+        to view them and help with this demand.
+      </b-alert>
 
       <b-card-text class="mb-3">
         <span class="mr-2 label font-weight-bold">Address:</span>
@@ -63,7 +85,7 @@
       </LeafletMap>
 
       <b-alert
-        v-else
+        v-else-if="isUserLoggedIn"
         key="missing-coords"
         show
         variant="warning"
@@ -128,10 +150,7 @@
               </b-badge>
             </span>
             <b-badge
-              v-if="
-                demandInfo.emergency === 'urgent' &&
-                demandInfo.status === 'active'
-              "
+              v-if="demandInfo.emergency === 'urgent' && demandInfo.status === 'active'"
               key="demand-emergency"
               pill
               variant="danger"
@@ -164,7 +183,7 @@
               assigned to
             </span>
             <a
-              v-if="hasKnownAssignee"
+              v-if="hasKnownAssignee && isUserLoggedIn"
               key="known-assignee"
               @click="goToUserProfile"
             >
@@ -174,14 +193,14 @@
               v-else
               key="unknown-assignee"
             >
-              {{ displayAssigneeName }}
+              {{ isUserLoggedIn ? displayAssigneeName : 'a volunteer' }}
             </span>
           </i>
         </span>
       </b-card-text>
 
       <b-button
-        v-if="!demandInfo.assignedTo"
+        v-if="isUserLoggedIn && !demandInfo.assignedTo"
         key="demand-is-not-assigned-yet"
         class="mt-2"
         variant="info"
@@ -190,10 +209,18 @@
         Take demand
       </b-button>
 
+      <b-button
+        v-else-if="!isUserLoggedIn && !demandInfo.assignedTo"
+        key="guest-take-demand"
+        class="mt-2"
+        variant="info"
+        :to="{ path: '/login', query: { redirect: $route.fullPath } }"
+      >
+        Log in to take demand
+      </b-button>
+
       <div
-        v-else-if="
-          isCurrentLoggedUserAnAssignee && demandInfo.status !== 'completed'
-        "
+        v-else-if="isCurrentLoggedUserAnAssignee && demandInfo.status !== 'completed'"
         key="demand-is-assigned-to-current-user"
         tag="li"
       >
@@ -225,10 +252,11 @@ import {
   get,
   child,
 } from 'firebase/database';
-import { auth } from '@/firebase';
+import { auth, getCurrentUser } from '@/firebase';
 import getCurrentDate from '@/utils/getCurrentDate';
 import isLessThan24HoursAgo from '@/utils/isLessThan24HoursAgo';
 import checkValidCoords from '@/utils/hasValidCoords';
+import syncPublicDemand from '@/utils/syncPublicDemand';
 import GoBackButton from '../common/GoBackButton.vue';
 import ModalWindow from '../common/ModalWindow.vue';
 import MapMarker from '../map/MapMarker.vue';
@@ -250,10 +278,14 @@ export default {
       demandId: this.$route.params.id,
       assigneeName: '',
       isCurrentLoggedUserAnAssignee: false,
-      currentUserId: auth.currentUser.uid,
+      currentUserId: null,
+      authReady: false,
     };
   },
   computed: {
+    isUserLoggedIn() {
+      return this.$store.getters.isUserLoggedIn;
+    },
     demandInfo() {
       return this.$store.state.demandDetailedInfo;
     },
@@ -275,74 +307,138 @@ export default {
       return (address && address.formattedAddress) || 'No address selected';
     },
   },
-  created() {
-    const demandInfo = ref(db, 'demands/' + this.demandId);
-
-    this.unsubscribe = onValue(demandInfo, (snapshot) => {
-      const data = snapshot.val();
-
-      if (data) {
-        this.$store.dispatch('setDemandDetailedInfo', {
-          data,
-        });
-
-        if (data.assignedTo) {
-          this.isCurrentLoggedUserAnAssignee = data.assignedTo === this.currentUserId;
-          this.assigneeName = '';
-
-          get(child(ref(db), `users/${data.assignedTo}`))
-            .then((userSnapshot) => {
-              const profile = userSnapshot.val();
-              const authEmail = data.assignedTo === this.currentUserId && auth.currentUser
-                ? auth.currentUser.email
-                : '';
-
-              // Same order as NavBar: first/last name, then email
-              if (profile && (profile.firstName || profile.lastName)) {
-                this.assigneeName = `${profile.firstName || ''} ${
-                  profile.lastName || ''
-                }`.trim();
-                return;
-              }
-
-              this.assigneeName = (profile && profile.email) || authEmail || 'Unknown user';
-            })
-            .catch((error) => {
-              console.error(error);
-              const authEmail = data.assignedTo === this.currentUserId && auth.currentUser
-                ? auth.currentUser.email
-                : '';
-              this.assigneeName = authEmail || 'Unknown user';
-            });
-        } else {
-          this.isCurrentLoggedUserAnAssignee = false;
-          this.assigneeName = '';
-        }
+  watch: {
+    isUserLoggedIn() {
+      if (this.authReady) {
+        this.currentUserId = (auth.currentUser && auth.currentUser.uid) || null;
+        this.subscribeToDemand();
       }
-    });
+    },
+  },
+  async created() {
+    await getCurrentUser();
+    this.authReady = true;
+    this.currentUserId = (auth.currentUser && auth.currentUser.uid) || null;
+    this.subscribeToDemand();
   },
   beforeDestroy() {
-    this.unsubscribe();
+    this.teardownSubscription();
   },
   methods: {
+    teardownSubscription() {
+      if (this.unsubscribe) {
+        this.unsubscribe();
+        this.unsubscribe = null;
+      }
+    },
+    subscribeToDemand() {
+      this.teardownSubscription();
+
+      const sourcePath = this.isUserLoggedIn
+        ? `demands/${this.demandId}`
+        : `publicDemands/${this.demandId}`;
+      const demandInfo = ref(db, sourcePath);
+
+      this.unsubscribe = onValue(demandInfo, (snapshot) => {
+        const data = snapshot.val();
+
+        if (data) {
+          const sourceContact = data.contactData || {};
+          const sourceAddress = sourceContact.address || {};
+          this.$store.dispatch('setDemandDetailedInfo', {
+            data: {
+              ...data,
+              contactData: {
+                name: sourceContact.name || '',
+                phone: sourceContact.phone || '',
+                address: {
+                  city: sourceAddress.city || '',
+                  coords: sourceAddress.coords || null,
+                  formattedAddress: sourceAddress.formattedAddress || '',
+                },
+              },
+            },
+          });
+
+          if (data.assignedTo && this.isUserLoggedIn) {
+            this.isCurrentLoggedUserAnAssignee = data.assignedTo === this.currentUserId;
+            this.assigneeName = '';
+
+            get(child(ref(db), `users/${data.assignedTo}`))
+              .then((userSnapshot) => {
+                const profile = userSnapshot.val();
+                const authEmail = data.assignedTo === this.currentUserId && auth.currentUser
+                  ? auth.currentUser.email
+                  : '';
+
+                if (profile && (profile.firstName || profile.lastName)) {
+                  this.assigneeName = `${profile.firstName || ''} ${
+                    profile.lastName || ''
+                  }`.trim();
+                  return;
+                }
+
+                this.assigneeName = (profile && profile.email) || authEmail || 'Unknown user';
+              })
+              .catch((error) => {
+                console.error(error);
+                const authEmail = data.assignedTo === this.currentUserId && auth.currentUser
+                  ? auth.currentUser.email
+                  : '';
+                this.assigneeName = authEmail || 'Unknown user';
+              });
+          } else {
+            this.isCurrentLoggedUserAnAssignee = false;
+            this.assigneeName = '';
+          }
+        }
+      });
+    },
     assignDemand() {
       update(ref(db, 'demands/' + this.demandId), {
         assignedTo: this.currentUserId,
         status: 'in progress',
-      });
+      })
+        .then(() => {
+          return syncPublicDemand(this.demandId);
+        })
+        .catch((error) => {
+          console.error(error);
+          this.$toast.error('Something went wrong! Try again later!', {
+            timeout: 2500,
+          });
+        });
     },
     unassignDemand() {
       update(ref(db, 'demands/' + this.demandId), {
         assignedTo: null,
         status: 'active',
-      });
+      })
+        .then(() => {
+          return syncPublicDemand(this.demandId);
+        })
+        .catch((error) => {
+          console.error(error);
+          this.$toast.error('Something went wrong! Try again later!', {
+            timeout: 2500,
+          });
+        });
     },
     actionInModalWindowHandler(e) {
       if (e === 'approve') {
         update(ref(db, 'demands/' + this.demandId), {
           status: 'completed',
           completedTime: getCurrentDate(),
-        });
+        })
+          .then(() => {
+            return syncPublicDemand(this.demandId);
+          })
+          .catch((error) => {
+            console.error(error);
+            this.$toast.error('Something went wrong! Try again later!', {
+              timeout: 2500,
+            });
+          });
       }
     },
     goToUserProfile() {

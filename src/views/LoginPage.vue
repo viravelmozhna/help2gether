@@ -71,7 +71,8 @@ export default {
           this.$toast.success('You was logged in!', {
             timeout: 2500,
           });
-          this.$router.push('/demands/list');
+          const redirect = this.$route.query.redirect || '/demands/list';
+          this.$router.push(redirect);
         })
         .catch((error) => {
           const errorMessage = error.code === errors.WRONG_PASSWORD || error.code === errors.USER_NOT_FOUND
