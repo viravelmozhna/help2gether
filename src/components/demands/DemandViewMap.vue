@@ -1,80 +1,61 @@
 <template>
-  <GoogleMap
+  <LeafletMap
     v-if="demands"
     :zoomNumber="zoomNumber"
-    class=""
   >
-    <GoogleInfoWindow
-      v-if="currentMarker"
-      :position="currentMarker[1].contactData.address.coords"
-      :isInfoWindowOpen="isInfoWindowOpen"
-      v-on:closeInfoWindow="closeInfoWindow"
-    >
-      <div class="info-window">
-        <DemandItem
-          :status="currentMarker[1].status"
-          :emergency="currentMarker[1].emergency"
-          :category="currentMarker[1].category"
-          :demand="currentMarker[1].demand"
-          :createdTime="currentMarker[1].createdTime"
-          :city="currentMarker[1].contactData.address.city"
-          :id="currentMarker[0]"
-        />
-      </div>
-    </GoogleInfoWindow>
-
-    <GoogleMarker
-      v-for="(demand, index) in demands"
+    <MapMarker
+      v-for="demand in demandsWithCoords"
       :marker="demand[1].contactData.address.coords"
-      :index="index"
       :key="demand[0]"
-      v-on:clickOnMarker="clickOnMarker"
-    />
-  </GoogleMap>
+    >
+      <MapPopup>
+        <div class="info-window">
+          <DemandItem
+            :status="demand[1].status"
+            :emergency="demand[1].emergency"
+            :category="demand[1].category"
+            :demand="demand[1].demand"
+            :createdTime="demand[1].createdTime"
+            :city="demand[1].contactData.address.city"
+            :id="demand[0]"
+          />
+        </div>
+      </MapPopup>
+    </MapMarker>
+  </LeafletMap>
 </template>
 
 <script>
 import { filterPropertiesValues, zoomMapNumbers } from '@/env/constants';
+import hasValidCoords from '@/utils/hasValidCoords';
 import DemandItem from './DemandItem.vue';
-import GoogleMap from '../map/GoogleMap.vue';
-import GoogleMarker from '../map/GoogleMarker.vue';
-import GoogleInfoWindow from '../map/GoogleInfoWindow.vue';
+import LeafletMap from '../map/LeafletMap.vue';
+import MapMarker from '../map/MapMarker.vue';
+import MapPopup from '../map/MapPopup.vue';
 
 export default {
   name: 'DemandViewMap',
   components: {
     DemandItem,
-    GoogleMap,
-    GoogleMarker,
-    GoogleInfoWindow,
+    LeafletMap,
+    MapMarker,
+    MapPopup,
   },
   data() {
     return {
       filterProperties: filterPropertiesValues,
       zoomNumber: zoomMapNumbers.MAP_LIST_VALUE,
-      currentMarker: null,
-      currentMarkerIndex: null,
-      isInfoWindowOpen: false,
     };
   },
   computed: {
     demands() {
       return this.$store.getters.filteredDemands;
     },
-  },
-  methods: {
-    clickOnMarker(e) {
-      this.currentMarker = this.demands[e.index];
-
-      if (this.currentMarkerIndex === e.index) {
-        this.isInfoWindowOpen = !this.isInfoWindowOpen;
-      } else {
-        this.isInfoWindowOpen = true;
-        this.currentMarkerIndex = e.index;
-      }
-    },
-    closeInfoWindow() {
-      this.isInfoWindowOpen = false;
+    demandsWithCoords() {
+      return this.demands.filter((demand) => {
+        const address = demand[1] && demand[1].contactData && demand[1].contactData.address;
+        return hasValidCoords(address && address.coords);
+      });
     },
   },
 };

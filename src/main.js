@@ -8,24 +8,36 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
-import * as VueGoogleMaps from 'vue2-google-maps';
+import { Icon } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import {
+  LMap,
+  LTileLayer,
+  LMarker,
+  LPopup,
+} from 'vue2-leaflet';
+
+// Fix default Leaflet marker icons broken by Webpack asset handling
+/* eslint-disable no-underscore-dangle */
+delete Icon.Default.prototype._getIconUrl;
+Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
+/* eslint-enable no-underscore-dangle */
 
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 
 Vue.use(Toast);
 
-Vue.config.productionTip = false;
+Vue.component('l-map', LMap);
+Vue.component('l-tile-layer', LTileLayer);
+Vue.component('l-marker', LMarker);
+Vue.component('l-popup', LPopup);
 
-Vue.use(VueGoogleMaps, {
-  load: {
-    key: 'AIzaSyAxPjA1r401hT6qtHozJnIj0rnZKaNVRgQ',
-    libraries: 'places',
-    languages: 'en',
-    region: 'us',
-  },
-  installComponents: true,
-});
+Vue.config.productionTip = false;
 
 new Vue({
   store,

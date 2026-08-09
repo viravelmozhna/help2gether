@@ -64,17 +64,26 @@ export default {
     };
   },
   created() {
+    const { currentUser } = auth;
+    this.isItProfileOfCurrentLoggedUser = Boolean(
+      currentUser && this.id === currentUser.uid,
+    );
+
+    if (this.isItProfileOfCurrentLoggedUser && currentUser.email) {
+      this.userData.email = currentUser.email;
+    }
+
     const db = getDatabase();
     get(child(ref(db), `users/${this.id}`))
       .then((snapshot) => {
         if (snapshot.exists()) {
-          const userData = snapshot.val();
-          this.userData = userData;
-
-          const { currentUser } = auth;
-          if (this.id === currentUser.uid) {
-            this.isItProfileOfCurrentLoggedUser = true;
-          }
+          this.userData = {
+            firstName: '',
+            lastName: '',
+            phone: '',
+            email: this.userData.email,
+            ...snapshot.val(),
+          };
         }
       })
       .catch((error) => {

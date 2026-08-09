@@ -76,16 +76,25 @@ export default {
     },
   },
   created() {
-    if (this.isUserLoggedIn) {
+    if (this.isUserLoggedIn && this.userData && this.userData.id) {
       get(child(ref(db), `users/${this.userData.id}`))
         .then((snapshot) => {
-          const userData = snapshot.val();
-          this.userName = `${userData.firstName} ${userData.lastName}`;
+          const profile = snapshot.val();
+          if (profile && (profile.firstName || profile.lastName)) {
+            this.userName = `${profile.firstName || ''} ${
+              profile.lastName || ''
+            }`.trim();
+            return;
+          }
+          // No name on profile — fall back to email (profile or auth)
+          this.userName = (profile && profile.email) || this.userData.email || '';
         })
         .catch((error) => {
           console.log(error);
-          this.$toast.error('Something went wrong! Try again later!', {
-            timeout: 2500,
+          this.userName = this.userData.email || '';
+          const reason = error.code || error.message || 'unknown error';
+          this.$toast.error(`Could not load profile (${reason})`, {
+            timeout: 4000,
           });
         });
     }

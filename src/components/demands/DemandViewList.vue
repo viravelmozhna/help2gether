@@ -22,7 +22,8 @@
         :category="demand[1].category"
         :demand="demand[1].demand"
         :createdTime="demand[1].createdTime"
-        :city="demand[1].contactData.address.city"
+        :city="demand[1].contactData.address.city || 'No city'"
+        :hasLocation="hasDemandLocation(demand)"
         :id="demand[0]"
         :key="demand[0]"
       />
@@ -31,6 +32,7 @@
 </template>
 
 <script>
+import hasValidCoords from '@/utils/hasValidCoords';
 import DemandItem from './DemandItem.vue';
 
 export default {
@@ -41,6 +43,12 @@ export default {
   computed: {
     demands() {
       return this.$store.getters.filteredDemands;
+    },
+  },
+  methods: {
+    hasDemandLocation(demand) {
+      const address = demand[1] && demand[1].contactData && demand[1].contactData.address;
+      return hasValidCoords(address && address.coords);
     },
   },
 };
