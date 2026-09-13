@@ -13,6 +13,7 @@ const toPublicDemand = function (demand) {
     demand: demand.demand || '',
     emergency: demand.emergency || '',
     createdTime: demand.createdTime || '',
+    createdAt: demand.createdAt || null,
     completedTime: demand.completedTime || null,
     status: demand.status || '',
     assignedTo: demand.assignedTo || null,

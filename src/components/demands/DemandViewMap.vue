@@ -16,6 +16,7 @@
             :category="demand[1].category"
             :demand="demand[1].demand"
             :createdTime="demand[1].createdTime"
+            :createdAt="demand[1].createdAt"
             :city="demand[1].contactData.address.city"
             :id="demand[0]"
           />
