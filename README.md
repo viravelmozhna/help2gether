@@ -16,11 +16,14 @@ I built help2gether in the first months of the full-scale war in Ukraine, when m
 **For signed-in volunteers**
 - See the contact name and phone number for each request
 - Add requests. The address is picked from autocomplete suggestions, so every request has a map location
+- Edit the requests you created
 - **Take** a request, which moves it to *In progress*; **unassign** it, or **mark it completed**
 - "Your demands" lists every request you've taken, with its own list and map views
 - Sign up and log in with email and password, reset a forgotten password, and edit your profile
 
-**Privacy:** contact names and phone numbers are visible only to signed-in users. Guests read a separate copy of each request that has the contact details removed. Security rules in [`database.rules.json`](database.rules.json) enforce this.
+**Privacy:** contact names and phone numbers are visible only to signed-in users. Guests read a separate copy of each request that has the contact details removed.
+
+**Permissions:** only a request's creator (or an admin) can edit its details. Any volunteer can take a free request, but only the assigned volunteer can unassign or complete it. Security rules in [`database.rules.json`](database.rules.json) enforce all of this on the database, not just in the UI.
 
 ## Tech stack
 
@@ -63,6 +66,7 @@ The Firebase web config is in [`src/firebase.js`](src/firebase.js), and the app 
    ```bash
    firebase deploy --only database
    ```
+5. Optionally, make your account an admin (see [Data model](#data-model)).
 
 ## Scripts
 
@@ -93,13 +97,20 @@ database.rules.json     # Realtime Database security rules
 
 ### Data model
 
-The Realtime Database has three top-level nodes:
+The Realtime Database has four top-level nodes:
 
 | Node | Contents | Who can read |
 |---|---|---|
-| `demands` | Full requests, including contact name and phone | Signed-in users |
+| `demands` | Full requests, including contact name and phone, and `createdBy` (the creator's uid) | Signed-in users |
 | `publicDemands` | Copies of requests without contact details | Everyone |
 | `users/{uid}` | Name, phone and email | Signed-in users |
+| `admins/{uid}` | `true` for admin accounts | Only that user |
+
+Admins can edit any request, including old ones created before `createdBy` existed. The app can't change the `admins` node, so add an admin from the Firebase console or CLI:
+
+```bash
+firebase database:set /admins/<uid> --data true
+```
 
 Every change to a request (create, edit, take, unassign, complete) also updates its public copy.
 

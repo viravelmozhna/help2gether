@@ -72,6 +72,7 @@ export default {
     category: String,
     emergency: String,
     createdTime: String,
+    createdAt: Number,
     city: String,
     demand: String,
     id: String,
@@ -82,7 +83,7 @@ export default {
   },
   computed: {
     isNewlyCreatedDemand() {
-      return isLessThan24HoursAgo(this.createdTime);
+      return isLessThan24HoursAgo(this.createdAt, this.createdTime);
     },
   },
   methods: {

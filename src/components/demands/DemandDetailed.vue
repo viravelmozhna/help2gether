@@ -15,7 +15,7 @@
       class="ml-auto mr-auto mb-5 demand-detailed-card"
     >
       <b-button
-        v-if="isUserLoggedIn"
+        v-if="canEdit"
         class="mb-3 position-absolute edit-button"
         variant="light"
         size="sm"
@@ -91,13 +91,16 @@
         variant="warning"
         class="mt-2"
       >
-        This demand has no map location. Open
-        <a
-          href="#"
-          class="alert-link"
-          @click.prevent="editDemand"
-        >Edit</a>
-        and choose an address from the suggestions.
+        This demand has no map location.
+        <template v-if="canEdit">
+          Open
+          <a
+            href="#"
+            class="alert-link"
+            @click.prevent="editDemand"
+          >Edit</a>
+          and choose an address from the suggestions.
+        </template>
       </b-alert>
 
       <b-card-text class="mb-3">
@@ -255,6 +258,7 @@ import {
 import { auth, getCurrentUser } from '@/firebase';
 import getCurrentDate from '@/utils/getCurrentDate';
 import isLessThan24HoursAgo from '@/utils/isLessThan24HoursAgo';
+import canEditDemand, { isAdmin } from '@/utils/canEditDemand';
 import checkValidCoords from '@/utils/hasValidCoords';
 import syncPublicDemand from '@/utils/syncPublicDemand';
 import GoBackButton from '../common/GoBackButton.vue';
@@ -279,6 +283,7 @@ export default {
       assigneeName: '',
       isCurrentLoggedUserAnAssignee: false,
       currentUserId: null,
+      isCurrentUserAdmin: false,
       authReady: false,
     };
   },
@@ -289,8 +294,17 @@ export default {
     demandInfo() {
       return this.$store.state.demandDetailedInfo;
     },
+    canEdit() {
+      if (!this.isUserLoggedIn) {
+        return false;
+      }
+      return canEditDemand(this.demandInfo, this.currentUserId, this.isCurrentUserAdmin);
+    },
     isNewlyCreatedDemand() {
-      return isLessThan24HoursAgo(this.demandInfo.createdTime);
+      return isLessThan24HoursAgo(
+        this.demandInfo.createdAt,
+        this.demandInfo.createdTime,
+      );
     },
     displayAssigneeName() {
       return this.assigneeName || 'Unknown user';
@@ -311,6 +325,7 @@ export default {
     isUserLoggedIn() {
       if (this.authReady) {
         this.currentUserId = (auth.currentUser && auth.currentUser.uid) || null;
+        this.refreshAdminStatus();
         this.subscribeToDemand();
       }
     },
@@ -319,12 +334,21 @@ export default {
     await getCurrentUser();
     this.authReady = true;
     this.currentUserId = (auth.currentUser && auth.currentUser.uid) || null;
+    this.refreshAdminStatus();
     this.subscribeToDemand();
   },
   beforeDestroy() {
     this.teardownSubscription();
   },
   methods: {
+    async refreshAdminStatus() {
+      const uid = this.currentUserId;
+      const userIsAdmin = await isAdmin(uid);
+      // Ignore a stale answer if the user changed while waiting
+      if (uid === this.currentUserId) {
+        this.isCurrentUserAdmin = userIsAdmin;
+      }
+    },
     teardownSubscription() {
       if (this.unsubscribe) {
         this.unsubscribe();

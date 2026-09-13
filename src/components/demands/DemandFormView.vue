@@ -26,6 +26,8 @@ import {
 import DemandFormData from './DemandFormData.vue';
 import getCurrentDate from '@/utils/getCurrentDate';
 import syncPublicDemand from '@/utils/syncPublicDemand';
+import canEditDemand, { isAdmin } from '@/utils/canEditDemand';
+import { auth } from '@/firebase';
 import { modes } from '@/env/constants';
 
 const db = getDatabase();
@@ -62,9 +64,18 @@ export default {
   },
   created() {
     if (this.id) {
-      get(child(ref(db), `demands/${this.id}`))
-        .then((snapshot) => {
-          this.demandData = snapshot.val();
+      const uid = auth.currentUser && auth.currentUser.uid;
+      Promise.all([get(child(ref(db), `demands/${this.id}`)), isAdmin(uid)])
+        .then(([snapshot, userIsAdmin]) => {
+          const demand = snapshot.val();
+          if (!canEditDemand(demand, uid, userIsAdmin)) {
+            this.$toast.warning('Only the creator of this demand can edit it.', {
+              timeout: 3000,
+            });
+            this.$router.replace({ path: `/demands/detailed/${this.id}` });
+            return;
+          }
+          this.demandData = demand;
         })
         .catch((error) => {
           console.log(error.code);
@@ -131,6 +142,8 @@ export default {
         demand: e.demand,
         category: e.category,
         createdTime: getCurrentDate(),
+        createdAt: Date.now(),
+        createdBy: auth.currentUser.uid,
         status: 'active',
         emergency: e.emergency,
       };
